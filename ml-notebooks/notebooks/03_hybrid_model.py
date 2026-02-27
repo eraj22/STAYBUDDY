@@ -60,6 +60,79 @@ np.random.seed(42)
 
 print("=" * 65)
 print("  StayBuddy — Intelligent Hybrid Recommendation Engine")
+
+# ── GPS Search Function (UC-STU-001) ─────────────────────────────
+def haversine_distance(lat1, lon1, lat2, lon2):
+    """
+    Computes real-world distance in km between two GPS coordinates.
+    Used for UC-STU-001: Search Hostels Using GPS Location.
+    """
+    R = 6371  # Earth radius in km
+    lat1, lon1, lat2, lon2 = map(np.radians, [lat1, lon1, lat2, lon2])
+    dlat = lat2 - lat1
+    dlon = lon2 - lon1
+    a    = np.sin(dlat/2)**2 + np.cos(lat1)*np.cos(lat2)*np.sin(dlon/2)**2
+    return R * 2 * np.arcsin(np.sqrt(a))
+
+
+def search_by_gps(student_lat, student_lng, student_id,
+                  radius_km=5.0, top_k=5):
+    """
+    UC-STU-001: Find hostels near student's GPS location.
+    Combines proximity score with hybrid recommendation score.
+    Intelligence: GPS proximity is a soft score, not a hard cutoff.
+    Hostels just outside radius still appear with a proximity penalty.
+    """
+    student  = students_df[students_df["student_id"]==student_id].iloc[0]
+    hostels  = hostels_df[
+        hostels_df["hostel_type"]==student["preferred_type"]
+    ].copy()
+
+    # Compute real GPS distance from student to each hostel
+    hostels["gps_distance_km"] = hostels.apply(
+        lambda h: haversine_distance(
+            student_lat, student_lng,
+            h["latitude"], h["longitude"]
+        ), axis=1
+    )
+
+    # Proximity score: soft decay — not a hard cutoff
+    hostels["proximity_score"] = np.exp(
+        -0.3 * hostels["gps_distance_km"]
+    )
+
+    # Get hybrid scores for these hostels
+    cb_s = get_cb_scores(student_id)
+    cf_s = get_cf_scores(student_id)
+    idx  = cb_s.index.union(cf_s.index)
+    alpha = type_alphas.get(
+        classify_student_type(student), best_alpha
+    )
+    hybrid_s = (
+        alpha * cb_s.reindex(idx, fill_value=0) +
+        (1-alpha) * cf_s.reindex(idx, fill_value=0)
+    )
+
+    hostels["hybrid_score"] = hostels["hostel_id"].map(
+        hybrid_s.reindex(hostels["hostel_id"].values, fill_value=0)
+    )
+
+    # Final score: 60% hybrid + 40% proximity
+    hostels["final_score"] = (
+        0.60 * hostels["hybrid_score"] +
+        0.40 * hostels["proximity_score"]
+    )
+
+    return hostels.nlargest(top_k, "final_score")[[
+        "hostel_id","hostel_name","hostel_type","area",
+        "gps_distance_km","proximity_score","hybrid_score",
+        "final_score","overall_rating","single_room_price",
+        "available_rooms"
+    ]].reset_index(drop=True)
+
+
+
+
 print("  Method: Learned-α Fusion of CB (Cosine) + CF (SVD)")
 print("=" * 65)
 
@@ -906,6 +979,81 @@ with open(os.path.join(MODEL_DIR, "hybrid_metrics.json"), "w") as f:
 print("  ✓ hybrid_config.json    saved")
 print("  ✓ hybrid_metrics.json   saved")
 
+# ──────────────────────────────────────────────────────────────────
+# SECTION 10: GPS SEARCH DEMO (UC-STU-001)
+# ──────────────────────────────────────────────────────────────────
+print("\n📍 GPS SEARCH DEMO — UC-STU-001")
+print("─" * 65)
+print("  Simulating: Student at FAST NUCES H-11 campus")
+print("  GPS: 33.6461°N, 72.9928°E  |  Radius: 5km")
+
+# FAST NUCES coordinates
+FAST_LAT, FAST_LNG = 33.6461, 72.9928
+
+test_sid = students_df[
+    students_df["gender"]=="Male"
+].iloc[0]["student_id"]
+
+gps_results = search_by_gps(
+    FAST_LAT, FAST_LNG, test_sid, radius_km=5.0, top_k=5
+)
+
+for rank, (_, row) in enumerate(gps_results.iterrows(), 1):
+    print(f"\n  #{rank}  {row['hostel_name']}")
+    print(f"       GPS Distance : {row['gps_distance_km']:.2f} km")
+    print(f"       Proximity    : {row['proximity_score']:.3f}")
+    print(f"       Hybrid Score : {row['hybrid_score']:.3f}")
+    print(f"       Final Score  : {row['final_score']:.3f}")
+    print(f"       Rating: {row['overall_rating']}/5  |  "
+          f"PKR {row['single_room_price']:,}/mo  |  "
+          f"Area: {row['area']}")
+print("─" * 65)
+
+# ──────────────────────────────────────────────────────────────────
+# SECTION 11: RMSE IN HYBRID CONTEXT
+# ──────────────────────────────────────────────────────────────────
+print("\n📐 RMSE Evaluation (Hybrid Rating Prediction)")
+print("─" * 65)
+
+rated_test = interactions_df[
+    interactions_df["interaction_type"]=="booking"
+].dropna(subset=["rating"])
+
+actuals, hybrid_preds = [], []
+for _, row in rated_test.iterrows():
+    sid, hid = row["student_id"], row["hostel_id"]
+    try:
+        cb_s  = get_cb_scores(sid)
+        cf_s  = get_cf_scores(sid)
+        idx   = cb_s.index.union(cf_s.index)
+        student = students_df[students_df["student_id"]==sid].iloc[0]
+        alpha   = type_alphas.get(
+            classify_student_type(student), best_alpha
+        )
+        hy_s  = (
+            alpha * cb_s.reindex(idx, fill_value=0) +
+            (1-alpha) * cf_s.reindex(idx, fill_value=0)
+        )
+        if hid in hy_s.index:
+            hybrid_preds.append(float(hy_s[hid]))
+            actuals.append((row["rating"] - 2.5) / 2.5)
+    except:
+        continue
+
+if hybrid_preds:
+    preds_arr   = np.array(hybrid_preds)
+    actuals_arr = np.array(actuals)
+    if preds_arr.max() > preds_arr.min():
+        preds_arr = (preds_arr-preds_arr.min())/(preds_arr.max()-preds_arr.min())
+    hybrid_rmse = float(np.sqrt(np.mean((actuals_arr - preds_arr)**2)))
+    print(f"  Hybrid RMSE : {hybrid_rmse:.4f}")
+    print(f"  CF RMSE     : {cf_metrics.get('RMSE', 'N/A')}")
+    print(f"  Samples     : {len(hybrid_preds)} rated bookings")
+    print(f"  Interpretation: lower is better (0=perfect, 1=worst)")
+    final_metrics["Hybrid"]["RMSE"] = round(hybrid_rmse, 4)
+else:
+    print("  No rated bookings in test set for RMSE computation")
+print("─" * 65)
 
 # ──────────────────────────────────────────────────────────────────
 # FINAL SUMMARY
