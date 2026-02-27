@@ -2,3 +2,18 @@ node_modules
 .env
 .DS_Store
 npm-debug.log
+# ML - Large CSV datasets (regenerate with generate_dataset.py)
+ml-notebooks/data/*.csv
+
+# ML - Trained model binaries
+ml-notebooks/models/*.pkl
+ml-notebooks/models/*.joblib
+ml-notebooks/models/*.h5
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
