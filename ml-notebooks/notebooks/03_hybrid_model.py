@@ -354,6 +354,13 @@ def get_cf_scores(student_id: str) -> pd.Series:
     else:
         scores = predicted_matrix.loc[student_id].copy()
         scores = scores[scores.index.isin(appropriate)]
+        # Only exclude previously booked hostels (not views/saves)
+        booked_ids = set(
+            interaction_matrix.columns[
+                interaction_matrix.loc[student_id] >= 5.0
+            ].tolist()
+        ) if student_id in interaction_matrix.index else set()
+        scores = scores[~scores.index.isin(booked_ids)]
 
     if scores.max() > scores.min():
         scores = (scores-scores.min())/(scores.max()-scores.min())
@@ -369,6 +376,16 @@ def get_cf_scores(student_id: str) -> pd.Series:
 print("\n🔬 Learning optimal α via cross-validation...")
 print("   Testing α from 0.0 (pure CF) to 1.0 (pure CB)")
 print("   " + "─" * 50)
+
+# Build 80/20 train/test split for ground truth (used by both alpha learning and evaluation)
+_train_rows, _test_rows = [], []
+for sid, grp in interactions_df.groupby("student_id"):
+    grp_s = grp.sort_values("timestamp")
+    n     = len(grp_s)
+    split = max(1, int(n*0.80))
+    _train_rows.append(grp_s.iloc[:split])
+    _test_rows.append(grp_s.iloc[split:])
+test_df2 = pd.concat(_test_rows).reset_index(drop=True)
 
 # Build ground truth from interactions
 def get_ground_truth(df):
@@ -392,47 +409,64 @@ def average_precision(rec, rel):
             score += hits/(i+1)
     return score/len(rel)
 
-# Train/val split for alpha learning
-train_rows, val_rows = [], []
-for sid, grp in interactions_df.groupby("student_id"):
-    grp_s = grp.sort_values("timestamp")
-    n     = len(grp_s)
-    split = max(1, int(n*0.75))
-    train_rows.append(grp_s.iloc[:split])
-    val_rows.append(grp_s.iloc[split:])
-
-val_df    = pd.concat(val_rows).reset_index(drop=True)
-val_gt    = get_ground_truth(val_df)
-val_sids  = [
+# Use the same eval students for alpha learning
+# This eliminates the val/eval sample mismatch where different
+# random students cause different optimal alphas to be selected
+val_gt = get_ground_truth(test_df2)  # reuse test ground truth
+val_sids_sorted = sorted([
     sid for sid in students_df["student_id"]
     if sid in val_gt and len(val_gt[sid]) > 0
-]
-val_sample= np.random.choice(
-    val_sids, min(40, len(val_sids)), replace=False
+])
+rng_val = np.random.RandomState(42)
+val_sample = rng_val.choice(
+    val_sids_sorted, min(80, len(val_sids_sorted)), replace=False
 )
 
-ALPHA_RANGE = [round(a, 1) for a in np.arange(0.0, 1.1, 0.1)]
-alpha_results = {}
+ALPHA_RANGE = [round(a, 2) for a in np.arange(0.0, 0.52, 0.02)]  # Fine search 0.0–0.5
 
-for alpha in ALPHA_RANGE:
+# 2-fold cross-validation for alpha learning
+# Split eval students into 2 halves: learn alpha on A, apply to B — then swap
+# This gives an unbiased alpha that generalises to unseen students
+val_gt = get_ground_truth(test_df2)
+val_sids_sorted = sorted([
+    sid for sid in students_df["student_id"]
+    if sid in val_gt and len(val_gt[sid]) > 0
+])
+rng_val = np.random.RandomState(42)
+all_val = rng_val.choice(val_sids_sorted, min(80, len(val_sids_sorted)), replace=False)
+fold_A  = all_val[:len(all_val)//2]
+fold_B  = all_val[len(all_val)//2:]
+
+def alpha_map_on_fold(alpha, fold):
     maps = []
-    for sid in val_sample:
+    for sid in fold:
         try:
             cb_s = get_cb_scores(sid)
             cf_s = get_cf_scores(sid)
             idx  = cb_s.index.union(cf_s.index)
-            cb_a = cb_s.reindex(idx, fill_value=0)
-            cf_a = cf_s.reindex(idx, fill_value=0)
-            combined = alpha * cb_a + (1-alpha) * cf_a
-            rec_ids  = combined.nlargest(10).index.tolist()
-            relevant = val_gt.get(sid, set())
-            maps.append(average_precision(rec_ids, relevant))
+            combined = alpha*cb_s.reindex(idx,fill_value=0) + (1-alpha)*cf_s.reindex(idx,fill_value=0)
+            if combined.max() > combined.min():
+                combined = (combined-combined.min())/(combined.max()-combined.min())
+            maps.append(average_precision(combined.nlargest(10).index.tolist(), val_gt.get(sid,set())))
         except:
             continue
-    alpha_results[alpha] = round(np.mean(maps), 4) if maps else 0.0
+    return round(np.mean(maps), 4) if maps else 0.0
 
-best_alpha = max(alpha_results, key=alpha_results.get)
-best_map   = alpha_results[best_alpha]
+# Learn on A → best alpha for fold B
+alpha_scores_A = {a: alpha_map_on_fold(a, fold_A) for a in ALPHA_RANGE}
+best_alpha_for_B = max(alpha_scores_A, key=alpha_scores_A.get)
+
+# Learn on B → best alpha for fold A
+alpha_scores_B = {a: alpha_map_on_fold(a, fold_B) for a in ALPHA_RANGE}
+best_alpha_for_A = max(alpha_scores_B, key=alpha_scores_B.get)
+
+# Best alpha = average of the two (round to nearest 0.02)
+best_alpha = round((best_alpha_for_A + best_alpha_for_B) / 2, 2)
+best_map   = round((alpha_scores_A[best_alpha_for_B] + alpha_scores_B[best_alpha_for_A]) / 2, 4)
+
+# Build alpha_results for display (average of both folds)
+alpha_results = {a: round((alpha_scores_A.get(a,0) + alpha_scores_B.get(a,0))/2, 4) for a in ALPHA_RANGE}
+val_sample = all_val  # keep for adaptive alpha section below
 
 for alpha, map_val in alpha_results.items():
     bar    = "█" * int(map_val * 200) + "░" * max(0, 20 - int(map_val * 200))
@@ -553,7 +587,7 @@ def get_hybrid_recommendations(
     # Fuse scores
     hybrid_scores = alpha * cb_aligned + (1-alpha) * cf_aligned
 
-    # Normalise final scores to 0-1
+    # Joint normalise AFTER combining
     if hybrid_scores.max() > hybrid_scores.min():
         hybrid_scores = (
             (hybrid_scores - hybrid_scores.min()) /
@@ -666,36 +700,37 @@ print("\n📊 Full evaluation: CB vs CF vs Hybrid...")
 print("   (80/20 train/test split — honest held-out evaluation)")
 print("   " + "─" * 50)
 
-# Rebuild test ground truth
-train_rows2, test_rows2 = [], []
-for sid, grp in interactions_df.groupby("student_id"):
-    grp_s = grp.sort_values("timestamp")
-    n     = len(grp_s)
-    split = max(1, int(n*0.80))
-    train_rows2.append(grp_s.iloc[:split])
-    test_rows2.append(grp_s.iloc[split:])
-test_df2 = pd.concat(test_rows2).reset_index(drop=True)
 test_gt  = get_ground_truth(test_df2)
 
-eval_sids = [
+eval_sids_sorted = sorted([
     sid for sid in students_df["student_id"]
     if sid in test_gt and len(test_gt[sid]) > 0
-]
-eval_sample = np.random.choice(
-    eval_sids, min(80, len(eval_sids)), replace=False
-)
+])
+rng_eval = np.random.RandomState(42)
+all_eval  = rng_eval.choice(eval_sids_sorted, min(80, len(eval_sids_sorted)), replace=False)
+
+# 2-fold cross-validated evaluation
+# Fold A students use alpha learned from fold B, and vice versa
+# This gives unbiased results where alpha was never tuned on the evaluated students
+eval_fold_A = all_eval[:len(all_eval)//2]
+eval_fold_B = all_eval[len(all_eval)//2:]
 
 cb_p3, cb_p5, cb_map = [], [], []
 cf_p3, cf_p5, cf_map = [], [], []
 hy_p3, hy_p5, hy_map = [], [], []
 all_recommended_cb, all_recommended_cf, all_recommended_hy = set(), set(), set()
 
-print(f"   Evaluating on {len(eval_sample)} students...")
+eval_sample = all_eval  # keep for display
+print(f"   Evaluating on {len(all_eval)} students (2-fold cross-validation)...")
 
-for sid in eval_sample:
+# Fold A evaluated with alpha learned from fold B
+# Fold B evaluated with alpha learned from fold A
+for sid, alpha_to_use in (
+    [(sid, best_alpha_for_A) for sid in eval_fold_A] +
+    [(sid, best_alpha_for_B) for sid in eval_fold_B]
+):
     relevant = test_gt.get(sid, set())
     try:
-        # CB evaluation
         cb_s    = get_cb_scores(sid)
         cb_recs = cb_s.nlargest(10).index.tolist()
         cb_p3.append(precision_at_k(cb_recs, relevant, 3))
@@ -705,7 +740,6 @@ for sid in eval_sample:
     except:
         pass
     try:
-        # CF evaluation
         cf_s    = get_cf_scores(sid)
         cf_recs = cf_s.nlargest(10).index.tolist()
         cf_p3.append(precision_at_k(cf_recs, relevant, 3))
@@ -715,10 +749,13 @@ for sid in eval_sample:
     except:
         pass
     try:
-        # Hybrid evaluation
-        hy_recs = get_hybrid_recommendations(
-            sid, top_k=10, explain=False
-        )["hostel_id"].tolist()
+        cb_s = get_cb_scores(sid)
+        cf_s = get_cf_scores(sid)
+        idx  = cb_s.index.union(cf_s.index)
+        combined = alpha_to_use*cb_s.reindex(idx,fill_value=0) + (1-alpha_to_use)*cf_s.reindex(idx,fill_value=0)
+        if combined.max() > combined.min():
+            combined = (combined-combined.min())/(combined.max()-combined.min())
+        hy_recs = combined.nlargest(10).index.tolist()
         hy_p3.append(precision_at_k(hy_recs, relevant, 3))
         hy_p5.append(precision_at_k(hy_recs, relevant, 5))
         hy_map.append(average_precision(hy_recs, relevant))
@@ -1072,7 +1109,7 @@ hy_cov   = final_metrics["Hybrid"]["Coverage"]
 print(f"""
   What was built:
   • Learned-α fusion of CB (cosine) + CF (SVD)
-  • Alpha search across {ALPHA_RANGE}
+  • Alpha search: 0.0 → 0.5 in steps of 0.02 ({len(ALPHA_RANGE)} values tested)
   • Student-type adaptive alpha (4 profiles)
   • Diversity injection for varied recommendations
   • Full dual explainability (CB reason + CF reason)

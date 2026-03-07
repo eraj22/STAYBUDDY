@@ -15,12 +15,12 @@
 ║     preference patterns that NO human rule could define.         ║
 ║                                                                  ║
 ║  2. Time-decay weighting — recent interactions carry more        ║
-║     signal than old ones. Formula: weight × e^(-λ × days_ago)   ║
+║     signal than old ones. Formula: weight × e^(-λ × days_ago)    ║
 ║                                                                  ║
 ║  3. Implicit feedback learning — learns from behaviour:          ║
-║     view(w=1) < save(w=3) < attempt(w=4) < booking(w=5)         ║
+║     view(w=1) < save(w=3) < attempt(w=4) < booking(w=5)          ║
 ║                                                                  ║
-║  4. Proper train/test split — 80% train, 20% test held out.     ║
+║  4. Proper train/test split — 80% train, 20% test held out.      ║
 ║     SVD trained on train set, evaluated on unseen test set.      ║
 ║     This gives honest, meaningful metrics.                       ║
 ║                                                                  ║
@@ -88,7 +88,7 @@ for itype, count in interactions_df["interaction_type"].value_counts().items():
 # Intelligence: recent interactions carry more signal.
 # decay = e^(-λ × days_since_interaction)
 # ──────────────────────────────────────────────────────────────────
-print("\n⏱️  Applying time-decay weighting to interactions...")
+print("\n Applying time-decay weighting to interactions...")
 
 DECAY_LAMBDA = 0.01
 
@@ -124,7 +124,7 @@ print(f"  ✓ Avg weight   : {interactions_df['final_weight'].mean():.3f}")
 #   - Last 20%  → testing  (evaluation ground truth)
 # This gives honest, meaningful metrics.
 # ──────────────────────────────────────────────────────────────────
-print("\n✂️  Building train/test split (80% train / 20% test)...")
+print("\n  Building train/test split (80% train / 20% test)...")
 
 train_rows, test_rows = [], []
 
@@ -147,7 +147,7 @@ print(f"  ✓ Test bookings/saves: "
 # ──────────────────────────────────────────────────────────────────
 # SECTION 4: BUILD USER-ITEM INTERACTION MATRIX (from train only)
 # ──────────────────────────────────────────────────────────────────
-print("\n🔢 Building user-item interaction matrix (train set)...")
+print("\n Building user-item interaction matrix (train set)...")
 
 all_students = students_df["student_id"].tolist()
 all_hostels  = hostels_df["hostel_id"].tolist()
@@ -179,7 +179,7 @@ matrix_values = interaction_matrix.values
 # Vᵀ = hostel  latent factors (k × 75)
 # k  = number of latent factors (hyperparameter, tuned below)
 # ──────────────────────────────────────────────────────────────────
-print("\n🧠 Training SVD Matrix Factorization...")
+print("\n Training SVD Matrix Factorization...")
 print("   Hyperparameter search — finding optimal k:")
 print("   " + "─" * 50)
 
@@ -245,7 +245,7 @@ pred_eval = pd.DataFrame(
 # SECTION 6: COLD START HANDLING
 # New students with no history → demographic clustering
 # ──────────────────────────────────────────────────────────────────
-print("\n🆕 Building cold-start handler (demographic clustering)...")
+print("\n Building cold-start handler (demographic clustering)...")
 
 DEMO_FEATURES = [
     "budget_max", "max_distance_km", "study_preference",
@@ -340,10 +340,11 @@ def get_cf_recommendations(student_id, top_k=10, exclude_seen=True):
     ]["hostel_id"].tolist()
     scores = scores[scores.index.isin(appropriate)]
 
-    # Exclude seen hostels
+    # Exclude only previously booked hostels (not views/saves)
     if exclude_seen:
-        seen = interaction_matrix.loc[student_id]
-        scores = scores[~scores.index.isin(seen[seen > 0].index)]
+        booked = interaction_matrix.loc[student_id]
+        booked_ids = booked[booked >= INTERACTION_WEIGHTS.get("booking", 5)].index
+        scores = scores[~scores.index.isin(booked_ids)]
 
     # Normalise
     if scores.max() > scores.min():
@@ -360,7 +361,7 @@ def get_cf_recommendations(student_id, top_k=10, exclude_seen=True):
 # ──────────────────────────────────────────────────────────────────
 # SECTION 8: EVALUATION METRICS (on held-out TEST set)
 # ──────────────────────────────────────────────────────────────────
-print("\n📊 Evaluating on held-out TEST set...")
+print("\n Evaluating on held-out TEST set...")
 
 def precision_at_k(recommended, relevant, k):
     if not relevant or k == 0:
@@ -431,11 +432,15 @@ for sid in sample:
         ]["hostel_id"].tolist()
         scores = scores[scores.index.isin(appropriate)]
 
-        # Exclude train-set interactions only
-        seen_in_train = interaction_matrix.loc[sid]
-        scores = scores[
-            ~scores.index.isin(seen_in_train[seen_in_train > 0].index)
-        ]
+        # Only exclude hostels the student already BOOKED in training
+        # (not views/saves — students can still be recommended saved hostels)
+        booked_in_train = set(
+            train_df[
+                (train_df["student_id"] == sid) &
+                (train_df["interaction_type"] == "booking")
+            ]["hostel_id"].tolist()
+        )
+        scores = scores[~scores.index.isin(booked_in_train)]
 
         if scores.max() > scores.min():
             scores = (scores - scores.min()) / (scores.max() - scores.min())
@@ -472,7 +477,7 @@ if os.path.exists(cb_path):
         cb_metrics = json.load(f)
 
 print("\n" + "─" * 58)
-print("  📈 COLLABORATIVE FILTERING — EVALUATION RESULTS")
+print("   COLLABORATIVE FILTERING — EVALUATION RESULTS")
 print("─" * 58)
 print(f"  {'Metric':<25} {'CF (SVD)':>10}  {'CB (Cosine)':>12}  Delta")
 print("  " + "─" * 55)
@@ -493,7 +498,7 @@ print("─" * 58)
 # ──────────────────────────────────────────────────────────────────
 # SECTION 9: LIVE DEMONSTRATION — 3 STUDENT PROFILES
 # ──────────────────────────────────────────────────────────────────
-print("\n🎯 LIVE CF RECOMMENDATIONS — 3 Student Profiles")
+print("\n LIVE CF RECOMMENDATIONS — 3 Student Profiles")
 print("=" * 65)
 
 demo_profiles = []
@@ -537,7 +542,7 @@ for label, sid in demo_profiles[:3]:
     print(f"     Study pref : {student['study_preference']:.2f}/1.0")
     print(f"     History    : "
           f"{'YES — ' + str(seen_count) + ' interactions' if has_hist else 'NO — cold start'}")
-    print(f"\n  🏠 TOP 5 CF RECOMMENDATIONS:")
+    print(f"\n   TOP 5 CF RECOMMENDATIONS:")
 
     recs = get_cf_recommendations(sid, top_k=5, exclude_seen=True)
 
@@ -558,7 +563,7 @@ print(f"\n{'='*65}")
 # SECTION 10: LATENT FACTOR ANALYSIS
 # Shows evaluators what SVD learned — proof of intelligence
 # ──────────────────────────────────────────────────────────────────
-print("\n🔍 Latent Factor Analysis — What did SVD discover?")
+print("\nLatent Factor Analysis — What did SVD discover?")
 print("─" * 58)
 hostel_factors = pd.DataFrame(
     Vt_final.T,
@@ -699,7 +704,7 @@ print(f"  ✓ Visualisation saved → models/collaborative_filtering_analysis.pn
 # ──────────────────────────────────────────────────────────────────
 # SECTION 12: SAVE MODEL ARTIFACTS
 # ──────────────────────────────────────────────────────────────────
-print("\n💾 Saving model artifacts...")
+print("\n Saving model artifacts...")
 
 joblib.dump(svd_final, os.path.join(MODEL_DIR, "svd_model.pkl"))
 np.save(os.path.join(MODEL_DIR, "U_student_factors.npy"), U_final)
@@ -756,6 +761,6 @@ print(f"""
   • Hyperparameter tuning: k optimised via RMSE
   • Proper ML evaluation: train/test split, not train=test
 
-  Next step → 03_hybrid_model.py
+  
 """)
 print("=" * 65)

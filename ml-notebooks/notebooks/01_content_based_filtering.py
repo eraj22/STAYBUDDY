@@ -572,10 +572,12 @@ def compute_all_metrics(students_df, hostels_df,
         if sid in ground_truth and len(ground_truth[sid]) > 0
     ]
 
-    # Sample for efficiency
-    sample = np.random.choice(
-        eval_students,
-        min(sample_size, len(eval_students)),
+    # Fixed seed + sorted list = same 60 students every run across all scripts
+    eval_students_sorted = sorted(eval_students)
+    rng = np.random.RandomState(42)
+    sample = rng.choice(
+        eval_students_sorted,
+        min(sample_size, len(eval_students_sorted)),
         replace=False
     )
 
