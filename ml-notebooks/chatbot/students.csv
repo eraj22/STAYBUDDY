@@ -1,0 +1,201 @@
+student_id,gender,department,year,latitude,longitude,budget_min,budget_max,price_sensitivity,max_distance_km,needs_transport,preferred_type,preferred_room_type,food_preference,study_preference,social_preference,comfort_preference,noise_tolerance,curfew_flexibility,must_have_amenities,priority_wifi,priority_gym,priority_study_room,priority_cafeteria,priority_laundry,priority_ac,priority_hot_water,priority_generator
+STU-001,Female,Computer Science,2,33.726495,73.043748,13933,37358,0.94,3.7,1,Girls,Dormitory,Veg,0.54,0.46,0.75,0.72,0.83,"[""Water Cooler"", ""Hot Water"", ""AC""]",0,0,0,0,0,1,1,0
+STU-002,Male,Software Engineering,1,33.643238,72.989876,10059,27415,0.86,0.6,0,Boys,Double,Non-Veg,0.92,0.08,0.68,0.84,0.86,"[""Laundry"", ""Refrigerator"", ""Library"", ""CCTV""]",0,0,0,0,1,0,0,0
+STU-003,Female,Electrical Engineering,4,33.678992,73.040251,11968,36125,0.31,2.4,0,Girls,Double,Non-Veg,0.46,0.54,0.17,0.24,0.27,"[""Microwave""]",0,0,0,0,0,0,0,0
+STU-004,Male,BBA,3,33.646918,72.996729,8453,17960,0.77,4.2,1,Boys,Dormitory,Non-Veg,0.99,0.01,0.95,0.78,0.61,"[""Iron"", ""Study Room"", ""AC""]",0,0,1,0,0,1,0,0
+STU-005,Female,Computer Science,4,33.6746,73.052369,13442,36614,0.02,3.2,0,Girls,Double,Non-Veg,0.89,0.11,0.28,0.21,0.04,"[""Study Room"", ""Parking"", ""Hot Water"", ""Rooftop Access""]",0,0,1,0,0,0,1,0
+STU-006,Male,Data Science,3,33.720267,73.057684,11328,22319,0.05,6.8,1,Boys,Single,Non-Veg,0.07,0.93,0.58,0.43,0.55,"[""Cafeteria"", ""Water Cooler"", ""AC"", ""Microwave""]",0,0,0,1,0,1,0,0
+STU-007,Male,Software Engineering,4,33.722798,73.087,7854,24431,0.72,5.4,1,Boys,Double,Non-Veg,0.01,0.99,0.75,0.56,0.58,"[""AC"", ""Security Guard"", ""Laundry"", ""Generator""]",0,0,0,0,1,1,0,1
+STU-008,Male,Social Sciences,1,33.641381,73.001581,5370,11227,0.43,3.4,0,Boys,Double,Non-Veg,0.96,0.04,0.03,0.26,0.03,"[""Gym"", ""Common Room""]",0,1,0,0,0,0,0,0
+STU-009,Female,BBA,1,33.727762,73.044406,10710,25442,0.47,4.6,1,Girls,Double,Both,0.86,0.14,0.57,0.3,0.32,"[""Hot Water""]",0,0,0,0,0,0,1,0
+STU-010,Female,Civil Engineering,3,33.710288,73.053187,7964,17558,0.58,3.1,0,Girls,Single,Veg,0.01,0.99,0.57,0.87,0.38,"[""WiFi"", ""Parking""]",1,0,0,0,0,0,0,0
+STU-011,Male,Computer Science,3,33.645323,73.001599,7587,15849,0.2,1.9,0,Boys,Double,Both,1.0,0.0,0.04,0.58,0.45,"[""Study Room"", ""Prayer Room""]",0,0,1,0,0,0,0,0
+STU-012,Female,Computer Science,4,33.690456,73.057118,8505,25172,0.62,5.0,1,Girls,Double,Veg,0.02,0.98,0.25,0.69,0.6,"[""Iron"", ""AC"", ""Security Guard""]",0,0,0,0,0,1,0,0
+STU-013,Male,Software Engineering,3,33.656045,72.983401,14146,20408,0.79,4.9,1,Boys,Dormitory,Both,0.38,0.62,0.42,0.17,0.47,"[""Microwave"", ""Gym""]",0,1,0,0,0,0,0,0
+STU-014,Male,Cyber Security,2,33.655455,72.991595,7775,25968,0.34,1.0,0,Boys,Dormitory,Non-Veg,0.44,0.56,0.86,0.15,0.08,"[""Iron"", ""Gym"", ""CCTV"", ""Laundry""]",0,1,0,0,1,0,0,0
+STU-015,Male,Electrical Engineering,3,33.680472,73.044134,12542,29840,0.04,4.2,1,Boys,Double,Veg,0.8,0.2,0.13,0.56,0.77,"[""Security Guard"", ""Common Room"", ""Water Cooler"", ""Study Room""]",0,0,1,0,0,0,0,0
+STU-016,Female,Cyber Security,2,33.72174,73.099094,12124,34352,0.85,5.3,1,Girls,Dormitory,Non-Veg,0.49,0.51,0.17,0.85,0.49,"[""Hot Water"", ""Laundry"", ""Library"", ""Rooftop Access""]",0,0,0,0,1,0,1,0
+STU-017,Male,Software Engineering,4,33.717491,73.053855,5719,19316,0.46,4.4,1,Boys,Double,Non-Veg,0.58,0.42,0.35,0.09,0.49,"[""Library"", ""Gym"", ""Lounge""]",0,1,0,0,0,0,0,0
+STU-018,Female,Social Sciences,2,33.719529,73.09855,9204,21650,0.77,2.4,0,Girls,Dormitory,Non-Veg,0.21,0.79,0.12,0.63,0.28,"[""Common Room""]",0,0,0,0,0,0,0,0
+STU-019,Female,Software Engineering,2,33.675392,73.052392,7696,14413,0.07,7.0,1,Girls,Single,Both,0.8,0.2,0.02,0.83,0.52,"[""Study Room"", ""Microwave""]",0,0,1,0,0,0,0,0
+STU-020,Female,Computer Science,1,33.732142,73.095046,9322,28004,0.35,2.7,0,Girls,Double,Both,0.03,0.97,0.44,0.79,0.28,"[""AC"", ""Parking""]",0,0,0,0,0,1,0,0
+STU-021,Male,BBA,4,33.68185,73.056473,9891,19883,0.82,1.1,0,Boys,Dormitory,Non-Veg,0.99,0.01,0.76,0.06,0.01,"[""Hot Water"", ""Cafeteria"", ""Study Room"", ""Security Guard""]",0,0,1,1,0,0,1,0
+STU-022,Male,Social Sciences,3,33.679833,73.041712,11305,35087,0.93,2.8,0,Boys,Single,Non-Veg,0.76,0.24,0.82,0.57,0.66,"[""Generator"", ""Lounge""]",0,0,0,0,0,0,0,1
+STU-023,Female,Cyber Security,3,33.638075,72.984313,12409,27786,0.78,2.6,0,Girls,Dormitory,Both,0.01,0.99,0.24,0.14,0.12,"[""Iron""]",0,0,0,0,0,0,0,0
+STU-024,Male,BBA,1,33.735814,73.092647,5896,21246,0.46,4.2,1,Boys,Dormitory,Both,0.14,0.86,0.3,0.93,0.12,"[""Study Room""]",0,0,1,0,0,0,0,0
+STU-025,Female,Social Sciences,4,33.723083,73.050285,12984,18390,0.32,4.0,1,Girls,Double,Non-Veg,0.03,0.97,0.44,0.9,0.96,"[""Hot Water"", ""Cafeteria"", ""Laundry"", ""CCTV""]",0,0,0,1,1,0,1,0
+STU-026,Male,Computer Science,4,33.713636,73.041036,12331,28735,0.4,4.0,1,Boys,Single,Non-Veg,0.54,0.46,0.75,0.53,0.68,"[""Refrigerator"", ""WiFi"", ""Hot Water"", ""Library""]",1,0,0,0,0,0,1,0
+STU-027,Male,Data Science,4,33.714743,73.040052,11715,28588,0.32,5.9,1,Boys,Double,Both,0.15,0.85,0.23,0.21,0.86,"[""Prayer Room""]",0,0,0,0,0,0,0,0
+STU-028,Female,Computer Science,2,33.739352,73.086923,12701,35301,0.39,3.1,0,Girls,Dormitory,Non-Veg,0.78,0.22,0.1,0.02,0.66,"[""CCTV"", ""Prayer Room""]",0,0,0,0,0,0,0,0
+STU-029,Female,Cyber Security,2,33.72469,73.088698,12905,27898,0.54,2.0,0,Girls,Dormitory,Both,0.02,0.98,0.28,0.71,0.27,"[""AC"", ""Refrigerator""]",0,0,0,0,0,1,0,0
+STU-030,Female,Cyber Security,4,33.723886,73.087622,6902,24107,0.69,1.8,0,Girls,Single,Non-Veg,0.09,0.91,0.55,0.22,0.21,"[""Laundry""]",0,0,0,0,1,0,0,0
+STU-031,Male,Cyber Security,3,33.711134,73.038593,12478,31449,0.83,5.3,1,Boys,Single,Non-Veg,0.35,0.65,0.67,0.82,0.4,"[""Parking""]",0,0,0,0,0,0,0,0
+STU-032,Male,Social Sciences,3,33.718891,73.047992,11781,32727,0.02,2.8,0,Boys,Single,Non-Veg,0.67,0.33,0.82,0.04,0.89,"[""Common Room"", ""Iron"", ""Water Cooler"", ""CCTV""]",0,0,0,0,0,0,0,0
+STU-033,Female,Civil Engineering,2,33.67562,73.043657,5320,14974,0.69,1.9,0,Girls,Dormitory,Non-Veg,0.77,0.23,0.23,0.63,0.75,"[""Water Cooler"", ""Cafeteria""]",0,0,0,1,0,0,0,0
+STU-034,Male,Software Engineering,2,33.713669,73.049783,6269,12529,0.05,4.4,1,Boys,Double,Veg,0.85,0.15,0.89,0.58,0.56,"[""Microwave"", ""Iron"", ""Cafeteria"", ""Library""]",0,0,0,1,0,0,0,0
+STU-035,Male,Social Sciences,1,33.677414,73.054932,8977,33030,0.63,1.1,0,Boys,Dormitory,Non-Veg,0.6,0.4,0.59,0.02,0.73,"[""Hot Water""]",0,0,0,0,0,0,1,0
+STU-036,Male,Civil Engineering,2,33.729379,73.089465,12148,35896,0.81,2.7,0,Boys,Dormitory,Veg,0.13,0.87,0.38,0.67,0.99,"[""Laundry"", ""AC"", ""Common Room""]",0,0,0,0,1,1,0,0
+STU-037,Male,Computer Science,3,33.727472,73.057811,14462,33628,0.87,1.0,0,Boys,Double,Both,0.83,0.17,0.5,0.73,0.62,"[""Generator"", ""Microwave""]",0,0,0,0,0,0,0,1
+STU-038,Male,Electrical Engineering,3,33.723921,73.094121,11331,36227,0.27,2.3,0,Boys,Dormitory,Non-Veg,0.44,0.56,0.4,0.6,0.65,"[""WiFi"", ""Cafeteria""]",1,0,0,1,0,0,0,0
+STU-039,Male,Cyber Security,1,33.725409,73.044646,6466,29816,0.12,2.9,0,Boys,Single,Non-Veg,0.64,0.36,0.58,0.97,0.38,"[""Common Room"", ""Generator"", ""Rooftop Access""]",0,0,0,0,0,0,0,1
+STU-040,Male,Electrical Engineering,2,33.717095,73.045914,12008,32531,0.26,1.6,0,Boys,Single,Non-Veg,0.06,0.94,0.53,0.11,0.87,"[""Common Room"", ""Gym"", ""Rooftop Access""]",0,1,0,0,0,0,0,0
+STU-041,Male,Social Sciences,2,33.685447,73.049805,10867,31151,0.08,4.9,1,Boys,Double,Non-Veg,0.04,0.96,0.48,0.63,0.83,"[""Water Cooler""]",0,0,0,0,0,0,0,0
+STU-042,Female,BBA,2,33.724441,73.038706,5692,12170,0.35,4.9,1,Girls,Single,Both,0.32,0.68,0.61,0.02,0.12,"[""Laundry"", ""Water Cooler""]",0,0,0,0,1,0,0,0
+STU-043,Male,Computer Science,1,33.718823,73.041888,14350,35431,0.02,3.0,0,Boys,Single,Non-Veg,0.22,0.78,0.82,0.82,0.79,"[""Microwave"", ""WiFi"", ""Parking"", ""Security Guard""]",1,0,0,0,0,0,0,0
+STU-044,Male,Cyber Security,4,33.714046,73.045634,6353,23423,0.57,2.9,0,Boys,Single,Veg,0.63,0.37,0.88,0.56,0.96,"[""Rooftop Access"", ""Laundry""]",0,0,0,0,1,0,0,0
+STU-045,Male,BBA,2,33.642708,72.994584,7062,21092,0.29,0.8,0,Boys,Double,Non-Veg,0.19,0.81,0.67,0.17,0.06,"[""Library"", ""Parking"", ""Iron"", ""Laundry""]",0,0,0,0,1,0,0,0
+STU-046,Male,Cyber Security,3,33.738756,73.094097,9206,29533,0.84,0.7,0,Boys,Single,Veg,0.34,0.66,0.32,0.69,0.96,"[""Refrigerator"", ""WiFi"", ""Gym"", ""Water Cooler""]",1,1,0,0,0,0,0,0
+STU-047,Female,Social Sciences,3,33.726084,73.097717,14943,30415,0.95,4.6,1,Girls,Single,Non-Veg,0.74,0.26,0.88,0.91,0.99,"[""Microwave"", ""Common Room"", ""Security Guard"", ""Rooftop Access""]",0,0,0,0,0,0,0,0
+STU-048,Male,Computer Science,3,33.726397,73.087976,9758,31768,0.32,4.8,1,Boys,Double,Non-Veg,0.48,0.52,0.91,0.06,0.69,"[""Library""]",0,0,0,0,0,0,0,0
+STU-049,Male,Electrical Engineering,1,33.712094,73.040472,14713,28201,0.81,3.7,1,Boys,Single,Both,0.29,0.71,0.43,0.75,0.91,"[""Security Guard""]",0,0,0,0,0,0,0,0
+STU-050,Female,Social Sciences,1,33.721793,73.039248,9576,32831,0.02,1.8,0,Girls,Double,Non-Veg,0.25,0.75,0.15,0.89,0.46,"[""Gym""]",0,1,0,0,0,0,0,0
+STU-051,Female,Data Science,3,33.722059,73.09587,14873,36879,0.08,4.9,1,Girls,Double,Both,0.93,0.07,0.39,0.37,0.89,"[""Lounge"", ""CCTV"", ""Rooftop Access""]",0,0,0,0,0,0,0,0
+STU-052,Male,Software Engineering,1,33.721501,73.042036,5798,18399,0.66,2.6,0,Boys,Dormitory,Veg,0.05,0.95,0.64,0.03,0.79,"[""Laundry"", ""Common Room""]",0,0,0,0,1,0,0,0
+STU-053,Female,Data Science,3,33.653526,72.998502,10109,18902,0.75,2.6,0,Girls,Single,Both,0.81,0.19,0.81,0.95,0.31,"[""Generator"", ""Water Cooler"", ""WiFi"", ""Study Room""]",1,0,1,0,0,0,0,1
+STU-054,Female,Computer Science,3,33.722777,73.084173,14836,23804,0.79,4.4,1,Girls,Double,Non-Veg,0.08,0.92,0.98,0.93,0.93,"[""Parking"", ""Microwave"", ""Gym""]",0,1,0,0,0,0,0,0
+STU-055,Male,Electrical Engineering,2,33.676652,73.046056,12437,17883,0.26,5.1,1,Boys,Single,Veg,0.92,0.08,0.53,0.17,0.17,"[""Iron"", ""Hot Water""]",0,0,0,0,0,0,1,0
+STU-056,Male,Civil Engineering,4,33.645125,73.000183,8998,17773,0.0,3.8,1,Boys,Single,Both,0.14,0.86,0.38,0.57,0.48,"[""CCTV"", ""Parking""]",0,0,0,0,0,0,0,0
+STU-057,Female,Data Science,4,33.720752,73.097581,10953,18612,0.62,3.8,1,Girls,Dormitory,Both,0.28,0.72,0.08,0.45,0.74,"[""Common Room""]",0,0,0,0,0,0,0,0
+STU-058,Female,Data Science,3,33.710754,73.054061,9284,27548,0.02,6.1,1,Girls,Dormitory,Veg,0.87,0.13,0.9,0.07,0.99,"[""Library"", ""Lounge""]",0,0,0,0,0,0,0,0
+STU-059,Female,Computer Science,4,33.682748,73.045437,8440,18071,0.02,4.0,1,Girls,Single,Non-Veg,0.18,0.82,0.76,0.04,0.86,"[""Prayer Room"", ""Parking""]",0,0,0,0,0,0,0,0
+STU-060,Male,Civil Engineering,1,33.710265,73.048136,11464,33026,0.5,3.6,1,Boys,Double,Veg,0.74,0.26,0.8,0.74,0.65,"[""WiFi""]",1,0,0,0,0,0,0,0
+STU-061,Male,BBA,2,33.693792,73.052594,8129,30414,0.63,3.2,0,Boys,Dormitory,Non-Veg,0.04,0.96,0.81,0.07,0.33,"[""AC"", ""Study Room"", ""Common Room"", ""Parking""]",0,0,1,0,0,1,0,0
+STU-062,Male,Social Sciences,2,33.714837,73.04642,14951,22516,0.07,2.8,0,Boys,Dormitory,Non-Veg,0.15,0.85,0.58,0.85,0.73,"[""CCTV"", ""Parking"", ""Prayer Room""]",0,0,0,0,0,0,0,0
+STU-063,Male,Electrical Engineering,4,33.692617,73.038021,8188,32809,0.3,1.8,0,Boys,Double,Non-Veg,0.55,0.45,0.6,0.2,0.89,"[""Gym""]",0,1,0,0,0,0,0,0
+STU-064,Male,Data Science,4,33.729384,73.087432,12505,24667,0.79,5.3,1,Boys,Single,Both,0.6,0.4,0.6,0.34,0.54,"[""Study Room"", ""Cafeteria"", ""Iron""]",0,0,1,1,0,0,0,0
+STU-065,Male,BBA,2,33.689379,73.04504,11965,31106,0.43,3.4,0,Boys,Double,Veg,0.02,0.98,0.48,0.9,0.53,"[""CCTV"", ""Laundry"", ""Water Cooler"", ""Parking""]",0,0,0,0,1,0,0,0
+STU-066,Female,Social Sciences,4,33.710442,73.045059,14943,22884,0.82,3.4,0,Girls,Single,Non-Veg,0.12,0.88,0.6,0.39,0.47,"[""WiFi""]",1,0,0,0,0,0,0,0
+STU-067,Female,Cyber Security,2,33.724882,73.099654,6797,13928,0.7,6.2,1,Girls,Dormitory,Both,0.09,0.91,0.19,0.09,0.53,"[""Security Guard""]",0,0,0,0,0,0,0,0
+STU-068,Female,Social Sciences,1,33.713325,73.045495,6936,25904,0.73,5.6,1,Girls,Single,Non-Veg,0.81,0.19,0.81,0.26,0.77,"[""Security Guard"", ""Iron""]",0,0,0,0,0,0,0,0
+STU-069,Male,Computer Science,2,33.692853,73.047947,10645,29394,0.46,5.4,1,Boys,Single,Veg,0.81,0.19,0.48,0.78,0.75,"[""Water Cooler""]",0,0,0,0,0,0,0,0
+STU-070,Male,Software Engineering,4,33.719325,73.053739,10935,25448,0.62,1.8,0,Boys,Single,Both,0.5,0.5,0.88,0.23,0.4,"[""Common Room""]",0,0,0,0,0,0,0,0
+STU-071,Female,Electrical Engineering,3,33.722615,73.047013,5193,29834,0.1,4.2,1,Girls,Double,Non-Veg,0.52,0.48,0.02,0.96,0.38,"[""Lounge"", ""Study Room"", ""Microwave""]",0,0,1,0,0,0,0,0
+STU-072,Female,BBA,4,33.690441,73.041112,10092,21114,0.62,6.6,1,Girls,Double,Veg,0.58,0.42,0.04,0.33,0.47,"[""Common Room""]",0,0,0,0,0,0,0,0
+STU-073,Male,Cyber Security,2,33.691172,73.054071,9314,24016,0.49,1.9,0,Boys,Dormitory,Non-Veg,0.13,0.87,0.81,0.1,0.43,"[""Generator"", ""Refrigerator""]",0,0,0,0,0,0,0,1
+STU-074,Female,Software Engineering,3,33.644083,72.987645,6223,30779,0.65,6.5,1,Girls,Double,Both,0.2,0.8,0.27,0.59,0.49,"[""Hot Water"", ""Prayer Room""]",0,0,0,0,0,0,1,0
+STU-075,Male,Cyber Security,3,33.712365,73.056979,13625,22032,0.37,0.9,0,Boys,Single,Non-Veg,0.3,0.7,0.98,0.42,0.5,"[""Library"", ""Cafeteria"", ""Parking"", ""Common Room""]",0,0,0,1,0,0,0,0
+STU-076,Female,Electrical Engineering,1,33.717721,73.057234,11617,19768,0.86,4.0,1,Girls,Dormitory,Non-Veg,0.72,0.28,0.3,0.19,0.13,"[""Laundry"", ""AC""]",0,0,0,0,1,1,0,0
+STU-077,Male,Computer Science,1,33.716861,73.057662,13210,18574,0.77,1.8,0,Boys,Double,Veg,0.01,0.99,0.13,0.47,0.61,"[""Microwave"", ""Common Room""]",0,0,0,0,0,0,0,0
+STU-078,Male,Computer Science,1,33.715017,73.048093,8555,29567,0.59,5.5,1,Boys,Double,Non-Veg,0.89,0.11,0.82,0.39,0.45,"[""Refrigerator""]",0,0,0,0,0,0,0,0
+STU-079,Female,BBA,1,33.693731,73.056794,9332,15329,0.21,0.9,0,Girls,Dormitory,Veg,0.07,0.93,0.87,0.96,0.24,"[""Library"", ""Microwave"", ""Cafeteria""]",0,0,0,1,0,0,0,0
+STU-080,Female,Software Engineering,3,33.640645,72.993676,11567,29283,0.34,0.9,0,Girls,Dormitory,Veg,0.13,0.87,0.81,0.24,0.22,"[""Iron"", ""CCTV""]",0,0,0,0,0,0,0,0
+STU-081,Male,Cyber Security,3,33.685824,73.055169,6070,12920,0.96,1.7,0,Boys,Dormitory,Non-Veg,0.18,0.82,0.25,0.35,0.9,"[""Library"", ""Cafeteria"", ""Hot Water""]",0,0,0,1,0,0,1,0
+STU-082,Female,Cyber Security,2,33.712128,73.054335,8483,32108,0.0,3.9,1,Girls,Double,Non-Veg,0.69,0.31,0.85,0.38,0.5,"[""Gym""]",0,1,0,0,0,0,0,0
+STU-083,Male,BBA,1,33.645307,72.987152,8557,26158,0.37,2.3,0,Boys,Dormitory,Both,0.4,0.6,0.39,0.98,0.95,"[""Cafeteria"", ""CCTV""]",0,0,0,1,0,0,0,0
+STU-084,Female,Cyber Security,3,33.689332,73.038152,12160,17847,0.29,2.6,0,Girls,Dormitory,Non-Veg,0.27,0.73,0.45,0.73,0.69,"[""Microwave"", ""Water Cooler""]",0,0,0,0,0,0,0,0
+STU-085,Female,Computer Science,4,33.679893,73.047389,13684,26119,0.13,4.0,1,Girls,Double,Non-Veg,0.46,0.54,0.93,0.87,0.71,"[""Cafeteria""]",0,0,0,1,0,0,0,0
+STU-086,Male,Civil Engineering,1,33.646091,72.998096,14285,36858,0.27,5.8,1,Boys,Double,Veg,0.77,0.23,0.91,0.44,0.13,"[""Parking""]",0,0,0,0,0,0,0,0
+STU-087,Female,Software Engineering,2,33.727101,73.10196,8933,17318,0.02,4.5,1,Girls,Dormitory,Non-Veg,0.22,0.78,0.09,0.68,0.88,"[""Prayer Room"", ""Common Room""]",0,0,0,0,0,0,0,0
+STU-088,Male,Software Engineering,2,33.711285,73.049754,8483,16427,0.68,6.4,1,Boys,Double,Veg,0.44,0.56,0.66,0.72,0.27,"[""Library"", ""Lounge""]",0,0,0,0,0,0,0,0
+STU-089,Male,Cyber Security,2,33.645081,72.991986,9366,14488,0.34,1.2,0,Boys,Double,Veg,0.01,0.99,0.55,0.09,0.76,"[""Common Room""]",0,0,0,0,0,0,0,0
+STU-090,Female,Computer Science,3,33.676897,73.048409,12759,29826,0.69,1.7,0,Girls,Double,Veg,0.18,0.82,0.31,0.76,0.62,"[""Common Room"", ""Study Room"", ""Rooftop Access"", ""Lounge""]",0,0,1,0,0,0,0,0
+STU-091,Male,Data Science,2,33.711416,73.051108,5947,15707,0.62,1.2,0,Boys,Double,Non-Veg,0.81,0.19,0.05,0.48,0.01,"[""AC"", ""Microwave""]",0,0,0,0,0,1,0,0
+STU-092,Female,Cyber Security,1,33.722535,73.096769,6559,18242,0.9,1.9,0,Girls,Single,Both,0.21,0.79,0.1,0.66,0.91,"[""Parking"", ""CCTV"", ""Microwave""]",0,0,0,0,0,0,0,0
+STU-093,Male,Electrical Engineering,4,33.725475,73.08496,6667,22404,0.66,4.9,1,Boys,Double,Non-Veg,0.19,0.81,0.54,0.68,0.68,"[""Water Cooler""]",0,0,0,0,0,0,0,0
+STU-094,Female,Software Engineering,3,33.716835,73.041568,6308,20101,0.08,3.5,0,Girls,Dormitory,Non-Veg,0.89,0.11,0.57,0.1,0.45,"[""CCTV"", ""Water Cooler"", ""Microwave"", ""Common Room""]",0,0,0,0,0,0,0,0
+STU-095,Female,Computer Science,1,33.71699,73.044214,13553,22620,0.21,0.9,0,Girls,Double,Both,0.27,0.73,0.27,0.66,0.97,"[""WiFi"", ""Lounge""]",1,0,0,0,0,0,0,0
+STU-096,Female,Cyber Security,2,33.720435,73.042164,12265,27381,0.24,1.4,0,Girls,Single,Both,0.98,0.02,0.31,0.48,0.06,"[""CCTV""]",0,0,0,0,0,0,0,0
+STU-097,Female,Software Engineering,2,33.725397,73.083788,8895,33733,0.35,2.8,0,Girls,Double,Veg,0.64,0.36,0.17,0.62,0.88,"[""Parking""]",0,0,0,0,0,0,0,0
+STU-098,Female,Computer Science,2,33.719572,73.083499,12282,32917,0.6,5.2,1,Girls,Single,Non-Veg,0.66,0.34,0.74,0.03,0.54,"[""CCTV"", ""Library""]",0,0,0,0,0,0,0,0
+STU-099,Male,Software Engineering,3,33.638713,72.98862,14969,32373,0.13,4.6,1,Boys,Double,Both,0.36,0.64,0.38,0.1,0.62,"[""Rooftop Access"", ""Prayer Room""]",0,0,0,0,0,0,0,0
+STU-100,Male,Social Sciences,3,33.718378,73.048245,6524,28158,0.41,0.8,0,Boys,Dormitory,Both,0.47,0.53,0.1,0.51,0.02,"[""Security Guard"", ""Parking"", ""Rooftop Access""]",0,0,0,0,0,0,0,0
+STU-101,Male,Electrical Engineering,2,33.727623,73.087787,8170,13525,0.37,7.0,1,Boys,Double,Both,0.8,0.2,0.77,0.81,0.4,"[""Study Room"", ""Library"", ""AC""]",0,0,1,0,0,1,0,0
+STU-102,Female,Cyber Security,1,33.678712,73.054174,8071,30010,0.01,3.6,1,Girls,Single,Both,0.9,0.1,0.57,0.93,0.67,"[""Common Room"", ""Hot Water""]",0,0,0,0,0,0,1,0
+STU-103,Female,Civil Engineering,1,33.712512,73.053211,14604,22343,0.8,4.0,1,Girls,Single,Non-Veg,0.46,0.54,0.82,0.98,0.5,"[""Parking"", ""Iron""]",0,0,0,0,0,0,0,0
+STU-104,Male,Electrical Engineering,3,33.680338,73.037913,6781,27301,0.42,1.4,0,Boys,Single,Non-Veg,0.55,0.45,0.04,0.29,0.45,"[""Gym""]",0,1,0,0,0,0,0,0
+STU-105,Male,BBA,4,33.72967,73.102106,10660,27586,0.49,6.0,1,Boys,Single,Veg,0.58,0.42,0.33,0.11,0.24,"[""Common Room"", ""Hot Water""]",0,0,0,0,0,0,1,0
+STU-106,Female,Social Sciences,2,33.691946,73.043707,5858,16377,0.29,1.6,0,Girls,Single,Non-Veg,0.46,0.54,0.72,0.95,0.92,"[""Lounge"", ""Prayer Room""]",0,0,0,0,0,0,0,0
+STU-107,Female,BBA,4,33.725785,73.101218,13428,33813,0.04,5.8,1,Girls,Dormitory,Veg,0.68,0.32,0.73,0.53,0.2,"[""Gym"", ""Water Cooler""]",0,1,0,0,0,0,0,0
+STU-108,Male,Civil Engineering,2,33.726919,73.098226,8870,25629,0.17,4.4,1,Boys,Double,Veg,0.73,0.27,0.51,0.49,0.63,"[""Lounge"", ""Cafeteria""]",0,0,0,1,0,0,0,0
+STU-109,Female,Data Science,1,33.650967,72.997267,14918,31641,0.84,1.6,0,Girls,Double,Non-Veg,0.72,0.28,0.51,0.53,0.56,"[""Generator"", ""Water Cooler"", ""Library""]",0,0,0,0,0,0,0,1
+STU-110,Male,Social Sciences,4,33.68219,73.042721,10356,17213,0.7,2.6,0,Boys,Single,Non-Veg,0.59,0.41,0.4,0.92,0.65,"[""AC"", ""Gym"", ""Generator"", ""Refrigerator""]",0,1,0,0,0,1,0,1
+STU-111,Male,Electrical Engineering,2,33.64995,72.987671,8867,24485,0.99,2.7,0,Boys,Double,Veg,0.4,0.6,0.78,0.39,0.58,"[""Library"", ""Lounge"", ""Prayer Room"", ""Gym""]",0,1,0,0,0,0,0,0
+STU-112,Female,Cyber Security,4,33.64041,72.987221,11035,25845,0.66,4.7,1,Girls,Dormitory,Both,0.65,0.35,0.84,0.22,0.12,"[""Cafeteria"", ""WiFi"", ""Common Room""]",1,0,0,1,0,0,0,0
+STU-113,Female,Data Science,3,33.726219,73.10109,6794,17782,0.06,6.8,1,Girls,Dormitory,Non-Veg,0.84,0.16,0.38,0.44,0.14,"[""Iron"", ""Lounge"", ""Security Guard""]",0,0,0,0,0,0,0,0
+STU-114,Male,Cyber Security,4,33.727625,73.044904,12777,24296,0.85,5.3,1,Boys,Dormitory,Both,0.96,0.04,0.89,0.48,0.73,"[""Prayer Room"", ""AC"", ""Lounge""]",0,0,0,0,0,1,0,0
+STU-115,Male,Cyber Security,1,33.722362,73.04809,6824,22507,0.24,1.8,0,Boys,Single,Non-Veg,0.56,0.44,0.74,0.17,0.19,"[""CCTV""]",0,0,0,0,0,0,0,0
+STU-116,Male,Computer Science,4,33.690905,73.055264,13989,19768,0.91,2.1,0,Boys,Dormitory,Both,0.65,0.35,0.54,0.63,0.26,"[""Water Cooler""]",0,0,0,0,0,0,0,0
+STU-117,Female,Civil Engineering,3,33.73811,73.101344,6678,20092,0.56,3.8,1,Girls,Double,Both,0.06,0.94,0.09,0.41,0.75,"[""Study Room"", ""Lounge"", ""WiFi""]",1,0,1,0,0,0,0,0
+STU-118,Female,Cyber Security,1,33.718807,73.048876,5809,26372,0.31,2.3,0,Girls,Double,Non-Veg,0.5,0.5,0.89,0.77,0.74,"[""Generator"", ""WiFi""]",1,0,0,0,0,0,0,1
+STU-119,Female,Cyber Security,1,33.689737,73.043266,9613,26039,0.54,2.7,0,Girls,Double,Veg,0.59,0.41,0.97,0.48,0.06,"[""WiFi"", ""Parking""]",1,0,0,0,0,0,0,0
+STU-120,Female,BBA,1,33.72065,73.097524,10153,25634,0.77,7.0,1,Girls,Dormitory,Non-Veg,0.43,0.57,0.66,0.82,0.65,"[""Prayer Room"", ""Generator"", ""Rooftop Access""]",0,0,0,0,0,0,0,1
+STU-121,Female,Social Sciences,4,33.72905,73.095552,5686,27426,0.41,4.5,1,Girls,Double,Both,0.54,0.46,0.15,0.52,0.96,"[""Rooftop Access"", ""Gym"", ""Cafeteria""]",0,1,0,1,0,0,0,0
+STU-122,Female,Cyber Security,1,33.692703,73.05499,5966,28239,0.91,6.0,1,Girls,Single,Both,0.04,0.96,0.73,0.74,0.08,"[""CCTV"", ""Parking""]",0,0,0,0,0,0,0,0
+STU-123,Male,Social Sciences,3,33.641107,72.996186,11372,23477,0.33,2.0,0,Boys,Single,Non-Veg,0.12,0.88,0.52,0.59,0.01,"[""Water Cooler""]",0,0,0,0,0,0,0,0
+STU-124,Female,Data Science,2,33.647973,72.994957,11861,25851,0.92,2.9,0,Girls,Dormitory,Both,0.05,0.95,0.27,0.37,0.57,"[""Gym"", ""Laundry""]",0,1,0,0,1,0,0,0
+STU-125,Female,Computer Science,2,33.637083,72.986621,12233,18335,0.12,6.2,1,Girls,Single,Non-Veg,0.5,0.5,0.13,0.54,0.94,"[""Laundry"", ""CCTV"", ""Microwave""]",0,0,0,0,1,0,0,0
+STU-126,Male,Social Sciences,4,33.723256,73.049703,5022,20416,0.55,5.5,1,Boys,Single,Veg,0.25,0.75,0.93,0.95,0.07,"[""Cafeteria"", ""Library"", ""Generator""]",0,0,0,1,0,0,0,1
+STU-127,Male,Software Engineering,2,33.72121,73.093051,10406,27447,0.13,3.4,0,Boys,Double,Both,0.76,0.24,0.3,0.57,0.44,"[""Microwave""]",0,0,0,0,0,0,0,0
+STU-128,Male,Civil Engineering,1,33.638706,72.989713,12740,22306,0.53,2.5,0,Boys,Double,Both,0.07,0.93,0.4,0.3,0.68,"[""Microwave"", ""Security Guard""]",0,0,0,0,0,0,0,0
+STU-129,Male,Computer Science,1,33.724818,73.051137,14353,22611,0.44,5.7,1,Boys,Single,Non-Veg,0.42,0.58,0.22,0.13,0.01,"[""Common Room"", ""Security Guard"", ""Parking"", ""Iron""]",0,0,0,0,0,0,0,0
+STU-130,Male,Civil Engineering,3,33.636803,72.994301,11382,35277,0.44,2.4,0,Boys,Dormitory,Veg,0.77,0.23,0.14,0.76,0.79,"[""Gym"", ""Security Guard""]",0,1,0,0,0,0,0,0
+STU-131,Female,Software Engineering,4,33.641848,72.993958,12804,35020,0.23,6.2,1,Girls,Dormitory,Both,0.43,0.57,0.88,0.33,0.11,"[""Hot Water""]",0,0,0,0,0,0,1,0
+STU-132,Female,Software Engineering,4,33.739186,73.084195,9541,34466,0.4,4.4,1,Girls,Single,Veg,0.81,0.19,0.32,0.47,0.29,"[""Parking"", ""Cafeteria""]",0,0,0,1,0,0,0,0
+STU-133,Female,Computer Science,3,33.730108,73.098868,10615,31631,0.71,3.9,1,Girls,Single,Veg,0.06,0.94,0.48,0.52,0.98,"[""Lounge""]",0,0,0,0,0,0,0,0
+STU-134,Female,Electrical Engineering,2,33.641898,72.999859,13005,27974,0.91,5.8,1,Girls,Double,Non-Veg,0.2,0.8,0.19,0.42,0.45,"[""Generator"", ""Refrigerator"", ""Lounge""]",0,0,0,0,0,0,0,1
+STU-135,Female,Data Science,2,33.729563,73.09781,11745,30679,0.33,6.6,1,Girls,Single,Both,0.91,0.09,0.28,0.48,0.18,"[""Refrigerator""]",0,0,0,0,0,0,0,0
+STU-136,Male,Data Science,2,33.728864,73.056535,11521,19748,0.8,0.7,0,Boys,Double,Veg,0.01,0.99,0.53,0.48,0.68,"[""Cafeteria"", ""Rooftop Access""]",0,0,0,1,0,0,0,0
+STU-137,Female,Civil Engineering,1,33.726944,73.101167,10255,15257,0.38,2.2,0,Girls,Dormitory,Non-Veg,0.05,0.95,0.28,0.72,0.86,"[""Laundry"", ""Hot Water"", ""Rooftop Access"", ""WiFi""]",1,0,0,0,1,0,1,0
+STU-138,Female,BBA,1,33.689726,73.047859,11694,32529,0.29,1.5,0,Girls,Single,Non-Veg,0.05,0.95,0.38,0.51,0.32,"[""CCTV"", ""Cafeteria""]",0,0,0,1,0,0,0,0
+STU-139,Female,Computer Science,2,33.728816,73.087079,10646,21020,0.47,3.2,0,Girls,Dormitory,Both,0.69,0.31,0.88,0.04,0.8,"[""Hot Water"", ""Generator""]",0,0,0,0,0,0,1,1
+STU-140,Male,Social Sciences,2,33.685995,73.051241,9076,29039,0.21,5.7,1,Boys,Single,Both,0.35,0.65,0.25,0.81,0.28,"[""Laundry"", ""Study Room"", ""Security Guard""]",0,0,1,0,1,0,0,0
+STU-141,Male,Civil Engineering,4,33.7248,73.044095,7810,24473,0.86,2.1,0,Boys,Double,Non-Veg,0.08,0.92,0.92,1.0,0.15,"[""Rooftop Access"", ""Generator"", ""CCTV""]",0,0,0,0,0,0,0,1
+STU-142,Female,Data Science,3,33.649864,72.9985,13459,32175,0.52,3.1,0,Girls,Dormitory,Veg,0.65,0.35,0.68,0.78,0.13,"[""Prayer Room"", ""Iron""]",0,0,0,0,0,0,0,0
+STU-143,Female,Computer Science,4,33.723829,73.099212,6306,21619,0.76,1.7,0,Girls,Double,Non-Veg,0.37,0.63,0.45,0.04,0.31,"[""Water Cooler"", ""Cafeteria"", ""Iron"", ""Rooftop Access""]",0,0,0,1,0,0,0,0
+STU-144,Male,Cyber Security,2,33.694323,73.041724,8036,20634,0.7,2.0,0,Boys,Single,Veg,0.89,0.11,0.11,0.77,0.49,"[""Lounge"", ""CCTV"", ""Parking""]",0,0,0,0,0,0,0,0
+STU-145,Female,Cyber Security,4,33.715653,73.047117,9537,15782,0.89,5.5,1,Girls,Single,Non-Veg,0.07,0.93,0.51,0.08,0.31,"[""Parking"", ""Common Room""]",0,0,0,0,0,0,0,0
+STU-146,Female,BBA,2,33.719236,73.044189,9507,19337,0.1,2.3,0,Girls,Double,Non-Veg,0.82,0.18,0.48,0.99,0.77,"[""Lounge""]",0,0,0,0,0,0,0,0
+STU-147,Male,BBA,4,33.728827,73.086616,14116,28911,0.64,3.2,0,Boys,Single,Both,0.78,0.22,0.87,0.08,0.92,"[""Water Cooler""]",0,0,0,0,0,0,0,0
+STU-148,Male,Software Engineering,4,33.713415,73.043244,14476,36746,0.97,3.4,0,Boys,Dormitory,Non-Veg,0.76,0.24,0.86,0.11,0.95,"[""Parking"", ""Laundry"", ""Common Room"", ""Water Cooler""]",0,0,0,0,1,0,0,0
+STU-149,Male,Software Engineering,2,33.723238,73.046581,8081,18529,0.63,6.3,1,Boys,Double,Veg,0.37,0.63,0.39,0.25,0.98,"[""Hot Water"", ""Lounge"", ""Gym"", ""Common Room""]",0,1,0,0,0,0,1,0
+STU-150,Female,Computer Science,2,33.689297,73.039493,7580,20012,0.05,2.2,0,Girls,Single,Both,0.19,0.81,0.1,0.88,0.53,"[""Library"", ""Gym"", ""Parking""]",0,1,0,0,0,0,0,0
+STU-151,Female,Social Sciences,4,33.685348,73.039185,12600,22767,0.91,2.3,0,Girls,Double,Both,0.95,0.05,0.83,0.3,0.79,"[""Security Guard""]",0,0,0,0,0,0,0,0
+STU-152,Male,Electrical Engineering,4,33.655553,72.994937,5045,11238,0.05,3.9,1,Boys,Single,Non-Veg,0.3,0.7,0.27,0.65,0.53,"[""Hot Water"", ""Study Room""]",0,0,1,0,0,0,1,0
+STU-153,Female,Social Sciences,3,33.723511,73.053447,6845,25787,0.85,3.7,1,Girls,Double,Non-Veg,0.51,0.49,0.48,0.37,0.49,"[""Common Room"", ""Parking"", ""Prayer Room""]",0,0,0,0,0,0,0,0
+STU-154,Female,Software Engineering,4,33.715967,73.043161,14404,32155,0.72,6.4,1,Girls,Single,Non-Veg,0.67,0.33,0.08,0.18,0.59,"[""Study Room"", ""Cafeteria"", ""Common Room"", ""Hot Water""]",0,0,1,1,0,0,1,0
+STU-155,Female,Social Sciences,2,33.722411,73.092481,7666,18634,0.86,6.3,1,Girls,Single,Non-Veg,0.69,0.31,0.3,0.19,0.12,"[""Laundry"", ""CCTV""]",0,0,0,0,1,0,0,0
+STU-156,Female,Electrical Engineering,2,33.721412,73.089293,8022,31266,0.08,1.7,0,Girls,Double,Veg,0.65,0.35,0.13,0.64,0.34,"[""Laundry"", ""Generator"", ""Study Room""]",0,0,1,0,1,0,0,1
+STU-157,Female,Social Sciences,3,33.645273,72.99634,14044,26444,0.83,2.2,0,Girls,Double,Veg,0.65,0.35,0.7,0.29,0.34,"[""Parking"", ""Generator"", ""Laundry""]",0,0,0,0,1,0,0,1
+STU-158,Male,Social Sciences,2,33.71956,73.085002,10080,30551,0.21,3.1,0,Boys,Single,Both,0.5,0.5,0.6,0.5,0.87,"[""Study Room"", ""Water Cooler"", ""Hot Water"", ""Security Guard""]",0,0,1,0,0,0,1,0
+STU-159,Female,BBA,2,33.728928,73.0462,14678,23697,0.51,3.8,1,Girls,Dormitory,Non-Veg,0.97,0.03,0.56,0.73,0.35,"[""Library"", ""Refrigerator""]",0,0,0,0,0,0,0,0
+STU-160,Female,Social Sciences,2,33.640592,72.992804,10873,20376,0.6,6.0,1,Girls,Double,Non-Veg,0.43,0.57,0.11,0.57,0.5,"[""Library"", ""Lounge"", ""Rooftop Access"", ""Microwave""]",0,0,0,0,0,0,0,0
+STU-161,Female,BBA,4,33.690612,73.05261,14168,36286,0.71,2.2,0,Girls,Single,Non-Veg,0.68,0.32,0.92,0.71,0.67,"[""Rooftop Access"", ""Prayer Room"", ""Lounge""]",0,0,0,0,0,0,0,0
+STU-162,Male,Computer Science,3,33.646537,72.984284,11152,32992,0.32,5.1,1,Boys,Single,Non-Veg,0.49,0.51,0.67,0.19,0.62,"[""Study Room"", ""Prayer Room""]",0,0,1,0,0,0,0,0
+STU-163,Male,BBA,4,33.642511,72.997688,7484,14338,0.04,6.3,1,Boys,Single,Non-Veg,0.84,0.16,0.53,0.89,0.84,"[""Refrigerator"", ""Security Guard"", ""Library"", ""Microwave""]",0,0,0,0,0,0,0,0
+STU-164,Female,Cyber Security,1,33.644866,72.988054,14190,21474,0.16,1.3,0,Girls,Dormitory,Both,0.56,0.44,0.85,0.73,0.84,"[""Prayer Room""]",0,0,0,0,0,0,0,0
+STU-165,Male,Software Engineering,3,33.734698,73.086592,9637,26162,0.27,2.3,0,Boys,Dormitory,Both,0.64,0.36,0.17,0.62,0.72,"[""Laundry"", ""Microwave"", ""CCTV""]",0,0,0,0,1,0,0,0
+STU-166,Female,Cyber Security,1,33.727689,73.096891,10851,22883,0.03,1.4,0,Girls,Single,Non-Veg,0.88,0.12,0.37,0.24,0.45,"[""Iron"", ""Microwave"", ""Common Room"", ""Laundry""]",0,0,0,0,1,0,0,0
+STU-167,Male,Data Science,4,33.712794,73.039823,6050,28763,0.16,3.1,0,Boys,Double,Veg,0.18,0.82,0.74,0.3,0.46,"[""WiFi"", ""Water Cooler"", ""Common Room""]",1,0,0,0,0,0,0,0
+STU-168,Female,Cyber Security,2,33.652407,73.000586,9888,19867,0.47,5.3,1,Girls,Single,Both,0.3,0.7,0.86,0.3,0.92,"[""Lounge"", ""Cafeteria""]",0,0,0,1,0,0,0,0
+STU-169,Male,Cyber Security,1,33.648869,72.988536,8785,30086,0.23,6.3,1,Boys,Single,Non-Veg,0.52,0.48,0.26,0.04,0.12,"[""CCTV"", ""Water Cooler"", ""Laundry""]",0,0,0,0,1,0,0,0
+STU-170,Female,Cyber Security,2,33.691288,73.042684,7892,14090,0.56,1.2,0,Girls,Dormitory,Both,0.11,0.89,0.85,0.93,0.18,"[""CCTV"", ""Study Room"", ""Water Cooler""]",0,0,1,0,0,0,0,0
+STU-171,Male,Computer Science,3,33.732638,73.087249,13216,29911,0.79,1.8,0,Boys,Dormitory,Non-Veg,0.41,0.59,0.3,0.5,0.42,"[""Microwave"", ""Iron""]",0,0,0,0,0,0,0,0
+STU-172,Male,Electrical Engineering,4,33.686945,73.044228,14447,33631,0.39,6.2,1,Boys,Single,Non-Veg,0.41,0.59,0.65,0.04,0.05,"[""Refrigerator"", ""CCTV"", ""Cafeteria"", ""Lounge""]",0,0,0,1,0,0,0,0
+STU-173,Male,BBA,3,33.738299,73.092736,8088,26103,0.27,6.3,1,Boys,Single,Both,0.1,0.9,0.8,0.04,0.99,"[""Hot Water"", ""WiFi""]",1,0,0,0,0,0,1,0
+STU-174,Male,Computer Science,4,33.648281,72.99818,14624,35447,0.82,6.2,1,Boys,Single,Non-Veg,0.41,0.59,0.77,0.6,0.34,"[""AC"", ""Security Guard""]",0,0,0,0,0,1,0,0
+STU-175,Male,Electrical Engineering,3,33.728025,73.041178,13630,28898,0.83,7.0,1,Boys,Double,Veg,0.89,0.11,0.15,0.04,0.88,"[""WiFi""]",1,0,0,0,0,0,0,0
+STU-176,Male,Data Science,4,33.722083,73.056616,5755,20393,0.48,3.5,0,Boys,Single,Veg,0.6,0.4,0.32,0.84,0.3,"[""Water Cooler""]",0,0,0,0,0,0,0,0
+STU-177,Female,Electrical Engineering,1,33.72359,73.092207,6118,18755,0.67,6.4,1,Girls,Dormitory,Non-Veg,0.61,0.39,0.84,0.4,0.52,"[""CCTV""]",0,0,0,0,0,0,0,0
+STU-178,Male,Software Engineering,3,33.726129,73.094883,10319,26460,0.27,4.5,1,Boys,Double,Both,0.46,0.54,0.86,0.35,0.97,"[""Library""]",0,0,0,0,0,0,0,0
+STU-179,Female,Civil Engineering,1,33.720023,73.100504,5761,13946,0.15,6.3,1,Girls,Dormitory,Both,0.1,0.9,0.01,0.24,0.82,"[""Rooftop Access"", ""Refrigerator"", ""Iron""]",0,0,0,0,0,0,0,0
+STU-180,Male,Software Engineering,2,33.721103,73.052508,6377,14523,0.53,3.2,0,Boys,Dormitory,Both,0.73,0.27,0.91,0.08,0.19,"[""Common Room"", ""Library""]",0,0,0,0,0,0,0,0
+STU-181,Male,Data Science,2,33.738646,73.091658,13000,31273,0.99,6.9,1,Boys,Dormitory,Veg,0.39,0.61,0.68,0.98,0.03,"[""Cafeteria"", ""Parking"", ""AC"", ""Common Room""]",0,0,0,1,0,1,0,0
+STU-182,Male,BBA,3,33.688029,73.039171,6437,31199,0.67,3.9,1,Boys,Double,Non-Veg,0.57,0.43,0.2,0.9,0.11,"[""Parking"", ""Common Room"", ""Study Room"", ""Rooftop Access""]",0,0,1,0,0,0,0,0
+STU-183,Female,Computer Science,3,33.645719,72.990326,9677,33279,0.01,4.9,1,Girls,Double,Non-Veg,0.57,0.43,0.15,0.07,1.0,"[""Refrigerator"", ""Water Cooler"", ""Prayer Room""]",0,0,0,0,0,0,0,0
+STU-184,Male,Data Science,1,33.650004,72.985205,9727,23447,0.06,6.6,1,Boys,Dormitory,Non-Veg,0.52,0.48,0.31,0.16,0.17,"[""Common Room"", ""Hot Water""]",0,0,0,0,0,0,1,0
+STU-185,Female,Software Engineering,4,33.728575,73.053986,14467,25402,0.55,3.8,1,Girls,Single,Non-Veg,0.56,0.44,0.7,0.79,0.63,"[""Security Guard"", ""Laundry""]",0,0,0,0,1,0,0,0
+STU-186,Male,BBA,3,33.723723,73.094917,13177,36210,0.6,4.8,1,Boys,Double,Non-Veg,0.73,0.27,0.6,0.48,0.82,"[""Prayer Room"", ""Lounge"", ""Library""]",0,0,0,0,0,0,0,0
+STU-187,Male,Civil Engineering,4,33.720073,73.085922,8705,27731,0.84,1.0,0,Boys,Double,Non-Veg,0.59,0.41,0.62,0.64,0.03,"[""Microwave""]",0,0,0,0,0,0,0,0
+STU-188,Female,Cyber Security,1,33.729863,73.053066,13328,24661,0.7,5.1,1,Girls,Single,Veg,0.21,0.79,0.21,0.44,0.07,"[""Parking"", ""CCTV"", ""Cafeteria""]",0,0,0,1,0,0,0,0
+STU-189,Female,Social Sciences,1,33.644736,72.998516,14551,33730,0.83,6.4,1,Girls,Double,Veg,0.11,0.89,0.05,0.85,0.55,"[""Lounge"", ""Iron"", ""Gym""]",0,1,0,0,0,0,0,0
+STU-190,Male,Electrical Engineering,2,33.691266,73.045135,14029,38375,0.29,2.3,0,Boys,Single,Veg,0.53,0.47,0.28,0.5,0.16,"[""Hot Water"", ""Library"", ""Refrigerator"", ""Security Guard""]",0,0,0,0,0,0,1,0
+STU-191,Male,Civil Engineering,2,33.729511,73.044565,8660,14728,0.93,4.3,1,Boys,Double,Both,0.07,0.93,0.58,0.54,0.45,"[""Laundry""]",0,0,0,0,1,0,0,0
+STU-192,Male,Cyber Security,2,33.739343,73.098548,6414,25274,0.59,2.1,0,Boys,Double,Non-Veg,0.51,0.49,0.06,0.86,0.96,"[""Laundry"", ""Microwave"", ""Refrigerator""]",0,0,0,0,1,0,0,0
+STU-193,Male,Electrical Engineering,3,33.64918,72.991124,14443,26226,0.84,5.2,1,Boys,Double,Veg,0.67,0.33,0.2,0.74,0.69,"[""Rooftop Access""]",0,0,0,0,0,0,0,0
+STU-194,Female,Cyber Security,4,33.693681,73.039811,10813,19666,0.72,7.0,1,Girls,Double,Non-Veg,0.25,0.75,0.77,0.09,0.51,"[""Gym"", ""Laundry"", ""Study Room"", ""Rooftop Access""]",0,1,1,0,1,0,0,0
+STU-195,Male,Electrical Engineering,3,33.65566,73.002686,8659,16078,0.71,5.7,1,Boys,Dormitory,Both,0.9,0.1,0.69,0.32,0.25,"[""Laundry""]",0,0,0,0,1,0,0,0
+STU-196,Female,Social Sciences,1,33.649327,72.984956,11993,30403,0.29,3.5,0,Girls,Double,Non-Veg,0.85,0.15,0.96,0.73,0.66,"[""Library"", ""Refrigerator""]",0,0,0,0,0,0,0,0
+STU-197,Female,Computer Science,4,33.726873,73.090862,11629,20498,0.79,6.1,1,Girls,Dormitory,Non-Veg,0.59,0.41,0.29,0.08,0.49,"[""Laundry"", ""CCTV"", ""AC"", ""Gym""]",0,1,0,0,1,1,0,0
+STU-198,Male,Social Sciences,4,33.64146,72.989376,11875,30739,0.91,3.0,0,Boys,Dormitory,Non-Veg,0.29,0.71,0.74,0.54,0.53,"[""Parking"", ""Hot Water"", ""Library"", ""Water Cooler""]",0,0,0,0,0,0,1,0
+STU-199,Male,Cyber Security,2,33.727588,73.047654,10493,22725,0.16,4.8,1,Boys,Dormitory,Both,0.42,0.58,1.0,0.18,0.5,"[""Prayer Room"", ""Common Room""]",0,0,0,0,0,0,0,0
+STU-200,Female,Electrical Engineering,4,33.723484,73.04233,7611,31588,0.44,5.7,1,Girls,Double,Non-Veg,0.35,0.65,0.09,0.72,0.21,"[""Laundry""]",0,0,0,0,1,0,0,0

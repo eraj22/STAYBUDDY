@@ -19,6 +19,17 @@ import matplotlib
 matplotlib.use("Agg")
 from sklearn.metrics.pairwise import cosine_similarity
 
+# ── Chatbot imports (Samiya's NLP module) ─────────────────────────
+try:
+    from chatbot import (
+        load_intent_model, load_spacy,
+        ConversationContext, chat,
+        INTENT_EMOJI, AMENITY_LABELS,
+    )
+    CHATBOT_AVAILABLE = True
+except ImportError:
+    CHATBOT_AVAILABLE = False
+
 # ──────────────────────────────────────────────────────────────────
 # PAGE CONFIG
 # ──────────────────────────────────────────────────────────────────
@@ -396,6 +407,62 @@ st.markdown("""
         font-weight: 500;
     }
 
+    /* ── Chatbot ── */
+    .chat-bubble-user {
+        background: #1a1a2e;
+        color: white;
+        border-radius: 18px 18px 4px 18px;
+        padding: 0.75rem 1.1rem;
+        margin: 0.4rem 0 0.4rem 20%;
+        font-size: 0.92rem;
+        line-height: 1.5;
+    }
+    .chat-bubble-bot {
+        background: white;
+        color: #1a1a2e;
+        border-radius: 18px 18px 18px 4px;
+        padding: 0.75rem 1.1rem;
+        margin: 0.4rem 20% 0.4rem 0;
+        font-size: 0.92rem;
+        line-height: 1.5;
+        border: 1px solid #e8e4dc;
+    }
+    .intent-chip {
+        display: inline-block;
+        background: #f0f0f8;
+        color: #5a5a8a;
+        border-radius: 10px;
+        padding: 2px 8px;
+        font-size: 0.72rem;
+        font-family: 'DM Mono', monospace;
+        margin-right: 4px;
+    }
+    .conf-bar {
+        height: 3px;
+        border-radius: 2px;
+        background: #e8e4dc;
+        margin: 4px 0;
+    }
+    .hostel-mini-card {
+        background: #fafaf8;
+        border: 1px solid #e8e4dc;
+        border-left: 3px solid #2ecc71;
+        border-radius: 8px;
+        padding: 0.7rem 1rem;
+        margin: 0.4rem 0;
+    }
+    .context-pill {
+        display: inline-block;
+        background: #eef3ff;
+        border: 1px solid #c5d5ff;
+        color: #3a5cc0;
+        border-radius: 12px;
+        padding: 2px 10px;
+        font-size: 0.75rem;
+        margin: 2px;
+        font-weight: 500;
+    }
+
     /* Streamlit overrides */
     div[data-testid="stForm"] { border: none; padding: 0; }
     .stButton>button {
@@ -470,6 +537,32 @@ TECH_DEPTS = [
     "Computer Science","Electrical Engineering",
     "Software Engineering","Cyber Security","Data Science"
 ]
+
+# ──────────────────────────────────────────────────────────────────
+# CHATBOT — load NLP models once, store in session state
+# ──────────────────────────────────────────────────────────────────
+if CHATBOT_AVAILABLE:
+    @st.cache_resource
+    def load_chatbot_models():
+        tokenizer, model, le = load_intent_model()
+        nlp = load_spacy()
+        return tokenizer, model, le, nlp
+
+    try:
+        cb_tokenizer, cb_model, cb_le, cb_nlp = load_chatbot_models()
+        CHATBOT_READY = True
+    except Exception as _e:
+        CHATBOT_READY = False
+        CHATBOT_ERROR = str(_e)
+else:
+    CHATBOT_READY = False
+    CHATBOT_ERROR = "chatbot.py not found"
+
+# Per-session conversation state
+if "chat_history" not in st.session_state:
+    st.session_state.chat_history = []   # list of {role, content, meta}
+if "chat_context" not in st.session_state:
+    st.session_state.chat_context = ConversationContext() if CHATBOT_AVAILABLE else None
 
 
 # ──────────────────────────────────────────────────────────────────
@@ -652,6 +745,7 @@ with st.sidebar:
         ["🏠  Overview",
          "🔍  Find My Hostel",
          "📍  GPS Search",
+         "💬  Chatbot",
          "📊  Model Performance"],
         label_visibility="hidden"
     )
@@ -1129,6 +1223,277 @@ elif page == "📍  GPS Search":
 # ══════════════════════════════════════════════════════════════════
 # PAGE 4: MODEL PERFORMANCE
 # ══════════════════════════════════════════════════════════════════
+
+# ══════════════════════════════════════════════════════════════════
+# PAGE 4: CHATBOT  (Samiya Saleem — 22I-1065)
+# ══════════════════════════════════════════════════════════════════
+elif page == "💬  Chatbot":
+
+    st.markdown("""
+    <div class="hero" style="padding:1.8rem 2.5rem">
+        <div class="hero-tag">NLP MODULE — SAMIYA SALEEM 22I-1065 · DISTILBERT FINE-TUNED</div>
+        <div class="hero-title" style="font-size:2rem">💬 StayBuddy Assistant</div>
+        <div class="hero-sub">Ask anything in plain English or Urdu — the bot classifies your intent,
+        extracts entities, and routes to the right answer or recommendation engine.</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    if not CHATBOT_READY:
+        st.error(
+            f"⚠️ Chatbot models not loaded. Make sure `intent_model/` folder and "
+            f"`label_encoder.pkl` are in the same directory as `app.py`.\n\n"
+            f"Error: `{CHATBOT_ERROR if 'CHATBOT_ERROR' in dir() else 'Unknown'}`"
+        )
+    else:
+        # ── How it works strip ────────────────────────────────────
+        cols = st.columns(5)
+        steps = [
+            ("1", "You type", "Plain English or Urdu"),
+            ("2", "DistilBERT", "Classifies 1 of 7 intents"),
+            ("3", "spaCy + regex", "Extracts budget, amenity, room…"),
+            ("4", "Context merge", "Remembers your preferences"),
+            ("5", "Route & respond", "Queries engine or CSV"),
+        ]
+        for col, (num, title, desc) in zip(cols, steps):
+            with col:
+                st.markdown(
+                    f'<div style="background:white;border-radius:10px;padding:0.7rem 0.9rem;'
+                    f'border:1px solid #e8e4dc;text-align:center">'
+                    f'<div style="font-size:0.65rem;font-weight:700;color:#aaa;'
+                    f'text-transform:uppercase;letter-spacing:1px">{num}</div>'
+                    f'<div style="font-weight:700;font-size:0.85rem;color:#1a1a2e;margin:3px 0">{title}</div>'
+                    f'<div style="font-size:0.73rem;color:#8a8a9a">{desc}</div>'
+                    f'</div>',
+                    unsafe_allow_html=True
+                )
+
+        st.markdown("<br>", unsafe_allow_html=True)
+
+        # ── Context memory banner ─────────────────────────────────
+        ctx = st.session_state.chat_context
+        ctx_summary = ctx.summary() if ctx else "—"
+        if ctx and ctx.turn_count > 0:
+            st.markdown(
+                f'<div style="background:#eef3ff;border:1px solid #c5d5ff;border-radius:8px;'
+                f'padding:0.5rem 1rem;font-size:0.82rem;color:#3a5cc0;margin-bottom:0.8rem">'
+                f'🧠 <strong>Context memory:</strong> {ctx_summary}'
+                f'</div>',
+                unsafe_allow_html=True
+            )
+
+        # ── Chat history ──────────────────────────────────────────
+        chat_container = st.container()
+        with chat_container:
+            if not st.session_state.chat_history:
+                st.markdown(
+                    '<div class="chat-bubble-bot">'
+                    "👋 Hi! I'm the StayBuddy assistant. Ask me anything about hostels near FAST NUCES Islamabad.<br><br>"
+                    "<strong>Try:</strong><br>"
+                    '• <em>"Show me girls hostels under 15k with WiFi"</em><br>'
+                    '• <em>"Does Khadija Residence have a gym?"</em><br>'
+                    '• <em>"How do I book a hostel?"</em><br>'
+                    '• <em>"koi sasta hostel hai FAST ke paas?"</em>'
+                    '</div>',
+                    unsafe_allow_html=True
+                )
+            else:
+                for msg in st.session_state.chat_history:
+                    if msg["role"] == "user":
+                        st.markdown(
+                            f'<div class="chat-bubble-user">{msg["content"]}</div>',
+                            unsafe_allow_html=True
+                        )
+                    else:
+                        meta = msg.get("meta", {})
+                        intent     = meta.get("intent", "")
+                        confidence = meta.get("confidence", 0)
+                        entities   = meta.get("entities", {})
+                        emoji      = meta.get("emoji", "💬")
+
+                        # Intent + confidence strip
+                        conf_color = "#2ecc71" if confidence >= 0.8 else "#f39c12" if confidence >= 0.65 else "#e74c3c"
+                        entity_chips = ""
+                        for k, v in entities.items():
+                            if k == "amenities":
+                                for a in v:
+                                    entity_chips += f'<span class="intent-chip">{AMENITY_LABELS.get(a, a)}</span>'
+                            elif k != "location_ref":
+                                entity_chips += f'<span class="intent-chip">{k}: {v}</span>'
+
+                        st.markdown(
+                            f'<div style="display:flex;align-items:center;gap:6px;margin:4px 0 2px 0">'
+                            f'<span class="intent-chip">{emoji} {intent.replace("_"," ")}</span>'
+                            f'<span style="font-size:0.7rem;color:{conf_color};font-family:DM Mono,monospace;font-weight:600">'
+                            f'{confidence:.0%}</span>'
+                            f'{entity_chips}'
+                            f'</div>',
+                            unsafe_allow_html=True
+                        )
+
+                        # Main bot bubble
+                        resp_type = meta.get("type", "text")
+
+                        if resp_type == "hostel_results":
+                            hostels = meta.get("hostels", [])
+                            used_engine = meta.get("used_engine", False)
+
+                            engine_note = (
+                                "🧠 _Powered by Eraj's hybrid recommendation engine_"
+                                if used_engine else
+                                "📊 _Direct CSV filter (engine unavailable)_"
+                            )
+                            st.markdown(
+                                f'<div class="chat-bubble-bot">'
+                                f'{msg["content"]}<br>'
+                                f'<span style="font-size:0.75rem;color:#8a8a9a">{engine_note}</span>'
+                                f'</div>',
+                                unsafe_allow_html=True
+                            )
+
+                            # Mini hostel cards
+                            for h in hostels:
+                                score_str = f"  · **{h['score']:.1f}% match**" if "score" in h else ""
+                                amenity_str = "  ·  ".join(h.get("amenities", [])[:4])
+                                st.markdown(
+                                    f'<div class="hostel-mini-card">'
+                                    f'<strong>{h["name"]}</strong>{score_str}<br>'
+                                    f'<span style="font-size:0.8rem;color:#6b6b7a">'
+                                    f'📍 {h["area"]}  ·  💰 PKR {h["price"]:,}/mo  ·  '
+                                    f'⭐ {h["rating"]}  ·  📏 {h["distance"]}km  ·  '
+                                    f'🔒 {h["security"]}/5'
+                                    f'</span><br>'
+                                    f'<span style="font-size:0.75rem;color:#aaa">{amenity_str}</span>'
+                                    f'</div>',
+                                    unsafe_allow_html=True
+                                )
+                        else:
+                            st.markdown(
+                                f'<div class="chat-bubble-bot">{msg["content"]}</div>',
+                                unsafe_allow_html=True
+                            )
+
+        st.markdown("<br>", unsafe_allow_html=True)
+
+        # ── Input area ────────────────────────────────────────────
+        with st.form("chat_form", clear_on_submit=True):
+            col_in, col_btn = st.columns([5, 1])
+            with col_in:
+                user_input = st.text_input(
+                    "Message",
+                    placeholder='e.g. "Girls hostel under 12k with WiFi near FAST"',
+                    label_visibility="collapsed"
+                )
+            with col_btn:
+                send = st.form_submit_button("Send →", use_container_width=True)
+
+        # ── Suggested questions ───────────────────────────────────
+        st.markdown('<div class="section-label">Try asking</div>', unsafe_allow_html=True)
+        suggestions = [
+            "Girls hostel under 15k with WiFi",
+            "Does Khadija Residence have AC?",
+            "Hostels within 2km of FAST",
+            "How do I book a hostel?",
+            "Cheapest boys hostel available",
+            "koi hostel hai 10k mein?",
+        ]
+        sug_cols = st.columns(3)
+        for i, sug in enumerate(suggestions):
+            with sug_cols[i % 3]:
+                if st.button(sug, key=f"sug_{i}", use_container_width=True):
+                    user_input = sug
+                    send = True
+
+        # ── Process message ───────────────────────────────────────
+        if send and user_input and user_input.strip():
+            # Add user message to history
+            st.session_state.chat_history.append({
+                "role": "user", "content": user_input.strip()
+            })
+
+            # Run chatbot pipeline
+            try:
+                response = chat(
+                    user_text  = user_input.strip(),
+                    context    = st.session_state.chat_context,
+                    tokenizer  = cb_tokenizer,
+                    model      = cb_model,
+                    le         = cb_le,
+                    nlp        = cb_nlp,
+                    hostels_df = hostels_df,
+                    rec_fn     = get_ad_hoc_recommendations,
+                )
+
+                # Format display message
+                if response["type"] == "hostel_results":
+                    display_msg = response["message"]
+                else:
+                    display_msg = response["message"]
+
+                st.session_state.chat_history.append({
+                    "role":    "assistant",
+                    "content": display_msg,
+                    "meta":    response,
+                })
+            except Exception as e:
+                st.session_state.chat_history.append({
+                    "role":    "assistant",
+                    "content": f"⚠️ Error: {str(e)}",
+                    "meta":    {"intent":"error","confidence":0,"entities":{},"emoji":"⚠️","type":"text"},
+                })
+
+            st.rerun()
+
+        # ── Reset conversation ────────────────────────────────────
+        st.markdown("<br>", unsafe_allow_html=True)
+        col_r1, col_r2 = st.columns([4, 1])
+        with col_r2:
+            if st.button("🗑️ Clear chat", use_container_width=True):
+                st.session_state.chat_history = []
+                if CHATBOT_AVAILABLE:
+                    st.session_state.chat_context = ConversationContext()
+                st.rerun()
+
+        # ── Intelligence proof panel ──────────────────────────────
+        with st.expander("📊 NLP Model Details — Samiya Saleem (22I-1065)"):
+            m1, m2, m3, m4 = st.columns(4)
+            m1.metric("Intent Model",  "DistilBERT")
+            m2.metric("Intent Acc.",   "84.75%")
+            m3.metric("LLM Backend",   "Ollama llama3.2")
+            m4.metric("Training ex.",  "390")
+
+            st.markdown("**Architecture:**")
+            arch_rows = [
+                ("hostel_search",              "Eraj's hybrid engine",    "✅ intelligent"),
+                ("amenity / pricing / location","Live CSV query",          "✅ intelligent"),
+                ("booking / complaint / general","Ollama local LLM",      "✅ intelligent"),
+                ("low confidence (<65%)",       "Ollama LLM fallback",    "✅ intelligent"),
+            ]
+            arch_df = pd.DataFrame(arch_rows, columns=["Intent", "Handler", "Status"])
+            st.dataframe(arch_df, use_container_width=True, hide_index=True)
+
+            st.markdown("**Per-intent F1 scores (from training notebook):**")
+            f1_data = {
+                "Intent":   ["amenity_inquiry","booking_process","complaint",
+                              "general_info","hostel_search","location_info","pricing_info"],
+                "F1 Score": [1.00, 0.88, 0.92, 0.74, 0.86, 0.71, 0.82],
+                "Status":   ["✅","✅","✅","❌ needs improvement","✅","❌ needs improvement","✅"],
+            }
+            st.dataframe(pd.DataFrame(f1_data), use_container_width=True, hide_index=True)
+
+            st.markdown("**What makes this intelligent:**")
+            proofs = [
+                "DistilBERT — 66M parameter transformer, understands context not just keywords",
+                "Confidence threshold (65%) — routes to Ollama instead of guessing wrong",
+                "Ollama llama3.2 — local LLM answers booking/complaint/general with live dataset facts",
+                "Multi-turn context — remembers gender/budget across the whole conversation",
+                "Entity extraction — budget, amenity, room type, distance, hostel name, Urdu numbers",
+                "hostel_search → fires Eraj's hybrid recommendation engine directly",
+                "Graceful fallback — if Ollama offline, structured responses still work",
+            ]
+            for p in proofs:
+                st.markdown(f"✓ {p}")
+
+
 elif page == "📊  Model Performance":
 
     st.markdown("""
