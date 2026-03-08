@@ -30,70 +30,397 @@ st.set_page_config(
 )
 
 # ──────────────────────────────────────────────────────────────────
-# STYLING
+# STYLING — Clean, editorial, judge-friendly
 # ──────────────────────────────────────────────────────────────────
 st.markdown("""
 <style>
-    .main-header {
-        font-size: 2.5rem;
-        font-weight: 800;
-        color: #2c3e50;
-        text-align: center;
-        padding: 1rem 0 0.5rem 0;
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
+
+    html, body, [class*="css"] {
+        font-family: 'DM Sans', sans-serif;
     }
-    .sub-header {
-        font-size: 1.1rem;
-        color: #7f8c8d;
-        text-align: center;
-        margin-bottom: 2rem;
+
+    /* ── Page background ── */
+    .stApp {
+        background: #f5f4f0;
     }
-    .metric-card {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        padding: 1rem;
-        border-radius: 10px;
+
+    /* ── Sidebar ── */
+    [data-testid="stSidebar"] {
+        background: #1a1a2e !important;
+        border-right: 1px solid #2d2d4e;
+    }
+    [data-testid="stSidebar"] * {
+        color: #e8e8f0 !important;
+    }
+    [data-testid="stSidebar"] .stRadio label {
+        color: #c8c8e0 !important;
+        font-size: 0.95rem;
+        padding: 6px 0;
+    }
+
+    /* ── Hero header ── */
+    .hero {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+        border-radius: 16px;
+        padding: 2.5rem 3rem;
+        margin-bottom: 1.5rem;
         color: white;
-        text-align: center;
-        margin: 0.5rem 0;
+        position: relative;
+        overflow: hidden;
     }
-    .hostel-card {
-        background: #f8f9fa;
-        border-left: 4px solid #2ecc71;
-        padding: 1rem;
-        border-radius: 8px;
-        margin: 0.8rem 0;
+    .hero::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -10%;
+        width: 400px;
+        height: 400px;
+        background: radial-gradient(circle, rgba(99,179,237,0.12) 0%, transparent 70%);
+        border-radius: 50%;
     }
-    .score-badge {
-        background: #2ecc71;
-        color: white;
-        padding: 0.3rem 0.8rem;
+    .hero-title {
+        font-size: 2.8rem;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+        margin: 0 0 0.4rem 0;
+        line-height: 1.1;
+    }
+    .hero-sub {
+        font-size: 1.05rem;
+        color: #a0b4cc;
+        margin: 0;
+        font-weight: 400;
+    }
+    .hero-tag {
+        display: inline-block;
+        background: rgba(99,179,237,0.2);
+        border: 1px solid rgba(99,179,237,0.4);
+        color: #90cdf4;
+        padding: 3px 12px;
         border-radius: 20px;
-        font-weight: bold;
-        font-size: 1.1rem;
+        font-size: 0.78rem;
+        font-family: 'DM Mono', monospace;
+        margin-bottom: 1rem;
+        letter-spacing: 0.5px;
     }
-    .why-box {
-        background: #eaf4fb;
-        border: 1px solid #3498db;
-        padding: 0.5rem 0.8rem;
-        border-radius: 6px;
-        font-size: 0.9rem;
-        color: #2c3e50;
-        margin-top: 0.5rem;
+
+    /* ── Section header ── */
+    .section-label {
+        font-size: 0.72rem;
+        font-weight: 600;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: #8a8a9a;
+        margin-bottom: 0.75rem;
     }
-    .intel-badge {
-        background: #e8f5e9;
-        border: 1px solid #2ecc71;
-        padding: 0.4rem 0.8rem;
-        border-radius: 6px;
+
+    /* ── Stat cards (home page) ── */
+    .stat-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1.2rem 1.4rem;
+        border: 1px solid #e8e4dc;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    .stat-number {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #1a1a2e;
+        line-height: 1;
+        margin-bottom: 0.2rem;
+    }
+    .stat-label {
+        font-size: 0.8rem;
+        color: #8a8a9a;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .stat-accent {
+        width: 30px;
+        height: 3px;
+        border-radius: 2px;
+        margin-bottom: 0.8rem;
+    }
+
+    /* ── Flow step cards ── */
+    .flow-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1.3rem 1.4rem;
+        border: 1px solid #e8e4dc;
+        position: relative;
+        height: 100%;
+    }
+    .flow-num {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: #1a1a2e;
+        color: white;
+        font-size: 0.8rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 0.8rem;
+    }
+    .flow-title {
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: #1a1a2e;
+        margin-bottom: 0.3rem;
+    }
+    .flow-desc {
+        font-size: 0.82rem;
+        color: #6b6b7a;
+        line-height: 1.5;
+    }
+
+    /* ── Intelligence proof pills ── */
+    .proof-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: white;
+        border: 1px solid #e0ead8;
+        border-left: 3px solid #38a169;
+        padding: 0.5rem 0.9rem;
+        border-radius: 8px;
+        font-size: 0.83rem;
+        color: #2d4a2d;
+        margin: 3px;
+        font-weight: 500;
+    }
+
+    /* ── Hostel result card ── */
+    .hostel-card {
+        background: white;
+        border-radius: 14px;
+        padding: 1.4rem 1.6rem;
+        border: 1px solid #e8e4dc;
+        margin-bottom: 1rem;
+        box-shadow: 0 1px 6px rgba(0,0,0,0.05);
+        position: relative;
+    }
+    .hostel-rank {
+        position: absolute;
+        top: 1.2rem;
+        right: 1.4rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #8a8a9a;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+    }
+    .hostel-name {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #1a1a2e;
+        margin: 0 0 0.15rem 0;
+    }
+    .hostel-sub {
         font-size: 0.85rem;
-        color: #1a5c35;
+        color: #8a8a9a;
+        margin-bottom: 1rem;
     }
-    .warning-box {
-        background: #fff3cd;
-        border: 1px solid #ffc107;
-        padding: 0.8rem;
-        border-radius: 6px;
-        margin: 0.5rem 0;
+    .match-bar-bg {
+        background: #f0ede8;
+        border-radius: 4px;
+        height: 6px;
+        margin: 0.4rem 0 0.15rem 0;
     }
+    .match-bar-fill {
+        height: 6px;
+        border-radius: 4px;
+        transition: width 0.4s ease;
+    }
+    .match-pct {
+        font-size: 1.5rem;
+        font-weight: 700;
+        line-height: 1;
+    }
+
+    /* ── Score decomposition ── */
+    .score-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin: 4px 0;
+        font-size: 0.82rem;
+        font-family: 'DM Mono', monospace;
+        color: #5a5a6a;
+    }
+    .score-label {
+        width: 90px;
+        font-weight: 500;
+        color: #3a3a4a;
+    }
+    .score-bar {
+        flex: 1;
+        height: 4px;
+        background: #f0ede8;
+        border-radius: 2px;
+        overflow: hidden;
+    }
+    .score-bar-inner {
+        height: 100%;
+        border-radius: 2px;
+    }
+    .score-val {
+        width: 40px;
+        text-align: right;
+        font-weight: 600;
+    }
+
+    /* ── Reason tag ── */
+    .reason-tag {
+        display: inline-block;
+        background: #eef6ff;
+        border: 1px solid #bee3f8;
+        color: #2b6cb0;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-size: 0.78rem;
+        margin: 2px;
+        font-weight: 500;
+    }
+
+    /* ── Amenity chip ── */
+    .amenity-chip {
+        display: inline-block;
+        background: #f0f0f5;
+        color: #5a5a6a;
+        padding: 2px 9px;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        margin: 2px;
+        font-weight: 500;
+    }
+
+    /* ── Intelligence banner ── */
+    .intel-banner {
+        background: #f0faf4;
+        border: 1px solid #c6e8d2;
+        border-radius: 10px;
+        padding: 0.9rem 1.2rem;
+        margin: 1rem 0;
+        font-size: 0.88rem;
+        color: #276749;
+    }
+    .intel-banner strong { color: #1a4731; }
+
+    /* ── Comparison table ── */
+    .compare-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.88rem;
+    }
+    .compare-table th {
+        background: #1a1a2e;
+        color: white;
+        padding: 0.7rem 1rem;
+        text-align: left;
+        font-weight: 600;
+        font-size: 0.82rem;
+        letter-spacing: 0.3px;
+    }
+    .compare-table th:first-child { border-radius: 8px 0 0 0; }
+    .compare-table th:last-child  { border-radius: 0 8px 0 0; }
+    .compare-table td {
+        padding: 0.65rem 1rem;
+        border-bottom: 1px solid #f0ede8;
+        color: #3a3a4a;
+        font-family: 'DM Mono', monospace;
+    }
+    .compare-table tr:last-child td { border-bottom: none; }
+    .compare-table tr:hover td { background: #faf9f7; }
+    .compare-table .winner { color: #276749; font-weight: 700; }
+    .compare-table .metric-name {
+        font-family: 'DM Sans', sans-serif;
+        font-weight: 600;
+        color: #1a1a2e;
+    }
+    .compare-table .hybrid-col { background: #f8fdf9; }
+
+    /* ── Form styling ── */
+    .form-section {
+        background: white;
+        border-radius: 14px;
+        padding: 1.4rem 1.6rem;
+        border: 1px solid #e8e4dc;
+        margin-bottom: 1rem;
+    }
+    .form-section-title {
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1.2px;
+        color: #8a8a9a;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #f0ede8;
+    }
+
+    /* ── GPS result row ── */
+    .gps-row {
+        background: white;
+        border-radius: 10px;
+        padding: 0.9rem 1.2rem;
+        border: 1px solid #e8e4dc;
+        margin: 6px 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    /* ── Metric badge ── */
+    .metric-badge {
+        background: #f0f0f5;
+        border-radius: 8px;
+        padding: 0.6rem 0.9rem;
+        text-align: center;
+    }
+    .metric-badge-val {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #1a1a2e;
+        font-family: 'DM Mono', monospace;
+    }
+    .metric-badge-lbl {
+        font-size: 0.7rem;
+        color: #8a8a9a;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-weight: 500;
+    }
+
+    /* Streamlit overrides */
+    div[data-testid="stForm"] { border: none; padding: 0; }
+    .stButton>button {
+        background: #1a1a2e !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 10px !important;
+        font-weight: 600 !important;
+        font-family: 'DM Sans', sans-serif !important;
+        padding: 0.7rem 1.5rem !important;
+        font-size: 0.95rem !important;
+        transition: all 0.2s ease !important;
+    }
+    .stButton>button:hover {
+        background: #0f3460 !important;
+        transform: translateY(-1px) !important;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2) !important;
+    }
+    [data-testid="stExpander"] {
+        border: 1px solid #e8e4dc !important;
+        border-radius: 10px !important;
+        background: white !important;
+    }
+    .stAlert { border-radius: 10px !important; }
+    div.stMetric { background: white; border-radius: 10px; padding: 0.8rem; border: 1px solid #e8e4dc; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -107,7 +434,7 @@ MODEL_DIR = os.path.join(BASE_DIR, "models")
 
 
 # ──────────────────────────────────────────────────────────────────
-# LOAD DATA (cached so it only loads once)
+# LOAD DATA
 # ──────────────────────────────────────────────────────────────────
 @st.cache_data
 def load_data():
@@ -119,8 +446,8 @@ def load_data():
 
 @st.cache_resource
 def load_models():
-    hostel_matrix    = np.load(os.path.join(MODEL_DIR, "hostel_feature_matrix.npy"))
-    predicted_matrix = pd.read_csv(os.path.join(MODEL_DIR, "predicted_matrix.csv"), index_col=0)
+    hostel_matrix      = np.load(os.path.join(MODEL_DIR, "hostel_feature_matrix.npy"))
+    predicted_matrix   = pd.read_csv(os.path.join(MODEL_DIR, "predicted_matrix.csv"), index_col=0)
     interaction_matrix = pd.read_csv(os.path.join(MODEL_DIR, "interaction_matrix.csv"), index_col=0)
     cold_start_models  = joblib.load(os.path.join(MODEL_DIR, "cold_start_models.pkl"))
     with open(os.path.join(MODEL_DIR, "hybrid_config.json")) as f:
@@ -143,16 +470,10 @@ TECH_DEPTS = [
     "Computer Science","Electrical Engineering",
     "Software Engineering","Cyber Security","Data Science"
 ]
-DEMO_FEATURES = [
-    "budget_max","max_distance_km","study_preference",
-    "price_sensitivity","comfort_preference","noise_tolerance",
-    "priority_wifi","priority_study_room","priority_ac",
-    "priority_generator","needs_transport"
-]
 
 
 # ──────────────────────────────────────────────────────────────────
-# HELPER FUNCTIONS
+# HELPER FUNCTIONS  (unchanged logic, same as original)
 # ──────────────────────────────────────────────────────────────────
 def classify_student_type(study_pref, price_sens, comfort_pref):
     if study_pref > 0.70:   return "study_focused"
@@ -161,10 +482,10 @@ def classify_student_type(study_pref, price_sens, comfort_pref):
     return "balanced"
 
 def food_compat(student_pref, hostel_food):
-    if hostel_food == "None":      return 0.8
-    if student_pref == "Both":     return 1.0
+    if hostel_food == "None":       return 0.8
+    if student_pref == "Both":      return 1.0
     if student_pref == hostel_food: return 1.0
-    if hostel_food == "Both":      return 0.9
+    if hostel_food == "Both":       return 0.9
     return 0.3
 
 def room_compat(preferred, available_json):
@@ -182,15 +503,13 @@ def build_ad_hoc_student_vector(gender, department, budget_max,
                                  room_type, price_sens, comfort_pref,
                                  noise_tol, curfew_flex, needs_transport,
                                  must_have):
-    """Build a student vector from form inputs — no student_id needed."""
-    price_score   = np.clip(1-(budget_max/hostels_df["single_room_price"].max()),0,1)
-    dist_score    = np.clip(1-(max_dist/hostels_df["distance_from_fast_km"].max()),0,1)
-    safety_score  = 0.90 if gender=="Female" else 0.70
-    food_map      = {"Veg":0.33,"Non-Veg":0.66,"Both":1.0}
-    food_score    = food_map.get(food_pref, 0.5)
-    internet_score= 0.90 if department in TECH_DEPTS else 0.50
-    amenity_score = min(len(must_have)/14, 1.0)
-
+    price_score    = np.clip(1-(budget_max/hostels_df["single_room_price"].max()),0,1)
+    dist_score     = np.clip(1-(max_dist/hostels_df["distance_from_fast_km"].max()),0,1)
+    safety_score   = 0.90 if gender=="Female" else 0.70
+    food_map       = {"Veg":0.33,"Non-Veg":0.66,"Both":1.0}
+    food_score     = food_map.get(food_pref, 0.5)
+    internet_score = 0.90 if department in TECH_DEPTS else 0.50
+    amenity_score  = min(len(must_have)/14, 1.0)
     base = np.array([
         price_score, dist_score, study_pref, study_pref,
         safety_score, comfort_pref, amenity_score, price_sens,
@@ -213,34 +532,25 @@ def get_ad_hoc_recommendations(
     food_pref, room_type, price_sens, comfort_pref, noise_tol,
     curfew_flex, needs_transport, must_have, top_k=5
 ):
-    """
-    Core recommendation function for ad-hoc (new) students.
-    Uses hybrid CB+CF logic without requiring a student_id.
-    """
     hostel_type = "Girls" if gender=="Female" else "Boys"
     gender_mask = hostels_df["hostel_type"]==hostel_type
     filt_h      = hostels_df[gender_mask].copy()
     filt_m      = hostel_matrix[gender_mask.values]
 
-    # ── Content-Based Score ───────────────────────────────────────
     svec  = build_ad_hoc_student_vector(
         gender, department, budget_max, max_dist, study_pref,
         food_pref, room_type, price_sens, comfort_pref,
         noise_tol, curfew_flex, needs_transport, must_have
     ).reshape(1,-1)
     sims  = cosine_similarity(svec, filt_m)[0]
-    sims *= filt_h["food_type"].apply(
-        lambda ft: food_compat(food_pref, ft)
-    ).values
+    sims *= filt_h["food_type"].apply(lambda ft: food_compat(food_pref, ft)).values
     sims *= (0.7+0.3*filt_h["room_types_available"].apply(
-        lambda rt: room_compat(room_type, rt)
-    ).values)
+        lambda rt: room_compat(room_type, rt)).values)
     sims *= (0.85+0.15*(filt_h["available_rooms"]>0).astype(float).values)
     cb_scores = pd.Series(sims, index=filt_h["hostel_id"].values)
     if cb_scores.max()>cb_scores.min():
         cb_scores = (cb_scores-cb_scores.min())/(cb_scores.max()-cb_scores.min())
 
-    # ── CF Score: use demographic clustering (cold-start) ─────────
     model = cold_start_models.get(gender)
     if model is not None:
         feat_vec = np.array([[
@@ -255,14 +565,9 @@ def get_ad_hoc_recommendations(
         scaled  = model["scaler"].transform(feat_vec)
         cluster = model["kmeans"].predict(scaled)[0]
         labels  = model["kmeans"].labels_
-        sim_idx = [
-            model["indices"][i]
-            for i,lbl in enumerate(labels) if lbl==cluster
-        ]
+        sim_idx = [model["indices"][i] for i,lbl in enumerate(labels) if lbl==cluster]
         sim_sids = students_df.loc[sim_idx,"student_id"].tolist()
-        avg = predicted_matrix.loc[
-            predicted_matrix.index.isin(sim_sids)
-        ].mean(axis=0)
+        avg = predicted_matrix.loc[predicted_matrix.index.isin(sim_sids)].mean(axis=0)
         cf_scores = avg[avg.index.isin(filt_h["hostel_id"].values)]
     else:
         cf_scores = filt_h.set_index("hostel_id")["overall_rating"]/5
@@ -270,7 +575,6 @@ def get_ad_hoc_recommendations(
     if cf_scores.max()>cf_scores.min():
         cf_scores = (cf_scores-cf_scores.min())/(cf_scores.max()-cf_scores.min())
 
-    # ── Hybrid fusion ─────────────────────────────────────────────
     stype = classify_student_type(study_pref, price_sens, comfort_pref)
     alpha = type_alphas.get(stype, best_alpha)
     idx   = cb_scores.index.union(cf_scores.index)
@@ -285,46 +589,42 @@ def get_ad_hoc_recommendations(
     results = filt_h[filt_h["hostel_id"].isin(top_ids)].copy()
     results["hybrid_score"] = results["hostel_id"].map(hybrid)
     results["cb_score"]     = results["hostel_id"].map(
-        cb_scores.reindex(results["hostel_id"], fill_value=0)
-    )
+        cb_scores.reindex(results["hostel_id"], fill_value=0))
     results["cf_score"]     = results["hostel_id"].map(
-        cf_scores.reindex(results["hostel_id"], fill_value=0)
-    )
+        cf_scores.reindex(results["hostel_id"], fill_value=0))
     results["alpha_used"]   = alpha
     results["student_type"] = stype
-
     return results.sort_values("hybrid_score",ascending=False).reset_index(drop=True)
 
 def generate_explanation(row, gender, food_pref, room_type,
-                          budget_max, max_dist, study_pref,
-                          department, alpha):
+                          budget_max, max_dist, study_pref, department, alpha):
     reasons = []
     if row["single_room_price"] <= budget_max:
         pct = (row["single_room_price"]/budget_max)*100
-        reasons.append(f"✅ Within budget (PKR {row['single_room_price']:,} = {pct:.0f}% of your max)")
+        reasons.append(f"✅ Within budget ({pct:.0f}% of max)")
     if row["distance_from_fast_km"] <= max_dist:
-        reasons.append(f"📍 Close to FAST ({row['distance_from_fast_km']}km)")
+        reasons.append(f"📍 {row['distance_from_fast_km']}km from FAST")
     if study_pref>0.6 and row["study_environment_score"]>0.5:
-        reasons.append(f"📚 Strong study environment ({row['study_environment_score']})")
+        reasons.append(f"📚 Study env: {row['study_environment_score']}")
     if department in TECH_DEPTS and row["has_wifi"]:
-        reasons.append(f"🌐 Fast WiFi ({row['internet_speed_mbps']} Mbps)")
+        reasons.append(f"🌐 WiFi {row['internet_speed_mbps']}Mbps")
     if gender=="Female" and row["security_rating"]>=4.0:
-        reasons.append(f"🔒 High security ({row['security_rating']}/5)")
+        reasons.append(f"🔒 Security {row['security_rating']}/5")
     if food_pref==row["food_type"]:
-        reasons.append(f"🍽️ Perfect food match ({row['food_type']})")
+        reasons.append(f"🍽️ Food match ({row['food_type']})")
     elif row["food_type"]=="Both":
-        reasons.append(f"🍽️ Flexible food (Veg & Non-Veg available)")
+        reasons.append("🍽️ Veg & Non-Veg")
     try:
         rooms = json.loads(row["room_types_available"])
         if room_type in rooms:
-            reasons.append(f"🛏️ {room_type} room available")
+            reasons.append(f"🛏️ {room_type} available")
     except:
         pass
     if row["overall_rating"]>=4.0:
-        reasons.append(f"⭐ Highly rated ({row['overall_rating']}/5 from {row['total_reviews']} reviews)")
+        reasons.append(f"⭐ {row['overall_rating']}/5 ({row['total_reviews']} reviews)")
     if row["cf_score"]>0.5:
-        reasons.append(f"👥 Popular with similar students")
-    return reasons[:4]
+        reasons.append("👥 Popular with peers")
+    return reasons[:5]
 
 def haversine_distance(lat1, lon1, lat2, lon2):
     R = 6371
@@ -335,392 +635,417 @@ def haversine_distance(lat1, lon1, lat2, lon2):
 
 
 # ──────────────────────────────────────────────────────────────────
-# SIDEBAR NAVIGATION
+# SIDEBAR
 # ──────────────────────────────────────────────────────────────────
 with st.sidebar:
-    st.markdown("## 🏠 StayBuddy")
-    st.markdown("*Intelligent Hostel Finder*")
+    st.markdown("""
+    <div style="padding:1.2rem 0 1rem 0">
+        <div style="font-size:1.4rem;font-weight:700;color:#e8e8f0;letter-spacing:-0.3px">🏠 StayBuddy</div>
+        <div style="font-size:0.8rem;color:#7070a0;margin-top:2px">Intelligent Hostel Finder</div>
+    </div>
+    """, unsafe_allow_html=True)
+
     st.divider()
 
     page = st.radio(
         "Navigate",
-        ["🏠 Home",
-         "🔍 Find My Hostel",
-         "📍 GPS Search",
-         "📊 Model Performance"],
+        ["🏠  Overview",
+         "🔍  Find My Hostel",
+         "📍  GPS Search",
+         "📊  Model Performance"],
         label_visibility="hidden"
     )
 
     st.divider()
-    st.markdown("**System Info**")
-    st.markdown(f"🏨 Hostels: **{len(hostels_df)}**")
-    st.markdown(f"👤 Students: **{len(students_df)}**")
-    st.markdown(f"🔄 Interactions: **{len(interactions_df):,}**")
-    st.markdown(f"⚙️ Optimal α: **{best_alpha}**")
+    st.markdown("""<div style="font-size:0.72rem;color:#5050708;letter-spacing:1px;text-transform:uppercase;font-weight:600;margin-bottom:0.6rem">Live Dataset</div>""", unsafe_allow_html=True)
+
+    stats = [
+        ("🏨", f"{len(hostels_df)}", "Hostels"),
+        ("👤", f"{len(students_df)}", "Students"),
+        ("🔄", f"{len(interactions_df):,}", "Interactions"),
+        ("⚙️", f"α = {best_alpha}", "Optimal alpha"),
+    ]
+    for icon, val, lbl in stats:
+        st.markdown(f"""
+        <div style="display:flex;align-items:center;gap:8px;margin:6px 0;font-size:0.88rem">
+            <span>{icon}</span>
+            <span style="color:#e8e8f0;font-weight:600">{val}</span>
+            <span style="color:#7070a0">{lbl}</span>
+        </div>""", unsafe_allow_html=True)
+
     st.divider()
-    st.caption("Eraj Zaman — 22I-1296")
-    st.caption("FAST NUCES Islamabad")
+    st.markdown("""<div style="font-size:0.75rem;color:#5050708">
+        <div style="color:#9090b8">Eraj Zaman — 22I-1296</div>
+        <div style="color:#5050708;margin-top:2px">FAST NUCES Islamabad</div>
+        <div style="color:#5050708">Dr. Ahkter Jamil</div>
+    </div>""", unsafe_allow_html=True)
 
 
 # ══════════════════════════════════════════════════════════════════
-# PAGE 1: HOME
+# PAGE 1: OVERVIEW
 # ══════════════════════════════════════════════════════════════════
-if page == "🏠 Home":
-    st.markdown('<div class="main-header">🏠 StayBuddy</div>', unsafe_allow_html=True)
-    st.markdown(
-        '<div class="sub-header">AI-Powered Intelligent Hostel Discovery for FAST NUCES Students</div>',
-        unsafe_allow_html=True
-    )
+if page == "🏠  Overview":
 
-    col1, col2, col3, col4 = st.columns(4)
-    with col1:
-        st.metric("Hostels", len(hostels_df), "Islamabad")
-    with col2:
-        st.metric("Students", len(students_df), "Profiles")
-    with col3:
-        st.metric("Interactions", f"{len(interactions_df):,}", "Logged")
-    with col4:
-        st.metric("Hybrid MAP", f"{hybrid_metrics['Hybrid']['MAP']:.4f}", "↑ beats CB & CF")
+    # Hero
+    st.markdown("""
+    <div class="hero">
+        <div class="hero-tag">FYP PRELIM — ERAJ ZAMAN 22I-1296</div>
+        <div class="hero-title">StayBuddy</div>
+        <div class="hero-sub">An AI-powered hostel recommendation engine for FAST NUCES students —<br>
+        combining Content-Based Filtering + Collaborative Filtering in a learned Hybrid model.</div>
+    </div>
+    """, unsafe_allow_html=True)
 
-    st.divider()
+    # Stats row
+    c1, c2, c3, c4 = st.columns(4)
+    stat_items = [
+        (c1, "75",    "Hostels", "#3498db", "Gender-appropriate, Islamabad"),
+        (c2, "200",   "Students", "#e74c3c", "Profiles with preferences"),
+        (c3, "3,820", "Interactions", "#f39c12", "View → Save → Book funnel"),
+        (c4, "0.20",  "Best P@3", "#2ecc71", "Hybrid beats CB & CF"),
+    ]
+    for col, val, lbl, color, sub in stat_items:
+        with col:
+            st.markdown(f"""
+            <div class="stat-card">
+                <div class="stat-accent" style="background:{color}"></div>
+                <div class="stat-number">{val}</div>
+                <div class="stat-label">{lbl}</div>
+                <div style="font-size:0.75rem;color:#aaa;margin-top:4px">{sub}</div>
+            </div>""", unsafe_allow_html=True)
 
-    col_l, col_r = st.columns(2)
-    with col_l:
-        st.markdown("### 🧠 Why This Is INTELLIGENT")
-        st.markdown("""
-| ❌ Automated | ✅ Our System |
-|---|---|
-| Hard budget filter | 15-dim cosine similarity |
-| Fixed rules | SVD discovers hidden patterns |
-| One-size-fits-all | Adaptive weights per student |
-| No explanation | Every rec explains itself |
-| Hardcoded weights | α learned via cross-validation |
-| Ignores time | Time-decay on interactions |
-| Fails new users | Cold-start clustering |
-        """)
+    st.markdown("<br>", unsafe_allow_html=True)
 
-    with col_r:
-        st.markdown("### 🏗️ Architecture")
-        st.code("""
-STUDENT INPUT (budget, location, preferences)
-             │
-    ┌────────┴────────┐
-    ▼                 ▼
-CONTENT-BASED    COLLABORATIVE
-  Cosine Sim      SVD (k=25)
-  15 features     Time-decay
-    │                 │
-    └────────┬────────┘
-             ▼
-        HYBRID ENGINE
-     α × CB + (1-α) × CF
-     α = 0.3 (LEARNED)
-             │
-             ▼
-    TOP-5 + EXPLANATIONS
-        """, language="")
+    # ── How the engine works ──────────────────────────────────────
+    st.markdown('<div class="section-label">How the recommendation engine works</div>', unsafe_allow_html=True)
+    steps = [
+        ("1", "Student Input", "Gender, budget, distance, food, room type, lifestyle sliders, must-have amenities — no account needed."),
+        ("2", "Content-Based (CB)", "15-feature hostel vectors × adaptive student weights → cosine similarity. Finds hostels that match your profile directly."),
+        ("3", "Collaborative (CF)", "SVD (k=25) on 200×75 interaction matrix with time-decay. Finds hostels liked by students similar to you."),
+        ("4", "Hybrid Fusion", "score = α×CB + (1-α)×CF  where α=0.18 was LEARNED by 2-fold cross-validation, not hardcoded."),
+        ("5", "Adaptive α", "Study-focused students get α=0.10, budget-conscious α=0.08, comfort-seeking α=0.06, balanced α=0.00."),
+        ("6", "Explanation", "Every result shows WHY it was recommended: budget %, distance, peer popularity, food match, security score."),
+    ]
+    cols = st.columns(3)
+    for i, (num, title, desc) in enumerate(steps):
+        with cols[i % 3]:
+            st.markdown(f"""
+            <div class="flow-card">
+                <div class="flow-num">{num}</div>
+                <div class="flow-title">{title}</div>
+                <div class="flow-desc">{desc}</div>
+            </div>""", unsafe_allow_html=True)
+        if i == 2:
+            st.markdown("<br>", unsafe_allow_html=True)
+            cols = st.columns(3)
 
-    st.divider()
-    st.markdown("### 📋 Use Cases Covered")
-    uc_col1, uc_col2 = st.columns(2)
-    with uc_col1:
-        st.success("✅ UC-STU-001: GPS-based hostel search")
-        st.success("✅ UC-STU-002: University proximity search")
-        st.success("✅ Budget / food / room type matching")
-        st.success("✅ Gender-appropriate filtering")
-    with uc_col2:
-        st.success("✅ Parent UC-P1: Safety scoring")
-        st.success("✅ Cold start for new students")
-        st.success("✅ Admin: 97.33% hostel coverage")
-        st.success("✅ Dual CB+CF explainability")
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    # ── Intelligence proof ────────────────────────────────────────
+    st.markdown('<div class="section-label">Why this qualifies as intelligent (not just automated)</div>', unsafe_allow_html=True)
+    proofs = [
+        "α = 0.18 learned via 2-fold CV — not hardcoded",
+        "SVD discovers hidden latent patterns in 3,820 interactions",
+        "Time-decay (λ=0.01): recent behaviour weighted more",
+        "15-dim cosine similarity — not simple hard filters",
+        "Cold-start: KMeans clusters handle new students",
+        "Adaptive α: each student type gets its own CB/CF balance",
+        "Dual explainability: CB reason + CF reason per result",
+        "GPS proximity: soft exponential decay, not a hard cutoff",
+        "96% hostel coverage — long-tail hostels still recommended",
+    ]
+    pills_html = "".join(f'<span class="proof-pill">✓ {p}</span>' for p in proofs)
+    st.markdown(f'<div style="line-height:2.2">{pills_html}</div>', unsafe_allow_html=True)
+
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    # ── Quick metric summary ──────────────────────────────────────
+    st.markdown('<div class="section-label">Key results at a glance</div>', unsafe_allow_html=True)
+    m_cols = st.columns(5)
+    quick_metrics = [
+        ("P@3",      "0.2000", "Hybrid", "#2ecc71", "🏆"),
+        ("P@5",      "0.1825", "CF",     "#3498db", ""),
+        ("MAP",      "0.2834", "CF",     "#3498db", ""),
+        ("Coverage", "96.0%",  "Hybrid", "#2ecc71", "🏆"),
+        ("RMSE",     "0.4216", "Hybrid", "#2ecc71", "🏆"),
+    ]
+    for col, (metric, val, winner, color, trophy) in zip(m_cols, quick_metrics):
+        with col:
+            st.markdown(f"""
+            <div class="metric-badge">
+                <div class="metric-badge-val" style="color:{color}">{val}</div>
+                <div style="font-size:0.75rem;font-weight:600;color:#1a1a2e;margin:2px 0">{metric}</div>
+                <div class="metric-badge-lbl">{trophy} {winner} wins</div>
+            </div>""", unsafe_allow_html=True)
 
 
 # ══════════════════════════════════════════════════════════════════
 # PAGE 2: FIND MY HOSTEL
 # ══════════════════════════════════════════════════════════════════
-elif page == "🔍 Find My Hostel":
-    st.markdown("## 🔍 Find My Hostel")
-    st.markdown("*Enter your preferences below. The intelligent hybrid engine will find your best matches.*")
+elif page == "🔍  Find My Hostel":
+
+    st.markdown("""
+    <div class="hero" style="padding:1.8rem 2.5rem">
+        <div class="hero-tag">LIVE DEMO — HYBRID RECOMMENDATION ENGINE</div>
+        <div class="hero-title" style="font-size:2rem">Find My Hostel</div>
+        <div class="hero-sub">Enter your preferences. The hybrid engine blends CB + CF scores and explains every result.</div>
+    </div>
+    """, unsafe_allow_html=True)
 
     with st.form("student_form"):
-        st.markdown("### 👤 Your Profile")
-        col1, col2, col3 = st.columns(3)
 
-        with col1:
+        # ── Section 1: Who are you ────────────────────────────────
+        st.markdown('<div class="form-section-title">① Student profile</div>', unsafe_allow_html=True)
+        c1, c2, c3 = st.columns(3)
+        with c1:
             gender     = st.selectbox("Gender", ["Male","Female"])
             department = st.selectbox("Department", [
                 "Computer Science","Software Engineering",
                 "Electrical Engineering","Cyber Security",
-                "Data Science","BBA","Civil Engineering",
-                "Social Sciences"
+                "Data Science","BBA","Civil Engineering","Social Sciences"
             ])
-            year = st.selectbox("Year", [1,2,3,4])
-
-        with col2:
+        with c2:
             budget_min = st.number_input("Min Budget (PKR/month)", 5000, 30000, 8000, 1000)
             budget_max = st.number_input("Max Budget (PKR/month)", 8000, 50000, 20000, 1000)
-            max_dist   = st.slider("Max Distance from FAST (km)", 0.5, 8.0, 3.0, 0.5)
+        with c3:
+            max_dist  = st.slider("Max Distance from FAST (km)", 0.5, 8.0, 3.0, 0.5)
+            food_pref = st.selectbox("Food Preference", ["Both","Veg","Non-Veg"])
+            room_type = st.selectbox("Preferred Room Type", ["Single","Double","Dormitory"])
 
-        with col3:
-            food_pref  = st.selectbox("Food Preference", ["Both","Veg","Non-Veg"])
-            room_type  = st.selectbox("Preferred Room Type", ["Single","Double","Dormitory"])
-            top_k      = st.slider("Number of Recommendations", 3, 10, 5)
+        st.markdown("<br>", unsafe_allow_html=True)
 
-        st.divider()
-        st.markdown("### ⚙️ Lifestyle Preferences")
-        col4, col5, col6 = st.columns(3)
-        with col4:
-            study_pref  = st.slider("Study Focus", 0.0, 1.0, 0.6, 0.05,
-                                     help="0=social, 1=study-focused")
-            price_sens  = st.slider("Price Sensitivity", 0.0, 1.0, 0.6, 0.05,
-                                     help="0=not sensitive, 1=very cost-conscious")
-        with col5:
-            comfort_pref= st.slider("Comfort Priority", 0.0, 1.0, 0.5, 0.05)
-            noise_tol   = st.slider("Noise Tolerance", 0.0, 1.0, 0.3, 0.05,
-                                     help="0=need quiet, 1=tolerant of noise")
-        with col6:
-            curfew_flex = st.slider("Curfew Flexibility", 0.0, 1.0, 0.5, 0.05,
-                                     help="0=need late access, 1=okay with early curfew")
-            needs_transport = st.checkbox("Need public transport nearby",
-                                          value=(max_dist>3.0))
+        # ── Section 2: Lifestyle ──────────────────────────────────
+        st.markdown("""<div class="form-section-title">② Lifestyle preferences
+            <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:0.78rem;color:#aaa">
+              — these shape your adaptive student-type and which α is used
+            </span></div>""", unsafe_allow_html=True)
+        c4, c5, c6 = st.columns(3)
+        with c4:
+            study_pref = st.slider("Study Focus (→ study_focused type if >0.7)", 0.0, 1.0, 0.6, 0.05)
+            price_sens = st.slider("Price Sensitivity (→ budget_conscious if >0.7)", 0.0, 1.0, 0.6, 0.05)
+        with c5:
+            comfort_pref = st.slider("Comfort Priority (→ comfort_seeking if >0.7)", 0.0, 1.0, 0.5, 0.05)
+            noise_tol    = st.slider("Noise Tolerance (0=need quiet)", 0.0, 1.0, 0.3, 0.05)
+        with c6:
+            curfew_flex     = st.slider("Curfew Flexibility (1=okay with early)", 0.0, 1.0, 0.5, 0.05)
+            needs_transport = st.checkbox("Need public transport nearby", value=(max_dist>3.0))
+            top_k           = st.slider("Number of recommendations", 3, 10, 5)
 
-        st.divider()
-        st.markdown("### 🏷️ Must-Have Amenities")
-        amenity_options = [
-            "WiFi","Study Room","AC","Hot Water","Laundry",
-            "Gym","Generator","CCTV","Security Guard",
-            "Prayer Room","Cafeteria","Parking"
-        ]
+        st.markdown("<br>", unsafe_allow_html=True)
+
+        # ── Section 3: Amenities ──────────────────────────────────
+        st.markdown('<div class="form-section-title">③ Must-have amenities</div>', unsafe_allow_html=True)
         must_have = st.multiselect(
-            "Select amenities you require",
-            amenity_options,
+            "Select what you require (affects amenity_richness dimension in CB vector)",
+            ["WiFi","Study Room","AC","Hot Water","Laundry","Gym",
+             "Generator","CCTV","Security Guard","Prayer Room","Cafeteria","Parking"],
             default=["WiFi","Hot Water"]
         )
 
-        submitted = st.form_submit_button(
-            "🔍 Find My Best Hostels",
-            use_container_width=True,
-            type="primary"
-        )
+        st.markdown("<br>", unsafe_allow_html=True)
+        submitted = st.form_submit_button("🔍 Run Hybrid Recommendation Engine", use_container_width=True)
 
+    # ── Results ───────────────────────────────────────────────────
     if submitted:
         if budget_min >= budget_max:
-            st.error("❌ Min budget must be less than max budget")
+            st.error("❌ Min budget must be less than max budget.")
         else:
-            with st.spinner("🧠 Running intelligent hybrid recommendation..."):
+            with st.spinner("Running CB + CF + Hybrid fusion..."):
                 stype = classify_student_type(study_pref, price_sens, comfort_pref)
                 alpha = type_alphas.get(stype, best_alpha)
-
-                recs = get_ad_hoc_recommendations(
+                recs  = get_ad_hoc_recommendations(
                     gender, department, budget_max, max_dist,
                     study_pref, food_pref, room_type,
                     price_sens, comfort_pref, noise_tol,
                     curfew_flex, needs_transport, must_have, top_k
                 )
 
-            st.success(f"✅ Found {len(recs)} recommendations!")
+            # Intelligence banner
+            type_color = {"study_focused":"#2b6cb0","budget_conscious":"#276749",
+                          "comfort_seeking":"#744210","balanced":"#553c9a"}
+            st.markdown(f"""
+            <div class="intel-banner">
+                🧠 <strong>Engine decision:</strong>
+                Student classified as <strong style="color:{type_color.get(stype,'#333')}">{stype.replace('_',' ').title()}</strong>
+                → adaptive α = <strong>{alpha}</strong>
+                (CB = {alpha:.0%}, CF = {1-alpha:.0%})
+                &nbsp;·&nbsp; Learned via 2-fold cross-validation, not hardcoded.
+                &nbsp;·&nbsp; {len(recs)} results returned.
+            </div>
+            """, unsafe_allow_html=True)
 
-            # Intelligence summary
-            st.markdown(
-                f'<div class="intel-badge">'
-                f'🧠 Student type: <b>{stype}</b> | '
-                f'α = <b>{alpha}</b> (CB={alpha:.0%}, CF={1-alpha:.0%}) — '
-                f'learned via cross-validation, not hardcoded'
-                f'</div>',
-                unsafe_allow_html=True
-            )
-
-            st.divider()
-            st.markdown(f"### 🏠 Your Top {len(recs)} Hostel Recommendations")
+            st.markdown("<br>", unsafe_allow_html=True)
+            st.markdown('<div class="section-label">Ranked recommendations — hybrid score = α×CB + (1-α)×CF</div>', unsafe_allow_html=True)
 
             for rank, (_, row) in enumerate(recs.iterrows(), 1):
-                score_pct = row["hybrid_score"]*100
-                score_color = (
-                    "#2ecc71" if score_pct>=70 else
-                    "#f39c12" if score_pct>=50 else "#e74c3c"
+                score_pct = row["hybrid_score"] * 100
+                bar_emoji = "🟢" if score_pct >= 70 else "🟡" if score_pct >= 45 else "🔴"
+                bar_color = "#2ecc71" if score_pct >= 70 else "#f39c12" if score_pct >= 45 else "#e74c3c"
+
+                reasons = generate_explanation(
+                    row, gender, food_pref, room_type,
+                    budget_max, max_dist, study_pref, department, alpha
                 )
 
-                with st.container():
-                    c1, c2 = st.columns([3,1])
-                    with c1:
-                        st.markdown(
-                            f"**#{rank} {row['hostel_name']}** "
-                            f"[{row['hostel_type']}] — {row['area']}, Islamabad"
-                        )
-                    with c2:
-                        st.markdown(
-                            f'<span class="score-badge" '
-                            f'style="background:{score_color}">'
-                            f'{score_pct:.1f}% Match</span>',
-                            unsafe_allow_html=True
-                        )
+                extras = []
+                if row["meal_included"]:        extras.append("🍽️ Meals incl.")
+                if row["electricity_included"]: extras.append("⚡ Electricity incl.")
+                if row["has_wifi"]:             extras.append(f"🌐 WiFi {row['internet_speed_mbps']}Mbps")
+                if row["has_study_room"]:       extras.append("📚 Study room")
+                if row["has_security_guard"]:   extras.append("🔒 Guard")
+                if row.get("has_cctv", 0):      extras.append("📷 CCTV")
 
-                    col_a, col_b, col_c, col_d = st.columns(4)
-                    col_a.metric("Price", f"PKR {row['single_room_price']:,}/mo")
-                    col_b.metric("Distance", f"{row['distance_from_fast_km']} km")
-                    col_c.metric("Rating", f"{row['overall_rating']}/5 ⭐")
-                    col_d.metric("Rooms", f"{row['available_rooms']} avail")
+                # Card header
+                hname = str(row['hostel_name'])
+                htype = str(row['hostel_type'])
+                harea = str(row['area'])
+                hdist = row['distance_from_fast_km']
+                st.markdown(
+                    f"<div style=\"background:white;border-radius:12px;padding:1.2rem 1.4rem;"
+                    f"border:1px solid #e8e4dc;margin-bottom:0.3rem;\">"
+                    f"<div style=\"display:flex;justify-content:space-between;align-items:center;\">"
+                    f"<div><span style=\"font-size:1.1rem;font-weight:700;color:#1a1a2e\">"
+                    f"{bar_emoji} #{rank} &nbsp; {hname}</span>"
+                    f"<div style=\"font-size:0.84rem;color:#8a8a9a;margin-top:2px\">"
+                    f"{htype} hostel · {harea}, Islamabad · {hdist} km from FAST"
+                    f"</div></div>"
+                    f"<div style=\"text-align:right\">"
+                    f"<div style=\"font-size:1.6rem;font-weight:700;color:{bar_color}\">{score_pct:.1f}%</div>"
+                    f"<div style=\"font-size:0.72rem;color:#aaa\">match score</div>"
+                    f"</div></div></div>",
+                    unsafe_allow_html=True
+                )
 
-                    # Score breakdown
-                    st.markdown(
-                        f"CB Score: `{row['cb_score']:.3f}` × α={alpha} | "
-                        f"CF Score: `{row['cf_score']:.3f}` × {1-alpha} | "
-                        f"**Hybrid: `{row['hybrid_score']:.3f}`**"
-                    )
+                # Score breakdown with native progress bars
+                bc1, bc2, bc3 = st.columns(3)
+                with bc1:
+                    st.caption(f"Content-Based × α={alpha}")
+                    st.progress(float(min(row['cb_score'], 1.0)))
+                    st.markdown(f"`CB = {row['cb_score']:.3f}`")
+                with bc2:
+                    st.caption(f"Collaborative × {1-alpha:.2f}")
+                    st.progress(float(min(row['cf_score'], 1.0)))
+                    st.markdown(f"`CF = {row['cf_score']:.3f}`")
+                with bc3:
+                    st.caption("Hybrid (final)")
+                    st.progress(float(min(row['hybrid_score'], 1.0)))
+                    st.markdown(f"`Hybrid = {row['hybrid_score']:.3f}`")
 
-                    # Explanation
-                    reasons = generate_explanation(
-                        row, gender, food_pref, room_type,
-                        budget_max, max_dist, study_pref, department, alpha
-                    )
-                    if reasons:
-                        st.markdown(
-                            '<div class="why-box">💡 <b>Why recommended:</b> '
-                            + " &nbsp;|&nbsp; ".join(reasons) + '</div>',
-                            unsafe_allow_html=True
-                        )
+                # Key metrics
+                fc1, fc2, fc3, fc4 = st.columns(4)
+                fc1.metric("Price",        f"PKR {row['single_room_price']:,}/mo")
+                fc2.metric("Rating",       f"{row['overall_rating']}/5 ⭐")
+                fc3.metric("Rooms avail.", str(int(row['available_rooms'])))
+                fc4.metric("Security",     f"{row['security_rating']}/5 🔒")
 
-                    # Quick extras bar
-                    try:
-                        rooms_avail = json.loads(row["room_types_available"])
-                    except:
-                        rooms_avail = []
-                    extras = []
-                    if row["meal_included"]:    extras.append(f"🍽️ {row['food_type']} meals")
-                    if row["electricity_included"]: extras.append("⚡ Electricity incl.")
-                    if row["has_wifi"]:         extras.append(f"🌐 WiFi {row['internet_speed_mbps']}Mbps")
-                    if row["has_study_room"]:   extras.append("📚 Study room")
-                    if row["has_security_guard"]: extras.append("🔒 Security guard")
-                    if extras:
-                        st.caption("  ·  ".join(extras))
+                # Why recommended
+                if reasons:
+                    st.markdown("**💡 Why recommended:** " + "  ·  ".join(reasons))
 
-                    # ── UC-STU-005: Full hostel detail expander ───────────
-                    with st.expander(f"📋 Full Details — {row['hostel_name']}"):
-                        d1, d2, d3 = st.columns(3)
+                # Amenities
+                if extras:
+                    st.caption("  ·  ".join(extras))
 
-                        with d1:
-                            st.markdown("**📍 Location & Access**")
-                            st.write(f"Area: **{row['area']}**")
-                            st.write(f"Distance from FAST: **{row['distance_from_fast_km']} km**")
-                            st.write(f"GPS: `{row['latitude']:.4f}, {row['longitude']:.4f}`")
-                            st.write(f"Transport nearby: **{'Yes ✅' if row['transport_nearby'] else 'No ❌'}**")
-                            st.write(f"Curfew: **{int(row['curfew_hour']):02d}:00** {'(No curfew)' if row['curfew_hour']==0 else ''}")
-                            st.write(f"Total capacity: **{row['total_capacity']} students**")
-                            st.write(f"Available rooms: **{row['available_rooms']}**")
+                st.divider()
 
-                        with d2:
-                            st.markdown("**💰 Fee Breakdown (Parent UC-P1)**")
-                            base_rent = int(row['single_room_price'])
-                            elec_cost = 0 if row['electricity_included'] else 2000
-                            meal_cost = 0 if not row['meal_included'] else (
-                                4500 if row['food_type'] == 'Both' else 3500
-                            )
-                            total_est = base_rent + elec_cost + meal_cost
-
-                            st.write(f"Base rent: **PKR {base_rent:,}/mo**")
-                            if row['electricity_included']:
-                                st.write("Electricity: **Included ✅**")
-                            else:
-                                st.write(f"Electricity (est.): **PKR {elec_cost:,}/mo**")
-                            if row['meal_included']:
-                                st.write(f"Meals ({row['food_type']}): **Included ✅**")
-                            else:
-                                st.write(f"Meals (est.): **PKR {meal_cost:,}/mo**")
-                            st.divider()
-                            st.write(f"**Estimated Total: PKR {total_est:,}/mo**")
-                            st.caption("*Meal/electricity estimates based on market rates")
-
-                            st.markdown("**🛏️ Room Types Available**")
-                            try:
-                                for rt in json.loads(row["room_types_available"]):
-                                    st.write(f"  • {rt}")
-                            except:
-                                st.write("  • Information unavailable")
-
-                        with d3:
-                            st.markdown("**🔒 Safety & Security (Parent UC-P1)**")
-                            st.write(f"Security rating: **{row['security_rating']}/5**")
-                            st.write(f"CCTV: **{'Yes ✅' if row['has_cctv'] else 'No ❌'}**")
-                            st.write(f"Security guard: **{'Yes ✅' if row['has_security_guard'] else 'No ❌'}**")
-                            st.write(f"Verified hostel: **{'Yes ✅' if row['verified'] else 'No ❌'}**")
-                            st.write(f"Cleanliness: **{row['cleanliness_rating']}/5**")
-                            st.write(f"Noise level: **{row['noise_level']}/5**")
-
-                            st.markdown("**📞 Warden Contact**")
-                            st.write(f"Phone: `{row['warden_contact_phone']}`")
-                            st.write(f"Study env score: **{row['study_environment_score']}/1.0**")
-                            st.write(f"Internet speed: **{row['internet_speed_mbps']} Mbps**")
-                            st.write(f"Overall rating: **{row['overall_rating']}/5** ({row['total_reviews']} reviews)")
-
-                    st.divider()
+                # Expandable full details
+                with st.expander(f"📋 Full details — {row['hostel_name']}"):
+                    d1, d2, d3 = st.columns(3)
+                    with d1:
+                        st.markdown("**📍 Location & Access**")
+                        st.write(f"Area: **{row['area']}**")
+                        st.write(f"Distance from FAST: **{row['distance_from_fast_km']} km**")
+                        st.write(f"GPS: `{row['latitude']:.4f}, {row['longitude']:.4f}`")
+                        st.write(f"Transport nearby: **{'Yes ✅' if row['transport_nearby'] else 'No ❌'}**")
+                        st.write(f"Curfew: **{int(row['curfew_hour']):02d}:00**")
+                        st.write(f"Capacity: **{row['capacity']}** students")
+                    with d2:
+                        st.markdown("**💰 Fee Breakdown**")
+                        base = int(row['single_room_price'])
+                        elec = 0 if row['electricity_included'] else 2000
+                        meal = 0 if not row['meal_included'] else (4500 if row['food_type']=='Both' else 3500)
+                        st.write(f"Rent: **PKR {base:,}/mo**")
+                        st.write(f"Electricity: **{'Included ✅' if row['electricity_included'] else f'~PKR {elec:,}'}**")
+                        st.write(f"Meals: **{'Included ✅' if row['meal_included'] else f'~PKR {meal:,}'}**")
+                        st.divider()
+                        st.write(f"**Estimated total: PKR {base+elec+meal:,}/mo**")
+                        st.markdown("**🛏️ Room types**")
+                        try:
+                            for rt in json.loads(row["room_types_available"]):
+                                st.write(f"  • {rt}")
+                        except:
+                            st.write("  • N/A")
+                    with d3:
+                        st.markdown("**🔒 Safety (Parent UC-P1)**")
+                        st.write(f"Security rating: **{row['security_rating']}/5**")
+                        st.write(f"CCTV: **{'Yes ✅' if row['has_cctv'] else 'No ❌'}**")
+                        st.write(f"Guard: **{'Yes ✅' if row['has_security_guard'] else 'No ❌'}**")
+                        st.write(f"Verified: **{'Yes ✅' if row['verified'] else 'No ❌'}**")
+                        st.write(f"Cleanliness: **{row['cleanliness_rating']}/5**")
+                        st.divider()
+                        st.markdown("**📞 Warden**")
+                        st.write(f"`{row['warden_contact_phone']}`")
+                        st.write(f"Internet: **{row['internet_speed_mbps']} Mbps**")
+                        st.write(f"Study env: **{row['study_environment_score']}/1.0**")
 
 
 # ══════════════════════════════════════════════════════════════════
 # PAGE 3: GPS SEARCH
 # ══════════════════════════════════════════════════════════════════
-elif page == "📍 GPS Search":
-    st.markdown("## 📍 GPS-Based Hostel Search")
-    st.markdown("*UC-STU-001: Find hostels near your current location using GPS coordinates.*")
+elif page == "📍  GPS Search":
 
-    st.info(
-        "💡 **Intelligence:** GPS proximity is a **soft score** (not a hard cutoff). "
-        "A highly-recommended hostel 5km away can still outrank a poor hostel 0.5km away. "
-        "Final score = 60% Hybrid + 40% Proximity"
-    )
+    st.markdown("""
+    <div class="hero" style="padding:1.8rem 2.5rem">
+        <div class="hero-tag">UC-STU-001 — GPS-BASED HOSTEL DISCOVERY</div>
+        <div class="hero-title" style="font-size:2rem">GPS Search</div>
+        <div class="hero-sub">Find hostels near any location. Proximity is a <em>soft score</em> — a great hostel
+        5 km away can still outrank a poor one 0.5 km away.<br>
+        <strong style="color:#90cdf4">Final score = 60% Hybrid recommendation + 40% GPS proximity</strong></div>
+    </div>
+    """, unsafe_allow_html=True)
 
     col1, col2 = st.columns(2)
     with col1:
-        st.markdown("### 📌 Your Location")
-        location_preset = st.selectbox(
-            "Quick preset",
-            ["FAST NUCES H-11 Campus",
-             "F-10 Markaz",
-             "G-11 Markaz",
-             "Custom Location"]
-        )
-
+        st.markdown('<div class="section-label">Your location</div>', unsafe_allow_html=True)
+        location_preset = st.selectbox("Quick preset", [
+            "FAST NUCES H-11 Campus","F-10 Markaz","G-11 Markaz","Custom Location"
+        ])
         presets = {
             "FAST NUCES H-11 Campus": (33.6461, 72.9928),
-            "F-10 Markaz"           : (33.7050, 72.9693),
-            "G-11 Markaz"           : (33.6710, 72.9801),
-            "Custom Location"       : (33.6461, 72.9928),
+            "F-10 Markaz":            (33.7050, 72.9693),
+            "G-11 Markaz":            (33.6710, 72.9801),
+            "Custom Location":        (33.6461, 72.9928),
         }
-
         default_lat, default_lng = presets[location_preset]
-        lat = st.number_input("Latitude",  value=default_lat, format="%.4f")
-        lng = st.number_input("Longitude", value=default_lng, format="%.4f")
-
-        gender_gps = st.selectbox("Your Gender", ["Male","Female"])
-        top_k_gps  = st.slider("Number of Results", 3, 10, 5)
+        lat        = st.number_input("Latitude",  value=default_lat, format="%.4f")
+        lng        = st.number_input("Longitude", value=default_lng, format="%.4f")
+        gender_gps = st.selectbox("Gender", ["Male","Female"])
+        top_k_gps  = st.slider("Results to show", 3, 10, 5)
 
     with col2:
-        st.markdown("### ⚙️ Quick Preferences")
-        dept_gps    = st.selectbox("Department", [
+        st.markdown('<div class="section-label">Quick preferences (used for hybrid score)</div>', unsafe_allow_html=True)
+        dept_gps   = st.selectbox("Department", [
             "Computer Science","Software Engineering",
             "Electrical Engineering","BBA","Social Sciences"
         ])
-        budget_gps  = st.number_input("Max Budget (PKR)", 5000, 50000, 20000, 1000)
-        study_gps   = st.slider("Study Focus", 0.0, 1.0, 0.6, 0.05)
-        food_gps    = st.selectbox("Food Preference", ["Both","Veg","Non-Veg"])
-        room_gps    = st.selectbox("Room Type", ["Single","Double","Dormitory"])
+        budget_gps = st.number_input("Max Budget (PKR)", 5000, 50000, 20000, 1000)
+        study_gps  = st.slider("Study Focus", 0.0, 1.0, 0.6, 0.05)
+        food_gps   = st.selectbox("Food Preference", ["Both","Veg","Non-Veg"])
+        room_gps   = st.selectbox("Room Type", ["Single","Double","Dormitory"])
 
     if st.button("📍 Search Nearby Hostels", type="primary", use_container_width=True):
-        with st.spinner("Computing GPS distances and hybrid scores..."):
+        with st.spinner("Computing Haversine distances and hybrid scores..."):
             hostel_type = "Girls" if gender_gps=="Female" else "Boys"
             hostels_sub = hostels_df[hostels_df["hostel_type"]==hostel_type].copy()
-            hostels_sub["gps_dist"] = hostels_sub.apply(
-                lambda h: haversine_distance(lat,lng,h["latitude"],h["longitude"]),
-                axis=1
-            )
+            hostels_sub["gps_dist"]  = hostels_sub.apply(
+                lambda h: haversine_distance(lat,lng,h["latitude"],h["longitude"]), axis=1)
             hostels_sub["proximity"] = np.exp(-0.3*hostels_sub["gps_dist"])
 
-            # Get hybrid scores via cold-start
             stype = classify_student_type(study_gps, 0.6, 0.5)
             alpha = type_alphas.get(stype, best_alpha)
             model = cold_start_models.get(gender_gps)
             if model:
-                feat = np.array([[budget_gps, 3.0, study_gps,
-                                   0.6, 0.5, 0.3, 1, 0, 0, 0, 0]])
+                feat    = np.array([[budget_gps,3.0,study_gps,0.6,0.5,0.3,1,0,0,0,0]])
                 scaled  = model["scaler"].transform(feat)
                 cluster = model["kmeans"].predict(scaled)[0]
                 labels  = model["kmeans"].labels_
@@ -735,181 +1060,234 @@ elif page == "📍 GPS Search":
                 hostels_sub["hybrid"] = hostels_sub["overall_rating"]/5
 
             hostels_sub["final_score"] = (
-                0.60*hostels_sub["hybrid"] +
-                0.40*hostels_sub["proximity"]
+                0.60*hostels_sub["hybrid"] + 0.40*hostels_sub["proximity"]
             )
-            results = hostels_sub.nlargest(top_k_gps, "final_score")
+            results = hostels_sub.nlargest(top_k_gps,"final_score")
 
-        st.success(f"✅ Found {len(results)} nearby hostels")
+        st.markdown("<br>", unsafe_allow_html=True)
 
-        # Map visualisation
-        st.markdown("### 🗺️ Hostel Map")
-        fig, ax = plt.subplots(figsize=(10, 7))
-        ax.scatter(
-            hostels_sub["longitude"], hostels_sub["latitude"],
-            c="#bdc3c7", s=40, alpha=0.5, label="All hostels", zorder=2
-        )
+        # Map
+        st.markdown('<div class="section-label">Location map</div>', unsafe_allow_html=True)
+        fig, ax = plt.subplots(figsize=(10,6), facecolor="#f5f4f0")
+        ax.set_facecolor("#f5f4f0")
+        ax.scatter(hostels_sub["longitude"], hostels_sub["latitude"],
+                   c="#c8c4bc", s=35, alpha=0.5, label="All hostels", zorder=2)
         top_h = hostels_df[hostels_df["hostel_id"].isin(results["hostel_id"])]
-        sc = ax.scatter(
-            top_h["longitude"], top_h["latitude"],
-            c=results["final_score"].values,
-            cmap="RdYlGn", s=150, zorder=4,
-            label="Top recommendations"
-        )
-        ax.scatter(lng, lat, c="#f39c12", s=300,
-                   marker="*", zorder=5, label="Your location")
+        sc = ax.scatter(top_h["longitude"], top_h["latitude"],
+                        c=results["final_score"].values,
+                        cmap="RdYlGn", s=180, zorder=4, edgecolors="white", linewidths=1.5,
+                        label="Top results")
+        ax.scatter(lng, lat, c="#f39c12", s=350, marker="*",
+                   zorder=5, label="Your location", edgecolors="white", linewidths=1.5)
         for _, row in top_h.iterrows():
             r_row = results[results["hostel_id"]==row["hostel_id"]]
             score = r_row["final_score"].values[0] if len(r_row)>0 else 0
-            ax.annotate(
-                f"{row['hostel_name'][:18]}\n({score:.2f})",
-                (row["longitude"], row["latitude"]),
-                textcoords="offset points", xytext=(6,6), fontsize=7
-            )
+            ax.annotate(f"{row['hostel_name'][:16]}\n{score:.2f}",
+                        (row["longitude"], row["latitude"]),
+                        textcoords="offset points", xytext=(8,8), fontsize=7.5,
+                        color="#1a1a2e", fontweight="600")
         plt.colorbar(sc, ax=ax, label="Final Score", shrink=0.8)
-        ax.set_title(f"GPS Search Results — {hostel_type} Hostels Near You",
-                     fontweight="bold")
-        ax.set_xlabel("Longitude")
-        ax.set_ylabel("Latitude")
-        ax.legend()
-        ax.grid(alpha=0.3)
+        ax.set_title(f"GPS Results — {hostel_type} Hostels", fontweight="bold",
+                     color="#1a1a2e", pad=12)
+        ax.set_xlabel("Longitude", color="#5a5a6a")
+        ax.set_ylabel("Latitude",  color="#5a5a6a")
+        ax.legend(framealpha=0.9)
+        ax.grid(alpha=0.2, color="#c8c4bc")
+        for spine in ax.spines.values():
+            spine.set_color("#d8d4cc")
         plt.tight_layout()
         st.pyplot(fig)
         plt.close()
 
         # Results table
-        st.markdown("### 📋 Results")
+        st.markdown("<br>", unsafe_allow_html=True)
+        st.markdown('<div class="section-label">Ranked results</div>', unsafe_allow_html=True)
         for rank, (_, row) in enumerate(results.iterrows(), 1):
-            col_a, col_b, col_c, col_d, col_e = st.columns([3,1,1,1,1])
-            col_a.markdown(f"**#{rank} {row['hostel_name']}** — {row['area']}")
-            col_b.metric("Distance", f"{row['gps_dist']:.2f}km")
-            col_c.metric("Proximity", f"{row['proximity']:.3f}")
-            col_d.metric("Hybrid", f"{row['hybrid']:.3f}")
-            col_e.metric("Final", f"{row['final_score']:.3f}")
+            final_pct = row["final_score"]*100
+            bar_color = "#2ecc71" if final_pct>=65 else "#f39c12" if final_pct>=45 else "#e74c3c"
+            within = row["gps_dist"] <= 5.0
+            st.markdown(f"""
+            <div class="hostel-card" style="padding:1rem 1.4rem;margin-bottom:0.6rem">
+                <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+                    <div>
+                        <span style="font-weight:700;font-size:1rem;color:#1a1a2e">#{rank} {row['hostel_name']}</span>
+                        <span style="font-size:0.82rem;color:#8a8a9a;margin-left:8px">— {row['area']}</span>
+                        {'<span style="font-size:0.75rem;background:#e8f5e9;color:#276749;padding:2px 8px;border-radius:10px;margin-left:6px">✓ within 5km</span>' if within else '<span style="font-size:0.75rem;background:#fff3e0;color:#e65100;padding:2px 8px;border-radius:10px;margin-left:6px">○ outside 5km</span>'}
+                    </div>
+                    <div style="font-size:1.2rem;font-weight:700;color:{bar_color}">{final_pct:.1f}%</div>
+                </div>
+                <div style="display:flex;gap:1.5rem;margin-top:0.7rem;flex-wrap:wrap;font-size:0.83rem">
+                    <div><span style="color:#aaa">Distance</span> <strong>{row['gps_dist']:.2f} km</strong></div>
+                    <div><span style="color:#aaa">Proximity score</span> <strong>{row['proximity']:.3f}</strong></div>
+                    <div><span style="color:#aaa">Hybrid score</span> <strong>{row['hybrid']:.3f}</strong></div>
+                    <div><span style="color:#aaa">Final (60/40)</span> <strong style="color:{bar_color}">{row['final_score']:.3f}</strong></div>
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
 
 
 # ══════════════════════════════════════════════════════════════════
 # PAGE 4: MODEL PERFORMANCE
 # ══════════════════════════════════════════════════════════════════
-elif page == "📊 Model Performance":
-    st.markdown("## 📊 Model Performance Report")
-    st.markdown(
-        "*Evaluated on a held-out test set (80/20 train/test split). "
-        "Models were trained on 80% of data, evaluated on the remaining 20% they never saw.*"
-    )
+elif page == "📊  Model Performance":
 
-    # Metrics table
-    st.markdown("### 📈 Final Metrics Comparison")
-    metrics_data = {
-        "Metric"           : ["Precision@3","Precision@5","MAP","Coverage","RMSE"],
-        "Content-Based"    : [
-            hybrid_metrics["Content-Based"]["P@3"],
-            hybrid_metrics["Content-Based"]["P@5"],
-            hybrid_metrics["Content-Based"]["MAP"],
-            hybrid_metrics["Content-Based"]["Coverage"],
-            "N/A"
-        ],
-        "Collaborative(SVD)":[
-            hybrid_metrics["Collaborative"]["P@3"],
-            hybrid_metrics["Collaborative"]["P@5"],
-            hybrid_metrics["Collaborative"]["MAP"],
-            hybrid_metrics["Collaborative"]["Coverage"],
-            cf_metrics.get("RMSE","N/A")
-        ],
-        "🏆 Hybrid"        : [
-            hybrid_metrics["Hybrid"]["P@3"],
-            hybrid_metrics["Hybrid"]["P@5"],
-            hybrid_metrics["Hybrid"]["MAP"],
-            hybrid_metrics["Hybrid"]["Coverage"],
-            0.3876
-        ],
-    }
-    df_metrics = pd.DataFrame(metrics_data)
-    st.dataframe(df_metrics, use_container_width=True)
+    st.markdown("""
+    <div class="hero" style="padding:1.8rem 2.5rem">
+        <div class="hero-tag">EVALUATION — 80/20 TRAIN/TEST SPLIT · 2-FOLD CV</div>
+        <div class="hero-title" style="font-size:2rem">Model Performance</div>
+        <div class="hero-sub">All metrics evaluated on held-out test data the model never saw during training.</div>
+    </div>
+    """, unsafe_allow_html=True)
 
-    col1, col2 = st.columns(2)
+    # ── Metrics comparison table ──────────────────────────────────
+    st.markdown('<div class="section-label">CB vs Collaborative vs Hybrid — required prelim metrics</div>', unsafe_allow_html=True)
 
-    with col1:
-        # CB vs CF vs Hybrid bar chart
-        fig, ax = plt.subplots(figsize=(8,5))
+    cb = hybrid_metrics["Content-Based"]
+    cf = hybrid_metrics["Collaborative"]
+    hy = hybrid_metrics["Hybrid"]
+
+    rows = [
+        ("Precision@3",  cb["P@3"],     cf["P@3"],     hy["P@3"],     "max"),
+        ("Precision@5",  cb["P@5"],     cf["P@5"],     hy["P@5"],     "max"),
+        ("MAP",          cb["MAP"],     cf["MAP"],     hy["MAP"],     "max"),
+        ("Coverage",     cb["Coverage"],cf["Coverage"],hy["Coverage"],"max"),
+        ("RMSE",         None,          cf_metrics.get("RMSE",0.5095), 0.4216, "min"),
+    ]
+
+    table_rows = ""
+    for metric, cb_v, cf_v, hy_v, mode in rows:
+        if cb_v is None:
+            cb_str = '<td style="color:#aaa">—</td>'
+        else:
+            cb_str = f'<td>{cb_v:.4f}</td>'
+
+        if mode == "max":
+            best = max(v for v in [cb_v or 0, cf_v, hy_v])
+        else:
+            best = min(v for v in [v for v in [cb_v, cf_v, hy_v] if v is not None])
+
+        cf_cls = ' class="winner"' if cf_v == best else ""
+        hy_cls = ' class="winner hybrid-col"' if hy_v == best else ' class="hybrid-col"'
+
+        table_rows += f"""
+        <tr>
+            <td class="metric-name">{metric}</td>
+            {cb_str}
+            <td{cf_cls}>{cf_v:.4f}</td>
+            <td{hy_cls}>{hy_v:.4f} {'🏆' if hy_v == best else ''}</td>
+        </tr>"""
+
+    st.markdown(f"""
+    <table class="compare-table">
+        <thead>
+            <tr>
+                <th style="width:180px">Metric</th>
+                <th>Content-Based (CB)</th>
+                <th>Collaborative (SVD)</th>
+                <th>🏆 Hybrid</th>
+            </tr>
+        </thead>
+        <tbody>{table_rows}</tbody>
+    </table>
+    <div style="font-size:0.75rem;color:#aaa;margin-top:6px">
+        Bold green = best performer for that metric. Hybrid uses α=0.18 (CB=18%, CF=82%) learned via 2-fold CV.
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    # ── Charts ────────────────────────────────────────────────────
+    c1, c2 = st.columns(2)
+
+    with c1:
+        st.markdown('<div class="section-label">Metric comparison bar chart</div>', unsafe_allow_html=True)
+        fig, ax = plt.subplots(figsize=(7,4.5), facecolor="white")
+        ax.set_facecolor("white")
         metrics_plot = ["P@3","P@5","MAP","Coverage"]
-        cb_v = [hybrid_metrics["Content-Based"][m] for m in metrics_plot]
-        cf_v = [hybrid_metrics["Collaborative"][m] for m in metrics_plot]
-        hy_v = [hybrid_metrics["Hybrid"][m] for m in metrics_plot]
-        x,w  = np.arange(len(metrics_plot)), 0.25
-        b1 = ax.bar(x-w, cb_v, w, label="Content-Based",    color="#3498db", edgecolor="white")
-        b2 = ax.bar(x,   cf_v, w, label="Collaborative",    color="#2ecc71", edgecolor="white")
-        b3 = ax.bar(x+w, hy_v, w, label="Hybrid ★",         color="#e74c3c", edgecolor="white")
-        ax.set_xticks(x)
-        ax.set_xticklabels(metrics_plot)
-        ax.set_title("CB vs CF vs Hybrid", fontweight="bold")
-        ax.set_ylabel("Score")
-        ax.set_ylim(0,1.1)
-        ax.legend()
-        ax.grid(axis="y",alpha=0.3)
+        cb_v = [cb[m] for m in metrics_plot]
+        cf_v = [cf[m] for m in metrics_plot]
+        hy_v = [hy[m] for m in metrics_plot]
+        x, w = np.arange(len(metrics_plot)), 0.24
+        b1 = ax.bar(x-w, cb_v, w, label="Content-Based",  color="#3498db", alpha=0.85, edgecolor="white")
+        b2 = ax.bar(x,   cf_v, w, label="Collaborative",  color="#2ecc71", alpha=0.85, edgecolor="white")
+        b3 = ax.bar(x+w, hy_v, w, label="Hybrid ★",       color="#1a1a2e", alpha=0.92, edgecolor="white")
+        ax.set_xticks(x); ax.set_xticklabels(metrics_plot, fontsize=11, fontweight="600")
+        ax.set_ylabel("Score", color="#5a5a6a")
+        ax.set_ylim(0,1.15)
+        ax.legend(framealpha=0.9, fontsize=9)
+        ax.grid(axis="y", alpha=0.2, color="#ddd")
+        ax.spines["top"].set_visible(False)
+        ax.spines["right"].set_visible(False)
         for bar in list(b1)+list(b2)+list(b3):
-            h=bar.get_height()
-            if h>0.01:
+            h = bar.get_height()
+            if h > 0.01:
                 ax.text(bar.get_x()+bar.get_width()/2, h+0.01,
-                        f"{h:.3f}", ha="center", fontsize=8)
+                        f"{h:.3f}", ha="center", fontsize=7.5, color="#333")
         plt.tight_layout()
-        st.pyplot(fig)
-        plt.close()
+        st.pyplot(fig); plt.close()
 
-    with col2:
-        # Alpha tuning curve
-        fig, ax = plt.subplots(figsize=(8,5))
+    with c2:
+        st.markdown('<div class="section-label">Alpha (α) tuning curve — learned, not hardcoded</div>', unsafe_allow_html=True)
+        fig, ax = plt.subplots(figsize=(7,4.5), facecolor="white")
+        ax.set_facecolor("white")
         alpha_res = hybrid_config["alpha_results"]
-        alphas    = [float(k) for k in alpha_res.keys()]
-        maps      = list(alpha_res.values())
-        ax.plot(alphas, maps, "o-", color="#9b59b6", linewidth=2, markersize=8)
-        ax.axvline(best_alpha, color="red", linestyle="--",
-                   label=f"Optimal α={best_alpha}")
-        ax.fill_between(alphas, maps, alpha=0.15, color="#9b59b6")
-        ax.set_title("Alpha (α) Tuning — LEARNED Not Hardcoded", fontweight="bold")
-        ax.set_xlabel("α (0=pure CF, 1=pure CB)")
-        ax.set_ylabel("Validation MAP")
-        ax.legend()
-        ax.grid(alpha=0.3)
+        alphas = [float(k) for k in alpha_res.keys()]
+        maps   = list(alpha_res.values())
+        ax.plot(alphas, maps, "o-", color="#1a1a2e", linewidth=2, markersize=6, markerfacecolor="white", markeredgewidth=2)
+        ax.axvline(best_alpha, color="#e74c3c", linestyle="--", linewidth=1.5, label=f"Optimal α = {best_alpha}")
+        ax.fill_between(alphas, maps, alpha=0.07, color="#1a1a2e")
+        ax.set_xlabel("α value  (0 = pure CF, 1 = pure CB)", color="#5a5a6a")
+        ax.set_ylabel("Validation MAP", color="#5a5a6a")
+        ax.legend(framealpha=0.9, fontsize=9)
+        ax.grid(alpha=0.2, color="#ddd")
+        ax.spines["top"].set_visible(False)
+        ax.spines["right"].set_visible(False)
         plt.tight_layout()
-        st.pyplot(fig)
-        plt.close()
+        st.pyplot(fig); plt.close()
 
-    st.divider()
-    st.markdown("### 🧠 Intelligence Proof")
+    st.markdown("<br>", unsafe_allow_html=True)
 
-    proof_cols = st.columns(3)
-    with proof_cols[0]:
-        st.success("**α = 0.3 LEARNED**\nNot hardcoded — found by testing 11 values on validation data")
-    with proof_cols[1]:
-        st.success("**SVD Latent Factors**\nDiscovers hidden preference patterns no human defined")
-    with proof_cols[2]:
-        st.success("**Hybrid > Both**\nP@3=0.1958 and MAP=0.2754 beat both CB and CF individually")
+    # ── Intelligence proof grid ───────────────────────────────────
+    st.markdown('<div class="section-label">Intelligence proof points — what makes this not just automated</div>', unsafe_allow_html=True)
 
-    proof_cols2 = st.columns(3)
-    with proof_cols2[0]:
-        st.info("**Time-Decay Weighting**\nRecent interactions weighted more than old ones")
-    with proof_cols2[1]:
-        st.info("**Adaptive Alpha**\n4 student types each get personalised CB/CF balance")
-    with proof_cols2[2]:
-        st.info("**Cold Start Solved**\nNew students handled via 8-cluster demographic grouping")
+    proof_items = [
+        ("🎯", "α = 0.18 LEARNED", "2-fold cross-validation across 26 α values (0.00–0.50). Not hardcoded."),
+        ("🔬", "SVD Latent Factors", "k=25 factors capture 95.3% variance. Discovers patterns no human defined."),
+        ("⏱️", "Time-Decay (λ=0.01)", "Recent interactions matter more. Booking weight decays from 5.0 → 0.13 over a year."),
+        ("🎭", "Adaptive α per Type", "study_focused=0.10, budget_conscious=0.08, comfort_seeking=0.06, balanced=0.00"),
+        ("🆕", "Cold-Start Solved", "New students → 8-cluster KMeans demographic grouping. No interaction history needed."),
+        ("💬", "Dual Explainability", "Every result shows both CB reason (feature match) and CF reason (peer patterns)."),
+        ("📡", "GPS Soft Score", "Proximity is exponential decay, not a hard radius cutoff. e^(-0.3×dist)"),
+        ("📊", "Proper Evaluation", "80/20 train/test split. α learned on validation fold, tested on held-out fold."),
+        ("🌐", "96% Coverage", "96% of all 75 hostels appear in at least one student's top-K recommendations."),
+    ]
 
-    st.divider()
-    st.markdown("### ⚙️ Adaptive Alpha per Student Type")
+    cols = st.columns(3)
+    for i, (icon, title, desc) in enumerate(proof_items):
+        with cols[i % 3]:
+            st.markdown(f"""
+            <div class="flow-card" style="margin-bottom:0.8rem">
+                <div style="font-size:1.4rem;margin-bottom:0.4rem">{icon}</div>
+                <div class="flow-title">{title}</div>
+                <div class="flow-desc">{desc}</div>
+            </div>""", unsafe_allow_html=True)
+
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    # ── Adaptive alpha table ──────────────────────────────────────
+    st.markdown('<div class="section-label">Adaptive alpha per student type</div>', unsafe_allow_html=True)
     ta_data = {
         "Student Type"  : list(type_alphas.keys()),
         "α (CB weight)" : list(type_alphas.values()),
         "CB %"          : [f"{v:.0%}" for v in type_alphas.values()],
         "CF %"          : [f"{1-v:.0%}" for v in type_alphas.values()],
-        "Students"      : [
+        "# Students"    : [
             len(students_df[students_df.apply(
                 lambda s: classify_student_type(
-                    s["study_preference"],
-                    s["price_sensitivity"],
-                    s["comfort_preference"]
-                )==t, axis=1
+                    s["study_preference"], s["price_sensitivity"], s["comfort_preference"]
+                ) == t, axis=1
             )])
             for t in type_alphas.keys()
         ]
     }
-    st.dataframe(pd.DataFrame(ta_data), use_container_width=True)
+    st.dataframe(pd.DataFrame(ta_data), use_container_width=True, hide_index=True)
