@@ -1,0 +1,85 @@
+{
+  "accuracy": 0.87013,
+  "macro_f1": 0.86699,
+  "weighted_f1": 0.86699,
+  "n_classes": 7,
+  "classes": [
+    "amenity_inquiry",
+    "booking_process",
+    "complaint",
+    "general_info",
+    "hostel_search",
+    "location_info",
+    "pricing_info"
+  ],
+  "train_size": 304,
+  "test_size": 77,
+  "best_epoch": 4,
+  "epochs_run": 6,
+  "early_stopped": true,
+  "batch_size": 8,
+  "learning_rate": 3e-05,
+  "max_len": 64,
+  "model_name": "distilbert-base-uncased",
+  "training_examples": 381,
+  "per_intent": {
+    "amenity_inquiry": {
+      "precision": 0.8889,
+      "recall": 0.7273,
+      "f1": 0.8,
+      "support": 11
+    },
+    "booking_process": {
+      "precision": 0.875,
+      "recall": 0.6364,
+      "f1": 0.7368,
+      "support": 11
+    },
+    "complaint": {
+      "precision": 0.9167,
+      "recall": 1.0,
+      "f1": 0.9565,
+      "support": 11
+    },
+    "general_info": {
+      "precision": 0.6923,
+      "recall": 0.8182,
+      "f1": 0.75,
+      "support": 11
+    },
+    "hostel_search": {
+      "precision": 0.8462,
+      "recall": 1.0,
+      "f1": 0.9167,
+      "support": 11
+    },
+    "location_info": {
+      "precision": 1.0,
+      "recall": 0.9091,
+      "f1": 0.9524,
+      "support": 11
+    },
+    "pricing_info": {
+      "precision": 0.9167,
+      "recall": 1.0,
+      "f1": 0.9565,
+      "support": 11
+    }
+  },
+  "training_loss_per_epoch": [
+    1.927253,
+    1.560728,
+    0.915834,
+    0.467824,
+    0.227177,
+    0.09164
+  ],
+  "val_accuracy_per_epoch": [
+    0.285714,
+    0.753247,
+    0.857143,
+    0.87013,
+    0.844156,
+    0.844156
+  ]
+}

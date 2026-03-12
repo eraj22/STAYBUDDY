@@ -1,84 +1,100 @@
 """
-╔══════════════════════════════════════════════════════════════════╗
-║   StayBuddy — NLP Chatbot Core  v2.0                            ║
-║   Author  : Samiya Saleem (22I-1065)                             ║
-║   Model   : DistilBERT fine-tuned · 7 intents · 84.75% acc      ║
-╚══════════════════════════════════════════════════════════════════╝
-
-INTELLIGENT features:
-  1. DistilBERT transformer (not keyword matching)
-  2. Confidence threshold — asks clarification if unsure
-  3. spaCy + regex entity extraction
-  4. Multi-turn context — remembers ALL preferences across turns
-  5. Follow-up resolution — "which of these", "how many of them",
-     "show me the cheapest one" all resolve against previous results
-  6. hostel_search -> Eraj's hybrid recommendation engine
-  7. Stats queries — "how many girls hostels are there"
-  8. Comparative queries — "which is closest / cheapest / highest rated"
+╔══════════════════════════════════════════════════════════════════════╗
+║  StayBuddy — Intelligent Chatbot                                     ║
+║  Author : Samiya Saleem (22I-1065)                                   ║
+╠══════════════════════════════════════════════════════════════════════╣
+║  3-LAYER PIPELINE                                                    ║
+║                                                                      ║
+║  LAYER 1 — UNDERSTANDING                                             ║
+║    • DistilBERT (fine-tuned, 7 intents, 84.75% acc)                  ║
+║    • spaCy + regex  →  entity extraction                             ║
+║    • Rule detectors →  follow-ups & counting queries                 ║
+║                                                                      ║
+║  LAYER 2 — REASONING                                                 ║
+║    • ConversationContext  →  full multi-turn memory                  ║
+║    • Confidence threshold →  asks clarification if unsure            ║
+║    • Intent router        →  hostel_search fires hybrid engine       ║
+║                                                                      ║
+║  LAYER 3 — RESPONSE GENERATION                                       ║
+║    • Structured handlers  →  live CSV / hybrid engine data           ║
+║    • Ollama (llama3)      →  natural language wrapping               ║
+║    • Template fallback    →  if Ollama not running                   ║
+╚══════════════════════════════════════════════════════════════════════╝
 """
 
 import re
 import os
-import json
 import joblib
+import requests
 import numpy as np
 import pandas as pd
 import torch
 from pathlib import Path
 from datetime import datetime
 from transformers import DistilBertTokenizer, DistilBertForSequenceClassification
-import spacy
 
-# ── Paths ──────────────────────────────────────────────────────────
-BASE_DIR  = Path(__file__).parent.resolve()
-MODEL_DIR = BASE_DIR / "intent_model"
-DATA_DIR  = BASE_DIR / "data"
+try:
+    import spacy
+    _SPACY_OK = True
+except ImportError:
+    _SPACY_OK = False
 
-_CLEAN_BASE = Path("C:/staybuddy_models")
-if " " in str(BASE_DIR) and _CLEAN_BASE.exists():
-    MODEL_DIR   = _CLEAN_BASE / "intent_model"
-    _LABEL_PATH = _CLEAN_BASE / "label_encoder.pkl"
-else:
-    _LABEL_PATH = BASE_DIR / "label_encoder.pkl"
+# ── Path resolution (handles OneDrive spaces in path) ─────────────────
+BASE_DIR    = Path(__file__).parent.resolve()
+MODEL_DIR   = BASE_DIR / "intent_model"
+LABEL_PATH  = BASE_DIR / "label_encoder.pkl"
 
-# ── Constants ──────────────────────────────────────────────────────
-CONFIDENCE_THRESHOLD = 0.55
+_CLEAN = Path("C:/staybuddy_models")
+if " " in str(BASE_DIR) and _CLEAN.exists():
+    MODEL_DIR  = _CLEAN / "intent_model"
+    LABEL_PATH = _CLEAN / "label_encoder.pkl"
+
+# ── Tuning knobs ───────────────────────────────────────────────────────
+CONFIDENCE_THRESHOLD = 0.55   # below this → ask clarification
 MAX_RESULTS          = 5
+OLLAMA_URL           = "http://localhost:11434/api/generate"
+OLLAMA_MODEL         = "llama3"   # change to "llama3.2" or "mistral" if needed
+OLLAMA_TIMEOUT       = 12         # seconds
+
+# ══════════════════════════════════════════════════════════════════════
+# LOOKUP TABLES
+# ══════════════════════════════════════════════════════════════════════
 
 AMENITY_MAP = {
-    "wifi":             "has_wifi",
-    "internet":         "has_wifi",
-    "gym":              "has_gym",
-    "fitness":          "has_gym",
-    "study room":       "has_study_room",
-    "study area":       "has_study_room",
-    "cafeteria":        "has_cafeteria",
-    "canteen":          "has_cafeteria",
-    "laundry":          "has_laundry",
-    "washing":          "has_laundry",
-    "ac":               "has_ac",
-    "air conditioning": "has_ac",
-    "air conditioner":  "has_ac",
-    "hot water":        "has_hot_water",
-    "geyser":           "has_hot_water",
-    "generator":        "has_generator",
-    "backup":           "has_generator",
-    "parking":          "has_parking",
-    "prayer room":      "has_prayer_room",
-    "mosque":           "has_prayer_room",
-    "library":          "has_library",
-    "cctv":             "has_cctv",
-    "camera":           "has_cctv",
-    "security guard":   "has_security_guard",
-    "guard":            "has_security_guard",
-    "common room":      "has_common_room",
-    "transport":        "transport_nearby",
+    # keyword in user text  →  CSV column name
+    "wifi":              "has_wifi",
+    "internet":          "has_wifi",
+    "gym":               "has_gym",
+    "fitness":           "has_gym",
+    "study room":        "has_study_room",
+    "study area":        "has_study_room",
+    "library":           "has_library",
+    "cafeteria":         "has_cafeteria",
+    "canteen":           "has_cafeteria",
+    "laundry":           "has_laundry",
+    "washing":           "has_laundry",
+    "ac":                "has_ac",
+    "air conditioning":  "has_ac",
+    "air conditioner":   "has_ac",
+    "hot water":         "has_hot_water",
+    "geyser":            "has_hot_water",
+    "generator":         "has_generator",
+    "backup":            "has_generator",
+    "parking":           "has_parking",
+    "prayer room":       "has_prayer_room",
+    "mosque":            "has_prayer_room",
+    "cctv":              "has_cctv",
+    "security guard":    "has_security_guard",
+    "guard":             "has_security_guard",
+    "common room":       "has_common_room",
+    "transport":         "transport_nearby",
 }
 
 AMENITY_LABELS = {
     "has_wifi":           "WiFi",
     "has_gym":            "Gym",
     "has_study_room":     "Study Room",
+    "has_library":        "Library",
     "has_cafeteria":      "Cafeteria",
     "has_laundry":        "Laundry",
     "has_ac":             "AC",
@@ -86,25 +102,11 @@ AMENITY_LABELS = {
     "has_generator":      "Generator",
     "has_parking":        "Parking",
     "has_prayer_room":    "Prayer Room",
-    "has_library":        "Library",
     "has_cctv":           "CCTV",
     "has_security_guard": "Security Guard",
     "has_common_room":    "Common Room",
     "transport_nearby":   "Transport",
 }
-
-URDU_NUMBERS = {
-    "10k": 10000, "12k": 12000, "15k": 15000, "20k": 20000,
-    "8k":  8000,  "5k":  5000,  "25k": 25000, "30k": 30000,
-    "das hazar":      10000, "barah hazar":  12000,
-    "pandarah hazar": 15000, "paanch hazar": 5000,
-    "bees hazar":     20000,
-}
-
-MULTI_WORD_AMENITIES = [
-    "study room", "study area", "hot water", "air conditioning",
-    "air conditioner", "prayer room", "common room", "security guard",
-]
 
 INTENT_EMOJI = {
     "hostel_search":   "🔍",
@@ -114,451 +116,450 @@ INTENT_EMOJI = {
     "location_info":   "📍",
     "complaint":       "⚠️",
     "general_info":    "ℹ️",
-    "stats_query":     "📊",
     "followup":        "↩️",
+    "stats_query":     "📊",
+}
+
+URDU_BUDGET = {
+    "5k":  5000,  "8k":  8000,  "10k": 10000, "12k": 12000,
+    "15k": 15000, "20k": 20000, "25k": 25000, "30k": 30000,
+    "paanch hazar":    5000,  "aath hazar":      8000,
+    "das hazar":       10000, "barah hazar":     12000,
+    "pandarah hazar":  15000, "bees hazar":      20000,
+}
+
+# multi-word amenities must be checked before single-word ones
+MULTI_WORD_AMENITIES = [
+    "study room", "study area", "hot water", "air conditioning",
+    "air conditioner", "prayer room", "common room", "security guard",
+]
+
+AREA_MAP = {
+    "g-13": "G-13", "g13": "G-13", "g-14": "G-14", "g14": "G-14",
+    "h-11": "H-11", "h11": "H-11", "f-10": "F-10", "f10": "F-10",
+    "e-11": "E-11", "e11": "E-11", "i-8":  "I-8",  "i8":  "I-8",
+    "i-10": "I-10", "i10": "I-10", "bahria": "Bahria Town",
+    "dha":  "DHA Phase 2", "gulberg": "Gulberg", "pwd": "PWD",
 }
 
 FOLLOWUP_PATTERNS = [
-    r'\b(which|what|which one|which ones)\b.*(of these|of them|from these|from them|among them|among these)',
-    r'\b(how many|kitne|kitni).*(of these|of them|from these|from them)',
-    r'\b(show me|give me|tell me).*(cheapest|closest|nearest|best|highest|lowest|top).*(one|ones|of these|of them)',
-    r'\b(the cheapest|the closest|the nearest|the best|the highest rated|the top rated)\b',
-    r'\b(filter|narrow|refine|from the list|from those|from above)\b',
-    r'\b(do any of them|does any of them|do they|any of these)\b',
-    r'\bsabse (sasta|mehnga|kareeb|acha)\b',
+    r'\b(which|what).*(of these|of them|from these)',
+    r'\b(how many|kitne|kitni).*(of these|of them|from these)',
+    r'\b(show me|give me).*(cheapest|closest|nearest|best|highest|lowest).*(one|from these)',
+    r'\b(cheapest|closest|nearest|best rated|highest rated|safest)\s*(one|hostel)?\s*$',
+    r'\b(do any|does any|do they|any of these)\b',
+    r'\b(filter|narrow down|from those|of those)\b',
+    r'\bwhich one\b',
+    # Budget follow-ups on last results
+    r'\b(within|under|below|less than).{0,15}(budget|rs|pkr|rupees|\d{4,6})',
+    r'\b(are within|within my).{0,20}budget',
+    r'\bwhich of these.{0,30}(budget|afford|price|cost)',
 ]
 
 STATS_PATTERNS = [
-    r'\bhow many\b',
-    r'\bkitne\b',
-    r'\bkitni\b',
-    r'\btotal (number|count|hostels)\b',
-    r'\bcount\b',
+    r'\bhow many\b', r'\bkitne\b', r'\bkitni\b',
+    r'\btotal (hostels|count|number)\b', r'\bcount\b',
 ]
 
 
-# ══════════════════════════════════════════════════════════════════
-# MODEL LOADING
-# ══════════════════════════════════════════════════════════════════
+# ══════════════════════════════════════════════════════════════════════
+# LAYER 1A — DISTILBERT INTENT CLASSIFICATION
+# ══════════════════════════════════════════════════════════════════════
 
 def load_intent_model():
-    model_path = str(MODEL_DIR)
-    tokenizer  = DistilBertTokenizer.from_pretrained(model_path, local_files_only=True)
-    model      = DistilBertForSequenceClassification.from_pretrained(model_path, local_files_only=True)
+    """Load fine-tuned DistilBERT + label encoder. Called once via @st.cache_resource."""
+    tokenizer = DistilBertTokenizer.from_pretrained(
+        str(MODEL_DIR), local_files_only=True
+    )
+    model = DistilBertForSequenceClassification.from_pretrained(
+        str(MODEL_DIR), local_files_only=True
+    )
     model.eval()
-    le = joblib.load(str(_LABEL_PATH))
+    le = joblib.load(str(LABEL_PATH))
     return tokenizer, model, le
 
 
 def load_spacy():
+    if not _SPACY_OK:
+        return None
     try:
         return spacy.load("en_core_web_sm")
     except OSError:
         return None
 
 
-# ══════════════════════════════════════════════════════════════════
-# INTENT CLASSIFICATION
-# ══════════════════════════════════════════════════════════════════
-
-def classify_intent(text, tokenizer, model, le):
-    encoding = tokenizer(
+def _classify(text: str, tokenizer, model, le):
+    """
+    Run DistilBERT forward pass.
+    Returns (intent_str, confidence_float, {intent: prob} dict)
+    """
+    enc = tokenizer(
         text, max_length=64, padding="max_length",
         truncation=True, return_tensors="pt"
     )
     with torch.no_grad():
         logits = model(
-            input_ids=encoding["input_ids"],
-            attention_mask=encoding["attention_mask"]
+            input_ids=enc["input_ids"],
+            attention_mask=enc["attention_mask"]
         ).logits
     probs      = torch.softmax(logits, dim=1).squeeze().numpy()
-    pred_idx   = int(np.argmax(probs))
-    confidence = float(probs[pred_idx])
-    intent     = le.classes_[pred_idx]
+    idx        = int(np.argmax(probs))
+    intent     = le.classes_[idx]
+    confidence = float(probs[idx])
     all_scores = {le.classes_[i]: float(probs[i]) for i in range(len(le.classes_))}
     return intent, confidence, all_scores
 
 
-# ══════════════════════════════════════════════════════════════════
-# FOLLOW-UP & STATS DETECTION
-# ══════════════════════════════════════════════════════════════════
-
-def is_followup(text: str) -> bool:
-    t = text.lower()
-    for pat in FOLLOWUP_PATTERNS:
-        if re.search(pat, t):
-            return True
-    return False
-
-
-def is_stats_query(text: str) -> bool:
-    t = text.lower()
-    for pat in STATS_PATTERNS:
-        if re.search(pat, t):
-            return True
-    return False
-
-
-def detect_comparison(text: str):
-    t = text.lower()
-    if re.search(r'\b(cheapest|sasta|lowest price|least expensive|affordable)\b', t):
-        return "cheapest"
-    if re.search(r'\b(closest|nearest|kareeb|most nearby|shortest distance)\b', t):
-        return "closest"
-    if re.search(r'\b(best|highest rated|top rated|best rating)\b', t):
-        return "best_rated"
-    if re.search(r'\b(most expensive|mehnga|priciest)\b', t):
-        return "most_expensive"
-    if re.search(r'\b(safest|most secure|highest security)\b', t):
-        return "safest"
-    return None
-
-
-# ══════════════════════════════════════════════════════════════════
-# ENTITY EXTRACTION
-# ══════════════════════════════════════════════════════════════════
+# ══════════════════════════════════════════════════════════════════════
+# LAYER 1B — ENTITY EXTRACTION
+# ══════════════════════════════════════════════════════════════════════
 
 def extract_entities(text: str, nlp, hostels_df) -> dict:
-    entities   = {}
-    text_lower = text.lower()
+    """
+    Extract structured slots from free text.
+    Strategies (in order): spaCy NER → regex → keyword → CSV name match
+    """
+    ents = {}
+    t    = text.lower()
 
+    # 1. spaCy NER for MONEY & location
     if nlp:
         doc = nlp(text)
         for ent in doc.ents:
-            if ent.label_ in ["GPE", "LOC", "FAC"]:
-                entities["location_ref"] = ent.text
+            if ent.label_ in ("GPE", "LOC", "FAC") and "location_ref" not in ents:
+                ents["location_ref"] = ent.text
             if ent.label_ == "MONEY":
-                amount = re.sub(r"[^\d]", "", ent.text)
-                if amount and int(amount) > 1000:
-                    entities["budget"] = int(amount)
+                digits = re.sub(r"[^\d]", "", ent.text)
+                if digits and 1000 < int(digits) < 100000:
+                    ents["budget"] = int(digits)
 
-    if "budget" not in entities:
-        match = re.search(
-            r'(?:under|below|less than|upto|up to|within|max|maximum)?\s*'
+    # 2. Budget from regex (PKR / rs / numbers)
+    if "budget" not in ents:
+        m = re.search(
+            r'(?:under|below|less than|upto|up to|within|max|budget.{0,8})?\s*'
             r'(?:rs\.?|pkr|rupees?)?\s*(\d[\d,]+)\s*(?:rs\.?|pkr|rupees?)?',
-            text_lower
+            t
         )
-        if match:
-            val = int(match.group(1).replace(",", ""))
+        if m:
+            val = int(m.group(1).replace(",", ""))
             if 1000 < val < 100000:
-                entities["budget"] = val
-        for word, value in URDU_NUMBERS.items():
-            if word in text_lower:
-                entities["budget"] = value
+                ents["budget"] = val
+        # Urdu / short-hand numbers
+        for word, val in URDU_BUDGET.items():
+            if word in t:
+                ents["budget"] = val
                 break
 
-    if re.search(r'\b(girls?|female|women|ladies|larkiyon)\b', text_lower):
-        entities["gender"] = "Female"
-    elif re.search(r'\b(boys?|male|men|larkon|gents)\b', text_lower):
-        entities["gender"] = "Male"
+    # 3. Gender
+    if re.search(r'\b(girls?|female|women|ladies|larkiyon|larki)\b', t):
+        ents["gender"] = "Female"
+    elif re.search(r'\b(boys?|male|men|gents|larkon|larka)\b', t):
+        ents["gender"] = "Male"
 
-    room = re.search(r'\b(single|double|dorm|dormitory|shared)\b', text_lower)
-    if room:
-        rt = room.group(1)
-        entities["room_type"] = "Dormitory" if rt in ("dorm","dormitory","shared") else rt.capitalize()
+    # 4. Room type
+    rm = re.search(r'\b(single|double|dorm|dormitory|shared)\b', t)
+    if rm:
+        v = rm.group(1)
+        ents["room_type"] = "Dormitory" if v in ("dorm", "dormitory", "shared") else v.capitalize()
 
-    dist = re.search(r'within\s*(\d+\.?\d*)\s*km', text_lower)
-    if dist:
-        entities["max_distance_km"] = float(dist.group(1))
+    # 5. Distance
+    dm = re.search(r'within\s*(\d+\.?\d*)\s*km', t)
+    if dm:
+        ents["max_distance_km"] = float(dm.group(1))
 
+    # 6. Amenities (multi-word first to avoid partial matches)
     found = []
     for kw in MULTI_WORD_AMENITIES:
-        if kw in text_lower and AMENITY_MAP[kw] not in found:
+        if kw in t and AMENITY_MAP.get(kw) not in found:
             found.append(AMENITY_MAP[kw])
     for kw, col in AMENITY_MAP.items():
-        if kw not in MULTI_WORD_AMENITIES:
-            if re.search(r'\b' + re.escape(kw) + r'\b', text_lower):
-                if col not in found:
-                    found.append(col)
+        if kw in MULTI_WORD_AMENITIES:
+            continue
+        if re.search(r'\b' + re.escape(kw) + r'\b', t) and col not in found:
+            found.append(col)
     if found:
-        entities["amenities"] = list(set(found))
+        ents["amenities"] = found
 
-    if hostels_df is not None:
-        known = hostels_df["hostel_name"].str.lower().tolist()
-        for name in known:
-            if name in text_lower:
-                entities["hostel_name"] = name
-                break
-
-    areas = ["g-13","g-14","g13","g14","h-11","h11","f-10","f10",
-             "e-11","e11","i-8","i8","bahria","dha","gulberg","pwd","i-10","i10"]
-    for area in areas:
-        if area in text_lower:
-            entities["area"] = area.upper().replace("G13","G-13").replace("G14","G-14")\
-                .replace("H11","H-11").replace("F10","F-10").replace("E11","E-11")\
-                .replace("I8","I-8").replace("I10","I-10")
+    # 7. Area / sector
+    for key, label in AREA_MAP.items():
+        if re.search(r'\b' + re.escape(key) + r'\b', t):
+            ents["area"] = label
             break
 
-    return entities
+    # 8. Hostel name from CSV
+    if hostels_df is not None:
+        for name in hostels_df["hostel_name"].tolist():
+            if name.lower() in t:
+                ents["hostel_name"] = name
+                break
+
+    return ents
 
 
-# ══════════════════════════════════════════════════════════════════
-# CONTEXT MANAGER
-# ══════════════════════════════════════════════════════════════════
+# ══════════════════════════════════════════════════════════════════════
+# LAYER 1C — RULE-BASED PRE-CLASSIFIERS
+# ══════════════════════════════════════════════════════════════════════
+
+RESULT_COMPLAINT_PATTERNS = [
+    r'\bi said\b',
+    r'\bwhy are you showing\b',
+    r'\bthis is (wrong|incorrect|over|too expensive)\b',
+    r"\bthat('s| is) (over|above|more than) my budget\b",
+    r'\bi (asked|said|mentioned|told you).{0,30}budget\b',
+    r'\bignoring my budget\b',
+    r'\bnot within my budget\b',
+    r'\bover budget\b',
+]
+
+
+def _is_followup(text: str) -> bool:
+    t = text.lower()
+    return any(re.search(p, t) for p in FOLLOWUP_PATTERNS)
+
+
+def _is_stats(text: str) -> bool:
+    t = text.lower()
+    return any(re.search(p, t) for p in STATS_PATTERNS)
+
+
+def _is_result_complaint(text: str) -> bool:
+    t = text.lower()
+    return any(re.search(p, t) for p in RESULT_COMPLAINT_PATTERNS)
+
+
+# ══════════════════════════════════════════════════════════════════════
+# LAYER 2 — CONVERSATION CONTEXT  (persisted in st.session_state)
+# ══════════════════════════════════════════════════════════════════════
 
 class ConversationContext:
+    """
+    Remembers every preference across the entire conversation.
+    Used to fill in missing slots when user asks follow-up questions
+    without repeating themselves.
+    """
     def __init__(self):
-        self.gender           = None
-        self.budget           = None
-        self.room_type        = None
-        self.max_distance_km  = None
-        self.amenities        = []
-        self.area             = None
-        self.last_intent      = None
-        self.last_hostels     = []
-        self.last_hostel_names= []
-        self.turn_count       = 0
-        self.started_at       = datetime.now()
+        self.gender          = None
+        self.budget          = None
+        self.room_type       = None
+        self.max_distance_km = None
+        self.amenities       = []
+        self.area            = None
+        self.last_intent     = None
+        self.last_hostels    = []   # list of card dicts from last search result
+        self.turn_count      = 0
+        self.history         = []   # [{role, text}] for Ollama multi-turn context
 
+    # ── Slot management ────────────────────────────────────────────
     def update(self, entities: dict):
-        if entities.get("gender"):          self.gender = entities["gender"]
-        if entities.get("budget"):          self.budget = entities["budget"]
-        if entities.get("room_type"):       self.room_type = entities["room_type"]
+        """Store any newly mentioned preferences."""
+        if entities.get("gender"):          self.gender          = entities["gender"]
+        if entities.get("budget"):          self.budget          = entities["budget"]
+        if entities.get("room_type"):       self.room_type       = entities["room_type"]
         if entities.get("max_distance_km"): self.max_distance_km = entities["max_distance_km"]
-        if entities.get("amenities"):
-            for a in entities["amenities"]:
-                if a not in self.amenities:
-                    self.amenities.append(a)
-        if entities.get("area"):            self.area = entities["area"]
+        if entities.get("area"):            self.area            = entities["area"]
+        for a in entities.get("amenities", []):
+            if a not in self.amenities:
+                self.amenities.append(a)
 
     def resolve(self, entities: dict) -> dict:
-        merged = dict(entities)
-        if not merged.get("gender")          and self.gender:          merged["gender"]          = self.gender
-        if not merged.get("budget")          and self.budget:          merged["budget"]          = self.budget
-        if not merged.get("room_type")       and self.room_type:       merged["room_type"]       = self.room_type
-        if not merged.get("max_distance_km") and self.max_distance_km: merged["max_distance_km"] = self.max_distance_km
-        if not merged.get("amenities")       and self.amenities:       merged["amenities"]       = self.amenities
-        return merged
+        """Merge current-turn entities with remembered context."""
+        m = dict(entities)
+        if not m.get("gender")          and self.gender:          m["gender"]          = self.gender
+        if not m.get("budget")          and self.budget:          m["budget"]          = self.budget
+        if not m.get("room_type")       and self.room_type:       m["room_type"]       = self.room_type
+        if not m.get("max_distance_km") and self.max_distance_km: m["max_distance_km"] = self.max_distance_km
+        if not m.get("amenities")       and self.amenities:       m["amenities"]       = list(self.amenities)
+        return m
 
     def set_last_hostels(self, cards: list):
-        self.last_hostels      = cards
-        self.last_hostel_names = [c["name"] for c in cards]
+        self.last_hostels = cards
 
-    def get_last_hostel_df(self, hostels_df: pd.DataFrame) -> pd.DataFrame:
-        if not self.last_hostel_names:
-            return pd.DataFrame()
-        return hostels_df[hostels_df["hostel_name"].isin(self.last_hostel_names)].copy()
+    # ── Ollama history ─────────────────────────────────────────────
+    def add_turn(self, role: str, text: str):
+        self.history.append({"role": role, "text": text})
+        if len(self.history) > 20:
+            self.history = self.history[-20:]
 
+    # ── Summary for UI banner ─────────────────────────────────────
     def summary(self) -> str:
         parts = []
-        if self.gender:           parts.append(f"Gender: {self.gender}")
-        if self.budget:           parts.append(f"Budget: PKR {self.budget:,}")
-        if self.room_type:        parts.append(f"Room: {self.room_type}")
-        if self.max_distance_km:  parts.append(f"Distance: ≤{self.max_distance_km}km")
+        if self.gender:          parts.append(f"Gender: {self.gender}")
+        if self.budget:          parts.append(f"Budget: PKR {self.budget:,}")
+        if self.room_type:       parts.append(f"Room: {self.room_type}")
+        if self.max_distance_km: parts.append(f"Max dist: {self.max_distance_km}km")
         if self.amenities:
-            labels = [AMENITY_LABELS.get(a, a) for a in self.amenities]
-            parts.append(f"Amenities: {', '.join(labels)}")
-        if self.last_hostel_names: parts.append(f"Last shown: {len(self.last_hostel_names)} hostels")
-        return " · ".join(parts) if parts else "No preferences set yet"
+            parts.append("Amenities: " + ", ".join(
+                AMENITY_LABELS.get(a, a) for a in self.amenities
+            ))
+        if self.last_hostels:    parts.append(f"Last shown: {len(self.last_hostels)} hostels")
+        return " · ".join(parts) if parts else "No preferences stored yet"
 
     def clear(self):
         self.__init__()
 
 
-# ══════════════════════════════════════════════════════════════════
-# FOLLOW-UP HANDLER
-# ══════════════════════════════════════════════════════════════════
+# ══════════════════════════════════════════════════════════════════════
+# LAYER 3A — OLLAMA  (natural language generation)
+# ══════════════════════════════════════════════════════════════════════
 
-def respond_followup(user_text: str, context: ConversationContext,
-                     hostels_df: pd.DataFrame, entities: dict) -> dict:
-    t = user_text.lower()
-    prev_df = context.get_last_hostel_df(hostels_df)
+def _ollama_alive() -> bool:
+    try:
+        r = requests.get("http://localhost:11434/api/tags", timeout=2)
+        return r.status_code == 200
+    except Exception:
+        return False
 
-    if prev_df.empty:
-        return {"type":"text","message":"❓ No previous results to filter. Search for hostels first."}
 
-    n = len(prev_df)
-    prev_names_str = ", ".join(context.last_hostel_names)
-
-    # How many of them [have X / are within Y km]
-    if re.search(r'\bhow many\b|\bkitne\b|\bkitni\b', t):
-        amenities  = entities.get("amenities", [])
-        dist_match = re.search(r'within\s*(\d+\.?\d*)\s*km', t)
-
-        if amenities:
-            filtered = prev_df.copy()
-            for a in amenities:
-                if a in filtered.columns:
-                    filtered = filtered[filtered[a] == 1]
-            lbl   = ", ".join(AMENITY_LABELS.get(a,a) for a in amenities)
-            count = len(filtered)
-            msg   = f"**{count} of the {n} hostels** have {lbl}."
-            if count > 0:
-                msg += "\n\n" + "\n".join(f"• {r['hostel_name']}" for _, r in filtered.iterrows())
-            return {"type":"text","message": msg}
-
-        if dist_match:
-            km       = float(dist_match.group(1))
-            filtered = prev_df[prev_df["distance_from_fast_km"] <= km]
-            msg      = f"**{len(filtered)} of the {n} hostels** are within {km}km of FAST."
-            if len(filtered) > 0:
-                msg += "\n\n" + "\n".join(
-                    f"• {r['hostel_name']} — {r['distance_from_fast_km']}km"
-                    for _, r in filtered.iterrows()
-                )
-            return {"type":"text","message": msg}
-
-        return {"type":"text","message":f"There are **{n} hostels** in the previous results."}
-
-    # Which of these have [amenity]
-    amenities = entities.get("amenities", [])
-    if amenities:
-        filtered = prev_df.copy()
-        for a in amenities:
-            if a in filtered.columns:
-                filtered = filtered[filtered[a] == 1]
-            elif a == "transport_nearby" and "transport_nearby" in filtered.columns:
-                filtered = filtered[filtered["transport_nearby"] == 1]
-        lbl = ", ".join(AMENITY_LABELS.get(a,a) for a in amenities)
-
-        if len(filtered) == 0:
-            return {"type":"text","message":f"❌ None of the {n} hostels have {lbl}."}
-
-        cards = _build_cards(filtered)
-        return {
-            "type":        "hostel_results",
-            "message":     f"**{len(filtered)} of the {n} hostels** have {lbl}:",
-            "hostels":     cards,
-            "names":       filtered["hostel_name"].tolist(),
-            "used_engine": False,
+def _ollama_call(prompt: str, system: str) -> str:
+    """
+    Call local Ollama instance.  Returns '' on any failure so callers
+    can fall back to template responses gracefully.
+    """
+    try:
+        payload = {
+            "model":  OLLAMA_MODEL,
+            "prompt": prompt,
+            "system": system,
+            "stream": False,
+            "options": {"temperature": 0.35, "top_p": 0.9, "num_predict": 280},
         }
+        r = requests.post(OLLAMA_URL, json=payload, timeout=OLLAMA_TIMEOUT)
+        if r.status_code == 200:
+            return r.json().get("response", "").strip()
+    except Exception:
+        pass
+    return ""
 
-    # Superlative comparisons
-    comparison = detect_comparison(user_text)
-    if comparison:
-        if comparison == "cheapest":
-            row = prev_df.nsmallest(1, "single_room_price").iloc[0]
-            msg = (f"💰 **Cheapest** from your results:\n\n"
-                   f"**{row['hostel_name']}** — PKR {int(row['single_room_price']):,}/mo  "
-                   f"⭐{row['overall_rating']}  📏{row['distance_from_fast_km']}km")
-        elif comparison == "closest":
-            row = prev_df.nsmallest(1, "distance_from_fast_km").iloc[0]
-            msg = (f"📍 **Closest to FAST** from your results:\n\n"
-                   f"**{row['hostel_name']}** — {row['distance_from_fast_km']}km  "
-                   f"PKR {int(row['single_room_price']):,}/mo  ⭐{row['overall_rating']}")
-        elif comparison == "best_rated":
-            row = prev_df.nlargest(1, "overall_rating").iloc[0]
-            msg = (f"⭐ **Highest rated** from your results:\n\n"
-                   f"**{row['hostel_name']}** — ⭐{row['overall_rating']}/5  "
-                   f"PKR {int(row['single_room_price']):,}/mo  📏{row['distance_from_fast_km']}km")
-        elif comparison == "most_expensive":
-            row = prev_df.nlargest(1, "single_room_price").iloc[0]
-            msg = (f"💸 **Most expensive** from your results:\n\n"
-                   f"**{row['hostel_name']}** — PKR {int(row['single_room_price']):,}/mo  "
-                   f"⭐{row['overall_rating']}")
-        elif comparison == "safest":
-            row = prev_df.nlargest(1, "security_rating").iloc[0]
-            msg = (f"🔒 **Most secure** from your results:\n\n"
-                   f"**{row['hostel_name']}** — Security {row['security_rating']}/5  "
-                   f"PKR {int(row['single_room_price']):,}/mo  ⭐{row['overall_rating']}")
-        return {"type":"text","message": msg}
 
-    return {
-        "type": "text",
-        "message": (
-            f"Your previous results had **{n} hostels**: {prev_names_str}.\n\n"
-            f"You can ask:\n"
-            f'• _"Which of these have WiFi / AC / gym?"_\n'
-            f'• _"How many of them are within 2km?"_\n'
-            f'• _"Show me the cheapest / closest / highest rated"_'
+def _system_prompt(context: ConversationContext, hostels_df) -> str:
+    """Build the Ollama system prompt with live dataset facts + user profile."""
+    g = len(hostels_df[hostels_df["hostel_type"] == "Girls"]) if hostels_df is not None else 38
+    b = len(hostels_df[hostels_df["hostel_type"] == "Boys"])  if hostels_df is not None else 37
+    pmin = int(hostels_df["single_room_price"].min()) if hostels_df is not None else 8152
+    pmax = int(hostels_df["single_room_price"].max()) if hostels_df is not None else 39833
+
+    last = ""
+    if context.last_hostels:
+        names = [h["name"] for h in context.last_hostels[:5]]
+        last  = "\nLast recommended: " + ", ".join(names)
+
+    return f"""You are the StayBuddy assistant — a helpful, friendly chatbot for students at FAST NUCES Islamabad searching for hostels.
+
+LIVE DATASET FACTS:
+- {g + b} hostels total: {g} girls, {b} boys
+- Price range: PKR {pmin:,} – {pmax:,}/month
+- All hostels are near FAST NUCES H-11 campus, Islamabad
+- Areas: G-13, H-11, F-10, E-11, I-8, I-10, Bahria Town, DHA, Gulberg{last}
+
+USER PROFILE SO FAR:
+{context.summary()}
+
+RULES:
+- Be concise and friendly — like a helpful senior student
+- Respond in the same language as the user (Urdu or English)
+- Never invent hostel names, prices, or features
+- If unsure about something specific, say so honestly
+- Keep replies under 160 words
+- Do NOT repeat the user's question back to them"""
+
+
+def _history_for_ollama(context: ConversationContext, new_msg: str) -> str:
+    """Format last few turns as a readable string for the Ollama prompt."""
+    lines = []
+    for t in context.history[-6:]:
+        role = "Student" if t["role"] == "user" else "Assistant"
+        lines.append(f"{role}: {t['text']}")
+    lines.append(f"Student: {new_msg}")
+    return "\n".join(lines)
+
+
+def _enhance(user_text: str, structured: dict, context: ConversationContext,
+             hostels_df, intent: str, entities: dict) -> str:
+    """
+    Use Ollama to wrap structured data in natural language.
+    For hostel_results: write the intro sentence only (cards stay separate).
+    For text responses: rewrite in conversational tone, keeping all facts.
+    Falls back to the structured message if Ollama returns nothing.
+    """
+    if structured.get("type") == "hostel_results":
+        cards = structured.get("hostels", [])
+        if not cards:
+            return structured["message"]
+        hostel_lines = "\n".join(
+            f"- {h['name']}: PKR {h['price']:,}/mo, "
+            f"{h['distance']}km from FAST, rated {h['rating']}/5, "
+            f"amenities: {', '.join(h['amenities'][:4])}"
+            for h in cards
         )
+        filters = f"Gender: {entities.get('gender', context.gender or 'any')}"
+        if entities.get("budget"):
+            filters += f", Budget ≤ PKR {entities['budget']:,}"
+        prompt = (
+            f"Conversation:\n{_history_for_ollama(context, user_text)}\n\n"
+            f"Filters: {filters}\n"
+            f"Results:\n{hostel_lines}\n\n"
+            f"Write ONE short, friendly opening line (max 20 words) introducing "
+            f"these results. Do not list the hostels."
+        )
+    else:
+        # Only enhance for intents where tone matters
+        if intent not in ("booking_process", "complaint", "general_info",
+                          "location_info", "pricing_info", "amenity_inquiry",
+                          "stats_query"):
+            return structured["message"]
+        prompt = (
+            f"Conversation:\n{_history_for_ollama(context, user_text)}\n\n"
+            f"Factual answer:\n{structured['message']}\n\n"
+            f"Rewrite as a natural, conversational reply. "
+            f"Keep every fact and number exactly as given. "
+            f"Do NOT add new information. Under 160 words."
+        )
+
+    reply = _ollama_call(prompt, _system_prompt(context, hostels_df))
+    return reply if reply else structured["message"]
+
+
+# ══════════════════════════════════════════════════════════════════════
+# LAYER 3B — STRUCTURED DATA HANDLERS
+# ══════════════════════════════════════════════════════════════════════
+
+def _make_card(row) -> dict:
+    return {
+        "name":      row["hostel_name"],
+        "type":      row["hostel_type"],
+        "area":      row["area"],
+        "price":     int(row["single_room_price"]),
+        "rating":    row["overall_rating"],
+        "distance":  row["distance_from_fast_km"],
+        "security":  row["security_rating"],
+        "elec_inc":  bool(row.get("electricity_included", 0)),
+        "meal_inc":  bool(row.get("meal_included", 0)),
+        "transport": bool(row.get("transport_nearby", 0)),
+        "curfew":    row.get("curfew_hour", 0),
+        "amenities": [
+            AMENITY_LABELS[c] for c in AMENITY_LABELS
+            if row.get(c, 0) == 1
+        ][:6],
     }
 
 
-# ══════════════════════════════════════════════════════════════════
-# STATS HANDLER
-# ══════════════════════════════════════════════════════════════════
-
-def respond_stats(user_text: str, entities: dict, hostels_df: pd.DataFrame) -> dict:
-    gender    = entities.get("gender")
-    area      = entities.get("area")
-    amenities = entities.get("amenities", [])
-
-    df = hostels_df.copy()
-    if gender:
-        df = df[df["hostel_type"] == ("Girls" if gender=="Female" else "Boys")]
-    if area:
-        df = df[df["area"].str.lower().str.contains(area.lower(), na=False)]
-    for a in amenities:
-        if a in df.columns:
-            df = df[df[a] == 1]
-
-    count      = len(df)
-    type_label = ("girls" if gender=="Female" else "boys") if gender else ""
-
-    if gender and not amenities and not area:
-        girls = len(hostels_df[hostels_df["hostel_type"]=="Girls"])
-        boys  = len(hostels_df[hostels_df["hostel_type"]=="Boys"])
-        msg   = (f"There are **{count} {type_label} hostels** in StayBuddy.\n\n"
-                 f"📊 Full breakdown:\n"
-                 f"• 🏠 Girls hostels: **{girls}**\n"
-                 f"• 🏠 Boys hostels: **{boys}**\n"
-                 f"• Total: **{girls+boys}**")
-    elif amenities:
-        lbl = ", ".join(AMENITY_LABELS.get(a,a) for a in amenities)
-        msg = f"**{count} {type_label} hostels** have {lbl}."
-        if 0 < count <= 8:
-            names = df["hostel_name"].tolist()
-            msg  += "\n\n" + "\n".join(f"• {n} ({df[df['hostel_name']==n]['area'].values[0]})" for n in names)
-    elif area:
-        msg = f"**{count} hostels** are in the {area} area."
-    else:
-        girls = len(hostels_df[hostels_df["hostel_type"]=="Girls"])
-        boys  = len(hostels_df[hostels_df["hostel_type"]=="Boys"])
-        msg   = (f"StayBuddy has **{len(hostels_df)} hostels** in total:\n\n"
-                 f"• 🏠 Girls hostels: **{girls}**\n"
-                 f"• 🏠 Boys hostels: **{boys}**\n"
-                 f"• Price range: **PKR 8,152 – 39,833/mo**\n"
-                 f"• Ratings: **3.1 – 4.5 ⭐**\n"
-                 f"• Areas: G-13, H-11, F-10, E-11, I-8, I-10, Bahria Town, DHA, Gulberg and more")
-
-    return {"type":"text","message": msg}
-
-
-# ══════════════════════════════════════════════════════════════════
-# HELPERS
-# ══════════════════════════════════════════════════════════════════
-
-def _build_cards(df: pd.DataFrame) -> list:
-    cards = []
-    for _, row in df.iterrows():
-        card = {
-            "name":     row["hostel_name"],
-            "type":     row["hostel_type"],
-            "area":     row["area"],
-            "price":    int(row["single_room_price"]),
-            "rating":   row["overall_rating"],
-            "distance": row["distance_from_fast_km"],
-            "security": row["security_rating"],
-        }
-        amenity_list = [lbl for col, lbl in AMENITY_LABELS.items()
-                        if col in row.index and row[col] == 1]
-        card["amenities"] = amenity_list[:6]
-        cards.append(card)
-    return cards
-
-
-# ══════════════════════════════════════════════════════════════════
-# INTENT RESPONSE HANDLERS
-# ══════════════════════════════════════════════════════════════════
-
-def respond_hostel_search(entities, hostels_df, rec_fn=None):
+# ── Hostel search ──────────────────────────────────────────────────────
+def _handle_search(entities: dict, hostels_df, rec_fn) -> dict:
     gender    = entities.get("gender", "Male")
     budget    = entities.get("budget")
     max_dist  = entities.get("max_distance_km", 5.0)
     amenities = entities.get("amenities", [])
     room_type = entities.get("room_type", "Single")
     area      = entities.get("area")
+    htype     = "Girls" if gender == "Female" else "Boys"
 
-    hostel_type = "Girls" if gender == "Female" else "Boys"
-    df          = hostels_df[hostels_df["hostel_type"] == hostel_type].copy()
+    # Try hybrid engine
+    cards       = []
     used_engine = False
-    recs        = None
-
     if rec_fn is not None:
         try:
             must_have = [AMENITY_LABELS.get(a, a) for a in amenities]
-            recs = rec_fn(
+            recs      = rec_fn(
                 gender=gender, department="Computer Science",
                 budget_max=budget or 25000, max_dist=max_dist,
                 study_pref=0.6, food_pref="Both", room_type=room_type,
@@ -566,260 +567,417 @@ def respond_hostel_search(entities, hostels_df, rec_fn=None):
                 curfew_flex=0.5, needs_transport=(max_dist > 3.0),
                 must_have=must_have, top_k=MAX_RESULTS,
             )
-            used_engine = True
+            if recs is not None and len(recs) > 0:
+                # Hard enforce budget AFTER hybrid engine returns results
+                if budget:
+                    recs = recs[recs["single_room_price"] <= budget]
+                used_engine = True
+                for _, row in recs.iterrows():
+                    c = _make_card(row)
+                    if "hybrid_score" in row:
+                        c["score"] = round(float(row["hybrid_score"]) * 100, 1)
+                    cards.append(c)
         except Exception:
-            recs = None
+            pass
 
-    if recs is None or (hasattr(recs, '__len__') and len(recs) == 0):
-        used_engine = False
+    # Fallback: direct CSV filter
+    if not cards:
+        df = hostels_df[hostels_df["hostel_type"] == htype].copy()
         if budget:   df = df[df["single_room_price"] <= budget]
-        df = df[df["distance_from_fast_km"] <= max_dist]
+        if max_dist: df = df[df["distance_from_fast_km"] <= max_dist]
         for a in amenities:
             if a in df.columns:
                 df = df[df[a] == 1]
         if area:
-            df = df[df["area"].str.lower().str.contains(area.lower().replace("-",""), na=False)]
-        df["_score"] = df["overall_rating"] / 5.0
+            df = df[df["area"].str.lower().str.contains(area.lower(), na=False)]
+        df["_s"] = (
+            df["overall_rating"] / 5.0
+            + (1 - df["distance_from_fast_km"] / 6.14) * 0.2
+        )
         if budget:
-            df["_score"] += (1 - df["single_room_price"] / budget).clip(0,1) * 0.3
-        df["_score"] += (1 - df["distance_from_fast_km"] / 6.14) * 0.2
-        recs = df.sort_values("_score", ascending=False).head(MAX_RESULTS)
+            df["_s"] += (1 - df["single_room_price"] / budget).clip(0, 1) * 0.3
+        df = df.sort_values("_s", ascending=False).head(MAX_RESULTS)
+        for _, row in df.iterrows():
+            cards.append(_make_card(row))
 
-    if recs is None or len(recs) == 0:
+    if not cards:
         return {
-            "type":"no_results",
-            "message":(f"😔 No {hostel_type.lower()} hostels match your criteria.\n\n"
-                       "Try relaxing filters — increase budget, expand distance, or remove amenities."),
-            "hostels":[],"used_engine":False,
+            "type": "text",
+            "message": f"😔 No {htype.lower()} hostels matched your criteria. Try relaxing budget or distance.",
         }
 
-    cards = _build_cards(recs)
-    if used_engine and "hybrid_score" in recs.columns:
-        for i, (_, row) in enumerate(recs.iterrows()):
-            if i < len(cards):
-                cards[i]["score"] = round(float(row["hybrid_score"]) * 100, 1)
-
-    summary_parts = [f"{hostel_type} hostels"]
-    if budget:          summary_parts.append(f"≤ PKR {budget:,}")
-    if max_dist != 5.0: summary_parts.append(f"≤ {max_dist}km")
-    if amenities:       summary_parts.append(", ".join(AMENITY_LABELS.get(a,a) for a in amenities))
+    # Build summary message
+    filter_parts = []
+    if budget:                            filter_parts.append(f"≤ PKR {budget:,}")
+    if max_dist and max_dist != 5.0:      filter_parts.append(f"≤ {max_dist}km")
+    if amenities:
+        filter_parts.append(", ".join(AMENITY_LABELS.get(a, a) for a in amenities))
+    msg = f"Found **{len(cards)}** {htype} hostels"
+    if filter_parts:
+        msg += " · " + " · ".join(filter_parts)
 
     return {
         "type":        "hostel_results",
-        "message":     f"Found **{len(cards)}** {' · '.join(summary_parts)}",
+        "message":     msg,
         "hostels":     cards,
         "used_engine": used_engine,
-        "names":       [c["name"] for c in cards],
+        "note": (
+            "🧠 _Powered by Eraj's hybrid recommendation engine_"
+            if used_engine else "📊 _Filtered from live CSV data_"
+        ),
     }
 
 
-def respond_amenity_inquiry(entities, hostels_df):
+# ── Follow-up: filter / sort the last shown results ────────────────────
+def _handle_followup(text: str, context: ConversationContext,
+                     hostels_df, entities: dict):
+    t = text.lower()
+    n = len(context.last_hostels)
+    if n == 0:
+        return None
+
+    names = [h["name"] for h in context.last_hostels]
+    df    = hostels_df[hostels_df["hostel_name"].isin(names)].copy()
+
+    def _cards(sub):
+        out = []
+        for _, row in sub.iterrows():
+            out.append(_make_card(row))
+        return out
+
+    # Filter by amenity
+    amenities = entities.get("amenities", [])
+    if amenities:
+        filtered = df.copy()
+        for a in amenities:
+            if a in filtered.columns:
+                filtered = filtered[filtered[a] == 1]
+        lbl   = " + ".join(AMENITY_LABELS.get(a, a) for a in amenities)
+        count = len(filtered)
+        msg   = (
+            f"**{count} of the {n} hostels** have {lbl}:"
+            if count > 0 else f"None of the {n} hostels have {lbl}."
+        )
+        cards = _cards(filtered) if count > 0 else []
+        context.set_last_hostels(cards)
+        return _result("followup", 1.0, entities, msg, cards)
+
+    # Filter by budget
+    budget = entities.get("budget") or context.budget
+    if budget and re.search(r'budget|afford|under|below|cheap|sasta', t):
+        filtered = df[df["single_room_price"] <= budget].sort_values("overall_rating", ascending=False)
+        msg = (
+            f"**{len(filtered)} of the {n} hostels** are within PKR {budget:,}/mo:"
+            if len(filtered) > 0 else f"None within PKR {budget:,}/mo."
+        )
+        cards = _cards(filtered)
+        context.set_last_hostels(cards)
+        return _result("followup", 1.0, entities, msg, cards)
+
+    # Superlatives
+    if re.search(r'\bcheapest|sasta\b', t):
+        row = df.sort_values("single_room_price").iloc[0]
+    elif re.search(r'\bclosest|nearest|paas\b', t):
+        row = df.sort_values("distance_from_fast_km").iloc[0]
+    elif re.search(r'\bbest|highest.rated|top\b', t):
+        row = df.sort_values("overall_rating", ascending=False).iloc[0]
+    elif re.search(r'\bsafest|most.secure\b', t):
+        row = df.sort_values("security_rating", ascending=False).iloc[0]
+    elif re.search(r'\bmost.amenities\b', t):
+        amenity_cols = [c for c in AMENITY_LABELS if c in df.columns]
+        df["_am"] = df[amenity_cols].sum(axis=1)
+        row = df.sort_values("_am", ascending=False).iloc[0]
+    else:
+        return None
+
+    card = _make_card(row)
+    context.set_last_hostels([card])
+    return _result("followup", 1.0, entities,
+                   "From your previous results, here is the best match:", [card])
+
+
+def _result(intent, conf, entities, msg, hostels=None):
+    """Helper: build a standard hostel_results response dict."""
+    return {
+        "type":        "hostel_results" if hostels is not None else "text",
+        "message":     msg,
+        "hostels":     hostels or [],
+        "used_engine": False,
+        "intent":      intent,
+        "confidence":  conf,
+        "entities":    entities,
+        "emoji":       INTENT_EMOJI.get(intent, "💬"),
+        "note":        "📊 _Filtered from live CSV data_",
+    }
+
+
+# ── Stats / counting ───────────────────────────────────────────────────
+def _handle_stats(text: str, entities: dict, hostels_df) -> dict:
+    gender    = entities.get("gender")
+    area      = entities.get("area")
+    amenities = entities.get("amenities", [])
+
+    df = hostels_df.copy()
+    if gender:
+        htype = "Girls" if gender == "Female" else "Boys"
+        df    = df[df["hostel_type"] == htype]
+    for a in amenities:
+        if a in df.columns:
+            df = df[df[a] == 1]
+    if area:
+        df = df[df["area"].str.lower().str.contains(area.lower(), na=False)]
+
+    count      = len(df)
+    type_label = ("girls" if gender == "Female" else "boys") if gender else "total"
+
+    if amenities:
+        lbl = " + ".join(AMENITY_LABELS.get(a, a) for a in amenities)
+        msg = f"**{count} {type_label} hostels** have {lbl}."
+        if 0 < count <= 8:
+            msg += "\n\n" + "\n".join(f"• {r}" for r in df["hostel_name"].tolist())
+    elif area:
+        msg = f"**{count} {type_label} hostels** are in {area}."
+    elif gender:
+        msg = f"There are **{count} {type_label} hostels** in StayBuddy."
+    else:
+        g = len(hostels_df[hostels_df["hostel_type"] == "Girls"])
+        b = len(hostels_df[hostels_df["hostel_type"] == "Boys"])
+        msg = (
+            f"StayBuddy has **{g + b} hostels** in total — "
+            f"**{g} girls** and **{b} boys** hostels across Islamabad."
+        )
+
+    return {"type": "text", "message": msg,
+            "intent": "stats_query", "confidence": 1.0,
+            "entities": entities, "emoji": "📊"}
+
+
+# ── Amenity inquiry ────────────────────────────────────────────────────
+def _handle_amenity(entities: dict, hostels_df) -> dict:
     amenities   = entities.get("amenities", [])
     hostel_name = entities.get("hostel_name")
     gender      = entities.get("gender")
 
+    # Specific hostel query
     if hostel_name:
-        row = hostels_df[hostels_df["hostel_name"].str.lower() == hostel_name]
+        row = hostels_df[hostels_df["hostel_name"].str.lower() == hostel_name.lower()]
         if len(row) == 0:
-            return {"type":"text","message":f"❓ Couldn't find '{hostel_name}'."}
+            return {"type": "text", "message": f"❓ Couldn't find '{hostel_name}'."}
         row = row.iloc[0]
         if amenities:
-            lines = [f"**{row['hostel_name']}** ({row['area']}) amenities:\n"]
+            lines = [f"**{row['hostel_name']}** — Amenity check:\n"]
             for a in amenities:
                 lbl  = AMENITY_LABELS.get(a, a)
                 have = bool(row.get(a, 0))
-                lines.append(f"{'✅' if have else '❌'} **{lbl}**: {'Available' if have else 'Not available'}")
-            return {"type":"text","message":"\n".join(lines)}
-        have = [AMENITY_LABELS[c] for c in AMENITY_LABELS if c in row.index and row[c] == 1]
-        return {"type":"text","message":f"**{row['hostel_name']}** has: {', '.join(have) if have else 'No amenities listed'}"}
+                lines.append(f"{'✅' if have else '❌'} {lbl}: {'Yes' if have else 'No'}")
+            return {"type": "text", "message": "\n".join(lines)}
+        have = [AMENITY_LABELS[c] for c in AMENITY_LABELS if row.get(c, 0) == 1]
+        return {"type": "text",
+                "message": f"**{row['hostel_name']}** has: {', '.join(have) or 'None listed'}"}
 
+    # Search all hostels
     if amenities:
         df = hostels_df.copy()
         if gender:
-            df = df[df["hostel_type"] == ("Girls" if gender=="Female" else "Boys")]
+            df = df[df["hostel_type"] == ("Girls" if gender == "Female" else "Boys")]
         for a in amenities:
             if a in df.columns:
                 df = df[df[a] == 1]
-        df    = df.sort_values("overall_rating", ascending=False)
-        lbls  = [AMENITY_LABELS.get(a,a) for a in amenities]
+        df   = df.sort_values("overall_rating", ascending=False)
+        lbl  = " + ".join(AMENITY_LABELS.get(a, a) for a in amenities)
         if len(df) == 0:
-            return {"type":"text","message":f"😔 No hostels found with {' + '.join(lbls)}."}
-        names = df["hostel_name"].head(6).tolist()
-        msg   = (f"**{len(df)} hostels** have {' + '.join(lbls)}:\n\n"
-                 + "\n".join(f"• {n} ({df[df['hostel_name']==n]['area'].values[0]}, ⭐{df[df['hostel_name']==n]['overall_rating'].values[0]})" for n in names))
-        if len(df) > 6: msg += f"\n\n_...and {len(df)-6} more._"
-        return {"type":"text","message": msg}
+            return {"type": "text", "message": f"😔 No hostels found with {lbl}."}
+        lines = [f"**{len(df)} hostels** have {lbl}:\n"]
+        for _, r in df.head(6).iterrows():
+            lines.append(
+                f"• **{r['hostel_name']}** — {r['area']} · "
+                f"⭐{r['overall_rating']} · PKR {int(r['single_room_price']):,}/mo"
+            )
+        if len(df) > 6:
+            lines.append(f"_...and {len(df) - 6} more._")
+        return {"type": "text", "message": "\n".join(lines)}
 
-    return {"type":"text","message":"Which amenity are you asking about? (WiFi, gym, study room, AC, generator, etc.)"}
+    return {"type": "text",
+            "message": "Which amenity are you asking about? (WiFi, gym, AC, study room, etc.)"}
 
 
-def respond_pricing_info(entities, hostels_df):
+# ── Pricing ────────────────────────────────────────────────────────────
+def _handle_pricing(entities: dict, hostels_df) -> dict:
     hostel_name = entities.get("hostel_name")
     budget      = entities.get("budget")
     gender      = entities.get("gender")
 
     if hostel_name:
-        row = hostels_df[hostels_df["hostel_name"].str.lower() == hostel_name]
+        row = hostels_df[hostels_df["hostel_name"].str.lower() == hostel_name.lower()]
         if len(row) == 0:
-            return {"type":"text","message":f"❓ Couldn't find '{hostel_name}'."}
-        row   = row.iloc[0]
-        elec  = 0 if row["electricity_included"] else 2000
-        total = int(row["single_room_price"]) + elec
-        lines = [
-            f"**{row['hostel_name']}** — Fee Breakdown:",
-            f"• Single room: **PKR {int(row['single_room_price']):,}/mo**",
-        ]
-        if pd.notna(row.get("double_room_price")) and row["double_room_price"] > 0:
-            lines.append(f"• Double room: **PKR {int(row['double_room_price']):,}/mo**")
-        if pd.notna(row.get("dorm_room_price")) and row["dorm_room_price"] > 0:
-            lines.append(f"• Dorm bed: **PKR {int(row['dorm_room_price']):,}/mo**")
-        lines += [
-            f"• Electricity: **{'Included ✅' if row['electricity_included'] else 'Separate (~PKR 2,000)'}**",
-            f"• Meals: **{'Included ✅' if row['meal_included'] else 'Not included'}**",
-            f"\n💰 **Estimated total: PKR {total:,}/mo**",
-        ]
-        return {"type":"text","message":"\n".join(lines)}
+            return {"type": "text", "message": f"❓ Couldn't find '{hostel_name}'."}
+        r     = row.iloc[0]
+        lines = [f"**{r['hostel_name']}** — Pricing:\n"]
+        lines.append(f"• Single room: **PKR {int(r['single_room_price']):,}/mo**")
+        if pd.notna(r.get("double_room_price")) and r.get("double_room_price", 0) > 0:
+            lines.append(f"• Double room: PKR {int(r['double_room_price']):,}/mo")
+        if pd.notna(r.get("dorm_room_price")) and r.get("dorm_room_price", 0) > 0:
+            lines.append(f"• Dorm bed:    PKR {int(r['dorm_room_price']):,}/mo")
+        elec_extra = 0 if r["electricity_included"] else 2000
+        lines.append(
+            f"• Electricity: {'✅ Included' if r['electricity_included'] else '❌ Separate (~PKR 2,000)'}"
+        )
+        lines.append(f"• Meals: {'✅ Included' if r['meal_included'] else '❌ Not included'}")
+        lines.append(f"\n💰 **Estimated total: PKR {int(r['single_room_price']) + elec_extra:,}/mo**")
+        return {"type": "text", "message": "\n".join(lines)}
 
     df = hostels_df.copy()
-    if gender: df = df[df["hostel_type"] == ("Girls" if gender=="Female" else "Boys")]
-    if budget: df = df[df["single_room_price"] <= budget]
+    if gender:
+        df = df[df["hostel_type"] == ("Girls" if gender == "Female" else "Boys")]
+    if budget:
+        df = df[df["single_room_price"] <= budget]
     df = df.sort_values("single_room_price").head(5)
     if len(df) == 0:
-        return {"type":"text","message":f"😔 No hostels found under PKR {budget:,}."}
-    rng   = f"PKR {int(df['single_room_price'].min()):,} – {int(df['single_room_price'].max()):,}"
-    lines = [f"**Cheapest options** ({rng}/mo):\n"]
-    for _, row in df.iterrows():
-        extras = ("  ⚡ incl." if row["electricity_included"] else "") + \
-                 ("  🍽️ meals" if row["meal_included"] else "")
-        lines.append(f"• **{row['hostel_name']}** — PKR {int(row['single_room_price']):,}/mo  ⭐{row['overall_rating']}{extras}")
-    return {"type":"text","message":"\n".join(lines)}
+        return {"type": "text", "message": f"😔 No hostels found under PKR {budget:,}."}
+    lines = [
+        f"**Cheapest options** "
+        f"(PKR {int(df['single_room_price'].min()):,} – "
+        f"{int(df['single_room_price'].max()):,}/mo):\n"
+    ]
+    for _, r in df.iterrows():
+        extras = "  ".join(filter(None, [
+            "⚡ incl." if r["electricity_included"] else "",
+            "🍽️ meals"  if r["meal_included"]        else "",
+        ]))
+        lines.append(
+            f"• **{r['hostel_name']}** — PKR {int(r['single_room_price']):,}/mo  "
+            f"⭐{r['overall_rating']}  {extras}"
+        )
+    return {"type": "text", "message": "\n".join(lines)}
 
 
-def respond_location_info(entities, hostels_df):
+# ── Location ────────────────────────────────────────────────────────────
+def _handle_location(entities: dict, hostels_df) -> dict:
     hostel_name = entities.get("hostel_name")
     max_dist    = entities.get("max_distance_km", 2.0)
     area        = entities.get("area")
     gender      = entities.get("gender")
 
     if hostel_name:
-        row = hostels_df[hostels_df["hostel_name"].str.lower() == hostel_name]
+        row = hostels_df[hostels_df["hostel_name"].str.lower() == hostel_name.lower()]
         if len(row) == 0:
-            return {"type":"text","message":f"❓ Couldn't find '{hostel_name}'."}
-        row      = row.iloc[0]
-        walk_min = round(row["distance_from_fast_km"] / 5.0 * 60)
-        return {"type":"text","message":(
-            f"**{row['hostel_name']}** location:\n\n"
-            f"📍 Area: **{row['area']}**, Islamabad\n"
-            f"📏 Distance from FAST H-11: **{row['distance_from_fast_km']} km**\n"
-            f"🚌 Transport nearby: **{'Yes ✅' if row['transport_nearby'] else 'No ❌'}**\n"
-            f"🚶 Walking time: ~**{walk_min} min**\n"
-            f"🗺️ GPS: `{row['latitude']:.4f}, {row['longitude']:.4f}`"
-        )}
+            return {"type": "text", "message": f"❓ Couldn't find '{hostel_name}'."}
+        r        = row.iloc[0]
+        walk_min = round(r["distance_from_fast_km"] / 5.0 * 60)
+        msg = (
+            f"**{r['hostel_name']}** — Location:\n\n"
+            f"📍 Area: **{r['area']}**, Islamabad\n"
+            f"📏 Distance from FAST H-11: **{r['distance_from_fast_km']} km**\n"
+            f"🚌 Transport nearby: **{'Yes ✅' if r['transport_nearby'] else 'No ❌'}**\n"
+            f"🚶 Walking estimate: ~**{walk_min} min**\n"
+            f"🗺️ GPS: `{r['latitude']:.4f}, {r['longitude']:.4f}`"
+        )
+        return {"type": "text", "message": msg}
 
     df = hostels_df.copy()
-    if gender: df = df[df["hostel_type"] == ("Girls" if gender=="Female" else "Boys")]
-    if area:   df = df[df["area"].str.lower().str.contains(area.lower(), na=False)]
+    if gender:
+        df = df[df["hostel_type"] == ("Girls" if gender == "Female" else "Boys")]
+    if area:
+        df = df[df["area"].str.lower().str.contains(area.lower(), na=False)]
     df = df[df["distance_from_fast_km"] <= max_dist].sort_values("distance_from_fast_km")
     if len(df) == 0:
-        return {"type":"text","message":f"😔 No hostels within {max_dist}km. Try a larger distance."}
+        return {"type": "text",
+                "message": f"😔 No hostels within {max_dist}km. Try increasing the distance."}
     lines = [f"**{len(df)} hostels within {max_dist}km** of FAST H-11:\n"]
-    for _, row in df.head(8).iterrows():
-        lines.append(f"• **{row['hostel_name']}** — {row['distance_from_fast_km']}km  ({row['area']})  ⭐{row['overall_rating']}")
-    return {"type":"text","message":"\n".join(lines)}
+    for _, r in df.head(6).iterrows():
+        lines.append(
+            f"• **{r['hostel_name']}** — {r['distance_from_fast_km']}km "
+            f"· {r['area']} · ⭐{r['overall_rating']}"
+        )
+    return {"type": "text", "message": "\n".join(lines)}
 
 
-def respond_booking_process(entities, hostels_df):
+# ── Booking process ─────────────────────────────────────────────────────
+def _handle_booking(entities: dict, hostels_df) -> dict:
     hostel_name = entities.get("hostel_name")
-    msg = """**How to Book a Hostel via StayBuddy:**
-
-1️⃣ **Find your hostel** — use Find My Hostel or ask me
-2️⃣ **Note the warden contact** — shown in Full Details
-3️⃣ **Call or WhatsApp** the warden to confirm availability
-4️⃣ **Visit the hostel** before paying any advance
-5️⃣ **Documents needed:** CNIC copy, student ID, parent CNIC, 2 passport photos
-6️⃣ **Typical advance:** 1–2 months rent as security deposit
-
-📌 Ask for a receipt for every payment.
-📌 Confirm cancellation policy before signing anything."""
+    msg = (
+        "**How to Book a Hostel via StayBuddy:**\n\n"
+        "1️⃣ **Find your hostel** — use Find My Hostel or ask me\n"
+        "2️⃣ **Note warden contact** — shown in Full Details\n"
+        "3️⃣ **Call or WhatsApp** the warden to confirm availability\n"
+        "4️⃣ **Visit first** before paying any advance\n"
+        "5️⃣ **Documents needed:** CNIC, student ID, parent CNIC, 2 passport photos\n"
+        "6️⃣ **Security deposit:** typically 1–2 months rent\n\n"
+        "📌 Always get a receipt.  📌 Confirm cancellation policy in writing."
+    )
     if hostel_name:
-        row = hostels_df[hostels_df["hostel_name"].str.lower() == hostel_name]
+        row = hostels_df[hostels_df["hostel_name"].str.lower() == hostel_name.lower()]
         if len(row) > 0:
-            msg += f"\n\n📞 **{row.iloc[0]['hostel_name']} Warden:** `{row.iloc[0]['warden_contact_phone']}`"
-    return {"type":"text","message": msg}
+            msg += f"\n\n📞 **{row.iloc[0]['hostel_name']} warden:** `{row.iloc[0]['warden_contact_phone']}`"
+    return {"type": "text", "message": msg}
 
 
-def respond_complaint(entities, hostels_df):
+# ── Complaint ───────────────────────────────────────────────────────────
+def _handle_complaint(entities: dict, hostels_df) -> dict:
     hostel_name = entities.get("hostel_name")
-    msg = """**Complaint Escalation Steps:**
-
-1️⃣ Talk to the **warden directly** first (48hr window)
-2️⃣ If unresolved → escalate to **hostel owner/management**
-3️⃣ **Document everything** — photos, dates, times
-4️⃣ Common issues:
-   • WiFi/electricity → request written maintenance ticket
-   • Safety concern → note warden response time
-   • Food quality → raise in hostel committee
-   • Hygiene → escalate with photos
-
-⚠️ For urgent safety issues contact FAST's student affairs office."""
+    msg = (
+        "**How to raise a complaint:**\n\n"
+        "1️⃣ Talk to the warden directly first\n"
+        "2️⃣ If unresolved in 48 hours → escalate to hostel owner\n"
+        "3️⃣ Document everything — photos, dates, messages\n\n"
+        "**Common issues:**\n"
+        "• WiFi / electricity → request written maintenance ticket\n"
+        "• Safety concern → note warden response time & escalate\n"
+        "• Food quality → raise in hostel committee meeting\n\n"
+        "⚠️ _For urgent safety issues, contact FAST student affairs immediately._"
+    )
     if hostel_name:
-        row = hostels_df[hostels_df["hostel_name"].str.lower() == hostel_name]
+        row = hostels_df[hostels_df["hostel_name"].str.lower() == hostel_name.lower()]
         if len(row) > 0:
-            msg += (f"\n\n📞 **{row.iloc[0]['hostel_name']} Warden:** `{row.iloc[0]['warden_contact_phone']}`"
-                    f"\n⭐ Warden responsiveness: **{row.iloc[0]['warden_responsiveness']}/5**")
-    return {"type":"text","message": msg}
+            r    = row.iloc[0]
+            msg += (
+                f"\n\n📞 **{r['hostel_name']} warden:** `{r['warden_contact_phone']}`  "
+                f"Responsiveness: ⭐{r['warden_responsiveness']}/5"
+            )
+    return {"type": "text", "message": msg}
 
 
-def respond_general_info(entities, hostels_df):
+# ── General info ────────────────────────────────────────────────────────
+def _handle_general(entities: dict, hostels_df) -> dict:
     hostel_name = entities.get("hostel_name")
+
     if hostel_name:
-        row = hostels_df[hostels_df["hostel_name"].str.lower() == hostel_name]
+        row = hostels_df[hostels_df["hostel_name"].str.lower() == hostel_name.lower()]
         if len(row) > 0:
-            row    = row.iloc[0]
-            curfew = f"{int(row['curfew_hour']):02d}:00" if row["curfew_hour"] > 0 else "No curfew"
-            return {"type":"text","message":(
-                f"**{row['hostel_name']}** — General Info:\n\n"
-                f"🏠 Type: **{row['hostel_type']} hostel**\n"
-                f"📍 Area: **{row['area']}**, Islamabad\n"
-                f"✅ Verified: **{'Yes' if row['verified'] else 'No'}**\n"
-                f"⭐ Overall: **{row['overall_rating']}/5** ({row['total_reviews']} reviews)\n"
-                f"🔒 Security: **{row['security_rating']}/5**\n"
-                f"🧹 Cleanliness: **{row['cleanliness_rating']}/5**\n"
-                f"📚 Study environment: **{row['study_environment_score']}/1.0**\n"
-                f"🕐 Curfew: **{curfew}**\n"
-                f"👥 Capacity: **{row['capacity']} students**\n"
-                f"📞 Warden: `{row['warden_contact_phone']}`"
-            )}
-    return {"type":"text","message":"""**General Hostel Information:**
+            r      = row.iloc[0]
+            curfew = f"{int(r['curfew_hour']):02d}:00" if r["curfew_hour"] > 0 else "No curfew"
+            msg = (
+                f"**{r['hostel_name']}** — Full Info:\n\n"
+                f"🏠 Type: {r['hostel_type']} hostel\n"
+                f"📍 Area: {r['area']}, Islamabad\n"
+                f"✅ Verified: {'Yes' if r['verified'] else 'No'}\n"
+                f"⭐ Rating: {r['overall_rating']}/5 ({r['total_reviews']} reviews)\n"
+                f"🔒 Security: {r['security_rating']}/5\n"
+                f"🧹 Cleanliness: {r['cleanliness_rating']}/5\n"
+                f"📚 Study environment: {r['study_environment_score']}/1.0\n"
+                f"🕐 Curfew: {curfew}\n"
+                f"👥 Capacity: {r['capacity']} students\n"
+                f"📞 Warden: `{r['warden_contact_phone']}`"
+            )
+            return {"type": "text", "message": msg}
 
-📋 **Check before booking:** verified status, curfew time, noise level, warden responsiveness, electricity & meals inclusion.
-
-🏠 **StayBuddy covers:** 38 Girls · 37 Boys hostels in Islamabad.
-💰 **Price range:** PKR 8,152 – 39,833/month
-📍 **Areas:** G-13, H-11, F-10, E-11, I-8, I-10, Bahria Town, DHA, Gulberg and more.
-
-💡 Ask about a specific hostel for full details."""}
-
-
-def respond_low_confidence(intent, confidence, all_scores):
-    sorted_scores = sorted(all_scores.items(), key=lambda x: x[1], reverse=True)[:2]
-    opts = " or ".join(f"_{s[0].replace('_',' ')}_ ({s[1]:.0%})" for s in sorted_scores)
-    return {
-        "type":"clarification",
-        "message":(
-            f"🤔 I'm not quite sure ({confidence:.0%} confidence). Are you asking about {opts}?\n\n"
-            f"Try:\n"
-            f'• _"Show me girls hostels under 15k near FAST"_\n'
-            f'• _"How many girls hostels are there?"_\n'
-            f'• _"Which of these have AC?"_ (after a search)\n'
-            f'• _"How do I book a hostel?"_'
-        ),
-    }
+    g    = len(hostels_df[hostels_df["hostel_type"] == "Girls"])
+    b    = len(hostels_df[hostels_df["hostel_type"] == "Boys"])
+    pmin = int(hostels_df["single_room_price"].min())
+    pmax = int(hostels_df["single_room_price"].max())
+    msg  = (
+        f"**StayBuddy** covers **{g + b} hostels** near FAST NUCES Islamabad.\n\n"
+        f"🏠 {g} Girls  ·  {b} Boys\n"
+        f"💰 PKR {pmin:,} – {pmax:,}/month\n"
+        f"📍 G-13 · H-11 · F-10 · E-11 · I-8 · Bahria Town · DHA · Gulberg\n\n"
+        f"💡 Ask about a specific hostel, or use **Find My Hostel** for personalised recommendations."
+    )
+    return {"type": "text", "message": msg}
 
 
-# ══════════════════════════════════════════════════════════════════
-# MAIN CHAT FUNCTION
-# ══════════════════════════════════════════════════════════════════
+# ══════════════════════════════════════════════════════════════════════
+# MAIN CHAT FUNCTION  (called by app.py)
+# ══════════════════════════════════════════════════════════════════════
 
 def chat(
     user_text: str,
@@ -829,79 +987,192 @@ def chat(
     hostels_df: pd.DataFrame,
     rec_fn=None,
 ) -> dict:
+    """
+    Full 3-layer pipeline.
+
+    Returns a response dict with keys:
+      type          — "text" | "hostel_results" | "clarification"
+      message       — string to display
+      hostels       — list of card dicts (if type == hostel_results)
+      intent        — classified intent string
+      confidence    — float 0-1
+      entities      — raw extracted entities dict
+      emoji         — intent emoji
+      used_engine   — bool (True = hybrid engine was used)
+      ollama_used   — bool
+      note          — source attribution string
+    """
     context.turn_count += 1
 
-    # 1. Extract entities
+    # ── Step 1: Extract entities from this turn ────────────────────
     raw_entities = extract_entities(user_text, nlp, hostels_df)
-    context.update(raw_entities)
-    entities = context.resolve(raw_entities)
+    context.update(raw_entities)            # store in memory
+    entities = context.resolve(raw_entities)  # fill gaps from memory
 
-    # 2. Rule-based pre-classification (beats DistilBERT for these cases)
-    if is_followup(user_text) and context.last_hostels:
-        response = respond_followup(user_text, context, hostels_df, entities)
-        intent, confidence, all_scores = "followup", 1.0, {"followup": 1.0}
+    # ── Step 2: Rule-based pre-classification (beats DistilBERT) ──
 
-    elif is_stats_query(user_text):
-        response = respond_stats(user_text, entities, hostels_df)
-        intent, confidence, all_scores = "stats_query", 1.0, {"stats_query": 1.0}
+    # Follow-up (refers to last shown hostels)
+    if _is_followup(user_text) and context.last_hostels:
+        result = _handle_followup(user_text, context, hostels_df, entities)
+        if result:
+            if _ollama_alive():
+                result["message"] = _enhance(
+                    user_text, result, context, hostels_df, "followup", entities
+                )
+                result["ollama_used"] = True
+            else:
+                result["ollama_used"] = False
+            context.add_turn("user", user_text)
+            context.add_turn("assistant", result["message"])
+            return result
 
-    else:
-        # 3. DistilBERT classification
-        intent, confidence, all_scores = classify_intent(user_text, tokenizer, model, le)
-        context.last_intent = intent
-
-        if confidence < CONFIDENCE_THRESHOLD:
-            response = respond_low_confidence(intent, confidence, all_scores)
-        elif intent == "hostel_search":
-            response = respond_hostel_search(entities, hostels_df, rec_fn)
-        elif intent == "amenity_inquiry":
-            response = respond_amenity_inquiry(entities, hostels_df)
-        elif intent == "pricing_info":
-            response = respond_pricing_info(entities, hostels_df)
-        elif intent == "location_info":
-            response = respond_location_info(entities, hostels_df)
-        elif intent == "booking_process":
-            response = respond_booking_process(entities, hostels_df)
-        elif intent == "complaint":
-            response = respond_complaint(entities, hostels_df)
-        elif intent == "general_info":
-            response = respond_general_info(entities, hostels_df)
+    # Stats / counting
+    if _is_stats(user_text):
+        result = _handle_stats(user_text, entities, hostels_df)
+        if _ollama_alive():
+            result["message"] = _enhance(
+                user_text, result, context, hostels_df, "stats_query", entities
+            )
+            result["ollama_used"] = True
         else:
-            response = respond_low_confidence(intent, confidence, all_scores)
+            result["ollama_used"] = False
+        context.add_turn("user", user_text)
+        context.add_turn("assistant", result["message"])
+        return result
 
-    # 4. Store results for follow-up
-    if response.get("hostels"):
-        context.set_last_hostels(response["hostels"])
-    if response.get("names"):
-        context.last_hostel_names = response["names"]
+    # ── Step 2c: Result complaint — redo search with strict filters ─
+    if _is_result_complaint(user_text) and context.last_hostels:
+        # User is saying the results were wrong — redo with hard budget
+        budget = entities.get("budget") or context.budget
+        gender = entities.get("gender") or context.gender or "Male"
+        htype  = "Girls" if gender == "Female" else "Boys"
+        df     = hostels_df[hostels_df["hostel_type"] == htype].copy()
+        if budget:
+            df = df[df["single_room_price"] <= budget]
+        if context.max_distance_km:
+            df = df[df["distance_from_fast_km"] <= context.max_distance_km]
+        df = df.sort_values("overall_rating", ascending=False).head(MAX_RESULTS)
 
-    # 5. Attach metadata
-    response["intent"]     = intent
-    response["confidence"] = confidence
-    response["all_scores"] = all_scores
-    response["entities"]   = raw_entities
-    response["emoji"]      = INTENT_EMOJI.get(intent, "💬")
+        if len(df) == 0:
+            apology = (
+                f"Sorry about that! Unfortunately there are no {htype.lower()} hostels "
+                f"within PKR {budget:,}/mo"
+                + (f" and {context.max_distance_km}km" if context.max_distance_km else "")
+                + ". The minimum price in our dataset is PKR 8,152/mo. "
+                "Try increasing your budget slightly."
+            )
+            result = {"type": "text", "message": apology,
+                      "intent": "hostel_search", "confidence": 1.0,
+                      "entities": entities, "emoji": "🔍", "ollama_used": False}
+        else:
+            cards = [_make_card(row) for _, row in df.iterrows()]
+            context.set_last_hostels(cards)
+            result = {
+                "type": "hostel_results",
+                "message": (
+                    f"Apologies for the confusion! Here are {htype} hostels "
+                    f"strictly within PKR {budget:,}/mo:"
+                    if budget else "Here are corrected results:"
+                ),
+                "hostels": cards, "used_engine": False,
+                "intent": "hostel_search", "confidence": 1.0,
+                "entities": entities, "emoji": "🔍",
+                "note": "📊 _Strictly filtered by your budget_",
+                "ollama_used": False,
+            }
+        context.add_turn("user", user_text)
+        context.add_turn("assistant", result["message"])
+        return result
 
-    return response
+    # ── Step 3: DistilBERT intent classification ───────────────────
+    intent, confidence, all_scores = _classify(user_text, tokenizer, model, le)
+    context.last_intent = intent
+
+    # ── Step 4: Confidence gate ────────────────────────────────────
+    if confidence < CONFIDENCE_THRESHOLD:
+        top2 = sorted(all_scores.items(), key=lambda x: x[1], reverse=True)[:2]
+        opts = " or ".join(
+            f"_{s[0].replace('_',' ')}_ ({s[1]:.0%})" for s in top2
+        )
+        result = {
+            "type":       "clarification",
+            "message": (
+                f"🤔 I'm not sure what you mean ({confidence:.0%} confident).\n\n"
+                f"Are you asking about {opts}?\n\n"
+                f"Try something like:\n"
+                f'• _"Show me girls hostels under 15k with WiFi"_\n'
+                f'• _"Does Khadija Residence have a gym?"_\n'
+                f'• _"How do I book a hostel?"_'
+            ),
+            "intent":      intent,
+            "confidence":  confidence,
+            "all_scores":  all_scores,
+            "entities":    raw_entities,
+            "emoji":       "🤔",
+            "ollama_used": False,
+        }
+        context.add_turn("user", user_text)
+        context.add_turn("assistant", result["message"])
+        return result
+
+    # ── Step 5: Route to structured handler ───────────────────────
+    if   intent == "hostel_search":   structured = _handle_search(entities, hostels_df, rec_fn)
+    elif intent == "amenity_inquiry": structured = _handle_amenity(entities, hostels_df)
+    elif intent == "pricing_info":    structured = _handle_pricing(entities, hostels_df)
+    elif intent == "location_info":   structured = _handle_location(entities, hostels_df)
+    elif intent == "booking_process": structured = _handle_booking(entities, hostels_df)
+    elif intent == "complaint":       structured = _handle_complaint(entities, hostels_df)
+    elif intent == "general_info":    structured = _handle_general(entities, hostels_df)
+    else:
+        structured = {
+            "type":    "text",
+            "message": "I'm not sure how to help with that. Try asking about hostels, pricing, amenities, or booking.",
+        }
+
+    # After hostel_search, remember the results for follow-ups
+    if structured.get("type") == "hostel_results" and structured.get("hostels"):
+        context.set_last_hostels(structured["hostels"])
+
+    # ── Step 6: Ollama — wrap in natural language ──────────────────
+    if _ollama_alive():
+        structured["message"] = _enhance(
+            user_text, structured, context, hostels_df, intent, entities
+        )
+        structured["ollama_used"] = True
+    else:
+        structured["ollama_used"] = False
+
+    # ── Step 7: Attach metadata ────────────────────────────────────
+    structured.setdefault("intent",     intent)
+    structured.setdefault("confidence", confidence)
+    structured.setdefault("entities",   raw_entities)
+    structured.setdefault("emoji",      INTENT_EMOJI.get(intent, "💬"))
+    structured["all_scores"] = all_scores
+
+    # ── Step 8: Store in conversation history ──────────────────────
+    context.add_turn("user",      user_text)
+    context.add_turn("assistant", structured["message"])
+
+    return structured
 
 
-# ══════════════════════════════════════════════════════════════════
-# EXPORT UTILITY
-# ══════════════════════════════════════════════════════════════════
+# ══════════════════════════════════════════════════════════════════════
+# UTILITY
+# ══════════════════════════════════════════════════════════════════════
 
-def export_chat_text(history: list, context: ConversationContext) -> str:
+def export_chat_text(chat_history: list, context: ConversationContext) -> str:
+    """Export the full conversation as a downloadable text file."""
     lines = [
-        "=" * 60,
-        "  STAYBUDDY CHAT EXPORT",
-        f"  Date: {context.started_at.strftime('%Y-%m-%d %H:%M')}",
-        f"  Turns: {context.turn_count}",
-        f"  Preferences remembered: {context.summary()}",
-        "=" * 60, ""
+        "StayBuddy — Chat Export",
+        f"Exported : {datetime.now().strftime('%Y-%m-%d %H:%M')}",
+        f"Profile  : {context.summary()}",
+        "=" * 52,
+        "",
     ]
-    for msg in history:
-        role = "YOU" if msg["role"] == "user" else "STAYBUDDY"
+    for msg in chat_history:
+        role = "You" if msg["role"] == "user" else "StayBuddy"
         ts   = msg.get("timestamp", "")
-        lines.append(f"[{ts}] {role}:")
+        lines.append(f"[{ts}]  {role}:")
         lines.append(msg["content"])
         lines.append("")
     return "\n".join(lines)
