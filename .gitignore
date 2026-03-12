@@ -17,3 +17,5 @@ __pycache__/
 # Jupyter checkpoints
 .ipynb_checkpoints/
 
+ml-notebooks/chatbot/intent_model/model.safetensors
+ml-notebooks/intent_model/model.safetensors
