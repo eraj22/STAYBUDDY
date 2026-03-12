@@ -1340,7 +1340,7 @@ elif page == "👥  Intelligence Demo":
             st.rerun()
     with h3:
         st.markdown("<br>", unsafe_allow_html=True)
-        if st.button("↩ Reset", use_container_width=True, key="reset_pair"):
+        if st.button("↩ Reset", use_container_width=True):
             for k in ["demo_simulated","demo_sim_results","demo_sim_hostel",
                       "demo_sim_hostel_id","demo_sim_action"]:
                 st.session_state[k] = None if k != "demo_simulated" else False
@@ -1398,48 +1398,6 @@ elif page == "👥  Intelligence Demo":
 
     st.markdown("<br>", unsafe_allow_html=True)
 
-    # ── INTERACTION HISTORY ───────────────────────────────────────
-    st.markdown("""
-    <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:2px;
-                color:#64748b;margin-bottom:8px">
-        📋 Their Real Interaction History — this is what the SVD was trained on
-    </div>
-    """, unsafe_allow_html=True)
-
-    ACTION_COLORS = {"booking":"#10b981","save":"#3b82f6","attempt":"#f59e0b","view":"#94a3b8"}
-    ACTION_WEIGHTS = {"booking":5,"save":3,"attempt":4,"view":1}
-
-    def interaction_history(student_id, color):
-        ints = interactions_df[interactions_df["student_id"] == student_id]\
-               .sort_values("weight", ascending=False).head(5)
-        if len(ints) == 0:
-            st.caption("No interactions recorded.")
-            return
-        for _, row in ints.iterrows():
-            h = hostels_df[hostels_df["hostel_id"] == row["hostel_id"]]
-            hname  = h.iloc[0]["hostel_name"] if len(h) > 0 else str(row["hostel_id"])
-            atype  = str(row["interaction_type"])
-            ac     = ACTION_COLORS.get(atype, "#94a3b8")
-            wt     = ACTION_WEIGHTS.get(atype, 1)
-            st.markdown(
-                f'<div style="background:white;border-left:3px solid {ac};border-radius:0 8px 8px 0;'
-                f'padding:6px 10px;margin:3px 0;font-size:12px">'
-                f'<b style="color:#0f172a">{hname}</b>'
-                f'<span style="color:{ac};font-weight:700;margin-left:6px">{atype} ×{wt}</span>'
-                f'</div>',
-                unsafe_allow_html=True
-            )
-
-    ih1, ih2 = st.columns(2)
-    with ih1:
-        st.markdown('<div style="font-size:12px;font-weight:700;color:#3b82f6;margin-bottom:4px">🔵 Student A — top interactions by weight</div>', unsafe_allow_html=True)
-        interaction_history(s1_id, "#3b82f6")
-    with ih2:
-        st.markdown('<div style="font-size:12px;font-weight:700;color:#ef4444;margin-bottom:4px">🔴 Student B — top interactions by weight</div>', unsafe_allow_html=True)
-        interaction_history(s2_id, "#ef4444")
-
-    st.markdown("<br>", unsafe_allow_html=True)
-
     # ── Get recs ──────────────────────────────────────────────────
     s1_recs_orig = get_cf_top5(s1_id, gender_key)
     s2_recs      = get_cf_top5(s2_id, gender_key)
@@ -1487,113 +1445,6 @@ elif page == "👥  Intelligence Demo":
         </div>
     </div>
     """, unsafe_allow_html=True)
-
-    # ── COLD-START DEMO ───────────────────────────────────────────
-    with st.expander("🆕 Cold-Start Demo — what happens for a brand new student with zero history?", expanded=False):
-        st.markdown("""
-        <div style="font-size:12px;color:#64748b;margin-bottom:12px;line-height:1.6">
-            New students have no interactions, so SVD cannot place them in the latent space.
-            Instead we use <strong>KMeans clustering on 11 demographic features</strong> to find their
-            nearest cluster, then return that cluster's average predicted scores as their recommendations.
-            This is the cold-start model — it only runs until they accumulate enough interactions.
-        </div>
-        """, unsafe_allow_html=True)
-
-        cs_r1c1, cs_r1c2, cs_r1c3 = st.columns(3)
-        with cs_r1c1:
-            cs_gender  = st.selectbox("Gender", ["Male","Female"], key="cs_gender")
-            cs_budget  = st.number_input("Budget (PKR/mo)", min_value=5000, max_value=40000,
-                                          value=12000, step=1000, key="cs_budget")
-        with cs_r1c2:
-            cs_study   = st.slider("Study focus", 0.0, 1.0, 0.7, 0.05, key="cs_study")
-            cs_price   = st.slider("Price sensitivity", 0.0, 1.0, 0.5, 0.05, key="cs_price")
-        with cs_r1c3:
-            cs_dist    = st.slider("Max dist (km)", 0.5, 10.0, 3.0, 0.5, key="cs_dist")
-            cs_comfort = st.slider("Comfort preference", 0.0, 1.0, 0.5, 0.05, key="cs_comfort")
-
-        cs_r2c1, cs_r2c2, cs_r2c3, cs_r2c4, cs_r2c5 = st.columns(5)
-        with cs_r2c1:
-            cs_noise   = st.slider("Noise tolerance", 0.0, 1.0, 0.3, 0.05, key="cs_noise")
-        with cs_r2c2:
-            cs_wifi    = st.checkbox("Need WiFi", value=True, key="cs_wifi")
-            cs_study_room = st.checkbox("Need Study Room", value=False, key="cs_study_room")
-        with cs_r2c3:
-            cs_ac      = st.checkbox("Need AC", value=False, key="cs_ac")
-            cs_gen     = st.checkbox("Need Generator", value=False, key="cs_gen")
-        with cs_r2c4:
-            cs_transport = st.checkbox("Need Transport", value=False, key="cs_transport")
-
-        if st.button("🔍 Get Cold-Start Recommendations", key="cs_run"):
-            try:
-                cs_model = cold_start_models.get(cs_gender)
-                if cs_model is None:
-                    st.error("Cold-start model not found for this gender.")
-                else:
-                    # Build feature vector in the SAME order used during training
-                    feat_vec = np.array([[
-                        cs_budget, cs_dist, cs_study,
-                        cs_price,
-                        cs_comfort,
-                        cs_noise,
-                        int(cs_wifi),
-                        int(cs_study_room),
-                        int(cs_ac),
-                        int(cs_gen),
-                        int(cs_transport)
-                    ]])
-                    # Scale using the same scaler used in training
-                    if "scaler" in cs_model:
-                        feat_vec = cs_model["scaler"].transform(feat_vec)
-                    cluster = cs_model["kmeans"].predict(feat_vec)[0]
-                    members = [cs_model["indices"][i]
-                                for i, lbl in enumerate(cs_model["kmeans"].labels_) if lbl == cluster]
-
-                    st.markdown(f"""
-                    <div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:8px;
-                                padding:8px 12px;font-size:12px;color:#0c4a6e;margin:8px 0">
-                        📍 Placed in <strong>Cluster #{cluster}</strong> with
-                        <strong>{len(members)} similar students</strong> based on your demographics.
-                        Showing average recommendations from this cluster.
-                    </div>
-                    """, unsafe_allow_html=True)
-
-                    # Get recommendations from cluster members
-                    htype = "Girls" if cs_gender == "Female" else "Boys"
-                    gh    = hostels_df[hostels_df["hostel_type"] == htype]
-                    scores = {}
-                    for midx in members[:10]:
-                        sid = str(students_df.iloc[midx]["student_id"])
-                        if sid in predicted_matrix.index:
-                            row = predicted_matrix.loc[sid]
-                            for c, v in row.items():
-                                if c in gh["hostel_id"].values:
-                                    scores[c] = scores.get(c, 0) + v
-                    if scores:
-                        top = sorted(scores.items(), key=lambda x: x[1], reverse=True)
-                        shown = 0
-                        for hid, score in top:
-                            if shown >= 5:
-                                break
-                            h = hostels_df[hostels_df["hostel_id"] == hid]
-                            if len(h) > 0 and int(h.iloc[0]["single_room_price"]) <= cs_budget:
-                                shown += 1
-                                st.markdown(
-                                    f'<div style="background:white;border-left:3px solid #3b82f6;'
-                                    f'border-radius:0 8px 8px 0;padding:6px 10px;margin:3px 0;font-size:12px">'
-                                    f'<b>#{shown} {h.iloc[0]["hostel_name"]}</b>'
-                                    f' &nbsp;·&nbsp; {h.iloc[0]["area"]}'
-                                    f' &nbsp;·&nbsp; PKR {int(h.iloc[0]["single_room_price"]):,}/mo'
-                                    f' &nbsp;·&nbsp; ⭐ {h.iloc[0]["overall_rating"]}</div>',
-                                    unsafe_allow_html=True
-                                )
-                        if shown == 0:
-                            st.info("No hostels in this cluster are within your budget. Try increasing the budget.")
-                    else:
-                        st.info("Not enough data in this cluster to generate recommendations.")
-            except Exception as e:
-                st.error(f"Cold-start error: {e}")
-
-    st.markdown("<br>", unsafe_allow_html=True)
 
     # ── SIMULATION PANEL ──────────────────────────────────────────
     ACTION_META = {
@@ -1662,7 +1513,7 @@ elif page == "👥  Intelligence Demo":
         do_sim = st.button("▶  Run Simulation", use_container_width=True, type="primary")
     with bc2:
         if st.session_state.demo_simulated:
-            if st.button("↩ Reset", use_container_width=True, key="reset_sim"):
+            if st.button("↩ Reset", use_container_width=True):
                 st.session_state.demo_simulated   = False
                 st.session_state.demo_sim_results = None
                 st.session_state.demo_sim_hostel  = None
@@ -1792,42 +1643,6 @@ elif page == "👥  Intelligence Demo":
         for i, rec in enumerate(s2_recs):
             is_sh = rec["hostel_id"] in overlap
             render_rec_card(rec, i + 1, None, is_sh, False)
-
-    # ── WHY THIS IS INTELLIGENT ───────────────────────────────────
-    st.markdown("<br>", unsafe_allow_html=True)
-    st.markdown("""
-    <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:2px;
-                color:#64748b;margin-bottom:12px">
-        🧠 Why this qualifies as intelligence — not just automation
-    </div>
-    """, unsafe_allow_html=True)
-
-    exp_cols = st.columns(3)
-    explanations = [
-        ("🔬", "#3b82f6", "SVD Latent Factors",
-         "The model learned hidden preference dimensions from 3,820 interactions across 200 students. "
-         "Neither student said they were similar — the model discovered it by decomposing the "
-         "interaction matrix into 25 latent factors (k=25) that capture shared taste patterns."),
-        ("👥", "#10b981", "Implicit Collaboration",
-         "Students influence each other's recommendations with zero social connection. "
-         "When Student A books a hostel, that signal propagates through the shared latent space "
-         "to all similar students. This is emergent behaviour — it was never explicitly programmed."),
-        ("⚡", "#f59e0b", "Real-Time Adaptation",
-         "New interactions update recommendations instantly by projecting through existing SVD factors "
-         "via updated_U × Vt — no retraining needed. The cold-start model (KMeans, 8 clusters) "
-         "handles brand-new students until they accumulate enough interaction history."),
-    ]
-    for col, (icon, color, title, body) in zip(exp_cols, explanations):
-        with col:
-            st.markdown(f"""
-            <div style="background:white;border-radius:12px;padding:16px;
-                        border-top:3px solid {color};border:1px solid #e2e8f0;
-                        border-top:3px solid {color};height:100%">
-                <div style="font-size:24px;margin-bottom:8px">{icon}</div>
-                <div style="font-weight:800;font-size:13px;color:#0f172a;margin-bottom:6px">{title}</div>
-                <div style="font-size:12px;color:#64748b;line-height:1.6">{body}</div>
-            </div>
-            """, unsafe_allow_html=True)
 
 
 # ══════════════════════════════════════════════════════════════════
