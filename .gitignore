@@ -2,6 +2,7 @@ node_modules
 .env
 .DS_Store
 npm-debug.log
+
 # ML - Large CSV datasets (regenerate with generate_dataset.py)
 ml-notebooks/data/*.csv
 
@@ -17,5 +18,15 @@ __pycache__/
 # Jupyter checkpoints
 .ipynb_checkpoints/
 
+# Large model files
+*.npy
+*.bin
+*.pt
 ml-notebooks/chatbot/intent_model/model.safetensors
 ml-notebooks/intent_model/model.safetensors
+ml-notebooks/intent_model/checkpoint-369/
+ml-notebooks/intent_model/checkpoint-410/
+ml-notebooks/intent_model/models/
+models/
+intent_model/
+ml-notebooks - Shortcut.lnk
