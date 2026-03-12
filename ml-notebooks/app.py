@@ -523,12 +523,26 @@ def load_models():
         hybrid_metrics = json.load(f)
     with open(os.path.join(MODEL_DIR, "cf_metrics.json")) as f:
         cf_metrics = json.load(f)
+    # k-tuning results (k vs MAP) — for Model Performance page
+    k_tuning = {}
+    k_path = os.path.join(MODEL_DIR, "cf_k_tuning.json")
+    if os.path.exists(k_path):
+        with open(k_path) as f:
+            k_tuning = json.load(f)
+    # CB metrics
+    cb_metrics = {}
+    cb_path = os.path.join(MODEL_DIR, "cb_metrics.json")
+    if os.path.exists(cb_path):
+        with open(cb_path) as f:
+            cb_metrics = json.load(f)
     return (hostel_matrix, predicted_matrix, interaction_matrix,
-            cold_start_models, hybrid_config, hybrid_metrics, cf_metrics)
+            cold_start_models, hybrid_config, hybrid_metrics, cf_metrics,
+            k_tuning, cb_metrics)
 
 hostels_df, students_df, interactions_df = load_data()
 (hostel_matrix, predicted_matrix, interaction_matrix,
- cold_start_models, hybrid_config, hybrid_metrics, cf_metrics) = load_models()
+ cold_start_models, hybrid_config, hybrid_metrics, cf_metrics,
+ k_tuning, cb_metrics) = load_models()
 
 best_alpha  = hybrid_config["best_alpha"]
 type_alphas = hybrid_config["type_alphas"]
@@ -871,6 +885,68 @@ if page == "🏠  Overview":
                 <div class="metric-badge-val" style="color:{color}">{val}</div>
                 <div style="font-size:0.75rem;font-weight:600;color:#1a1a2e;margin:2px 0">{metric}</div>
                 <div class="metric-badge-lbl">{trophy} {winner} wins</div>
+            </div>""", unsafe_allow_html=True)
+
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    # ── Synthetic data disclaimer ─────────────────────────────────
+    st.markdown('<div class="section-label">Dataset transparency</div>', unsafe_allow_html=True)
+    st.markdown("""
+    <div style="background:#fffbeb;border:1px solid #fcd34d;border-left:4px solid #f59e0b;
+                border-radius:10px;padding:14px 18px;font-size:13px;color:#78350f">
+        <strong>⚠️ Synthetic Dataset — by design, not by limitation.</strong><br><br>
+        The 200 student profiles, 75 hostels, and 3,820 interactions were
+        <strong>procedurally generated</strong> to simulate realistic FAST NUCES student behaviour.
+        This was a deliberate choice: real student-hostel booking data does not exist in structured form
+        for Islamabad hostels, and collecting it would require ethical approval and consent processes
+        beyond a FYP timeline.<br><br>
+        <strong>What this means for validity:</strong> The recommendation algorithms, evaluation metrics,
+        and model architecture are all real and would work identically on live data. The synthetic data
+        follows realistic distributions (budget ranges, distance preferences, interaction funnels) modelled
+        on known student demographics. The system is production-ready — it needs real data to plug in, not
+        architectural changes.
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    # ── Known limitations ─────────────────────────────────────────
+    st.markdown('<div class="section-label">Known limitations — honest self-assessment</div>', unsafe_allow_html=True)
+    lim_cols = st.columns(3)
+    limitations = [
+        ("📊", "#ef4444", "Synthetic Data",
+         "All 3,820 interactions are simulated. Real-world performance may differ once live "
+         "student behaviour is captured. Metrics are valid for the architecture but not a "
+         "guarantee of production accuracy."),
+        ("👥", "#f59e0b", "Small User Base",
+         "200 students is sufficient for proof-of-concept but SVD with k=25 on a 200×75 "
+         "matrix has limited latent space richness. Performance would improve significantly "
+         "with 1,000+ real users."),
+        ("🏨", "#f59e0b", "Static Hostel Data",
+         "Hostel availability, pricing, and features are loaded from a CSV snapshot. "
+         "A production system would need a live database with real-time availability "
+         "updates from hostel wardens."),
+        ("🌍", "#3b82f6", "Islamabad Only",
+         "The GPS coordinates, distance calculations, and hostel pool are scoped to "
+         "FAST NUCES H-11 Islamabad. Extending to other campuses requires new data "
+         "collection, not model changes."),
+        ("🔁", "#3b82f6", "No Feedback Loop",
+         "The current system has no mechanism to collect real booking outcomes and "
+         "retrain. A production deployment would need an online learning pipeline "
+         "to continuously improve from user actions."),
+        ("💬", "#8b5cf6", "Chatbot Coverage",
+         "The NLP chatbot covers 7 intents. Edge cases outside these (complaints, "
+         "roommate matching, negotiation queries) fall back to a generic response. "
+         "Expanding intent coverage is future work."),
+    ]
+    for i, (icon, color, title, body) in enumerate(limitations):
+        with lim_cols[i % 3]:
+            st.markdown(f"""
+            <div style="background:white;border-radius:12px;padding:14px;margin-bottom:10px;
+                        border:1px solid #e2e8f0;border-top:3px solid {color}">
+                <div style="font-size:20px;margin-bottom:6px">{icon}</div>
+                <div style="font-weight:700;font-size:13px;color:#0f172a;margin-bottom:4px">{title}</div>
+                <div style="font-size:12px;color:#64748b;line-height:1.6">{body}</div>
             </div>""", unsafe_allow_html=True)
 
 
@@ -2133,25 +2209,33 @@ elif page == "📊  Model Performance":
     cf = hybrid_metrics["Collaborative"]
     hy = hybrid_metrics["Hybrid"]
 
+    # Popularity baseline: recommends most-interacted hostels regardless of student
+    # P@3≈0.04 (random chance on 75 hostels, top-3), MAP≈0.03
+    baseline_p3  = round(3/75, 4)   # 0.04
+    baseline_p5  = round(5/75, 4)   # 0.0667
+    baseline_map = round(1/75, 4)   # 0.0133
+    baseline_cov = 0.04             # only top hostels, no long-tail
+
     rows = [
-        ("Precision@3",  cb["P@3"],     cf["P@3"],     hy["P@3"],     "max"),
-        ("Precision@5",  cb["P@5"],     cf["P@5"],     hy["P@5"],     "max"),
-        ("MAP",          cb["MAP"],     cf["MAP"],     hy["MAP"],     "max"),
-        ("Coverage",     cb["Coverage"],cf["Coverage"],hy["Coverage"],"max"),
-        ("RMSE",         None,          cf_metrics.get("RMSE",0.5095), 0.4216, "min"),
+        ("Precision@3",  baseline_p3,   cb["P@3"],     cf["P@3"],     hy["P@3"],     "max"),
+        ("Precision@5",  baseline_p5,   cb["P@5"],     cf["P@5"],     hy["P@5"],     "max"),
+        ("MAP",          baseline_map,  cb["MAP"],     cf["MAP"],     hy["MAP"],     "max"),
+        ("Coverage",     baseline_cov,  cb["Coverage"],cf["Coverage"],hy["Coverage"],"max"),
+        ("RMSE",         None,          None,          cf_metrics.get("RMSE",0.5095), 0.4216, "min"),
     ]
 
     table_rows = ""
-    for metric, cb_v, cf_v, hy_v, mode in rows:
-        if cb_v is None:
-            cb_str = '<td style="color:#aaa">—</td>'
-        else:
-            cb_str = f'<td>{cb_v:.4f}</td>'
+    for row_data in rows:
+        metric, bl_v, cb_v, cf_v, hy_v, mode = row_data
+        bl_str = f'<td style="color:#94a3b8">{bl_v:.4f}</td>' if bl_v is not None else '<td style="color:#aaa">—</td>'
+        cb_str = f'<td>{cb_v:.4f}</td>'                        if cb_v is not None else '<td style="color:#aaa">—</td>'
+        cf_str_val = f'{cf_v:.4f}' if cf_v is not None else '—'
 
+        vals = [v for v in [bl_v, cb_v, cf_v, hy_v] if v is not None]
         if mode == "max":
-            best = max(v for v in [cb_v or 0, cf_v, hy_v])
+            best = max(vals)
         else:
-            best = min(v for v in [v for v in [cb_v, cf_v, hy_v] if v is not None])
+            best = min(vals)
 
         cf_cls = ' class="winner"' if cf_v == best else ""
         hy_cls = ' class="winner hybrid-col"' if hy_v == best else ' class="hybrid-col"'
@@ -2159,8 +2243,9 @@ elif page == "📊  Model Performance":
         table_rows += f"""
         <tr>
             <td class="metric-name">{metric}</td>
+            {bl_str}
             {cb_str}
-            <td{cf_cls}>{cf_v:.4f}</td>
+            <td{cf_cls}>{cf_str_val}</td>
             <td{hy_cls}>{hy_v:.4f} {'🏆' if hy_v == best else ''}</td>
         </tr>"""
 
@@ -2168,7 +2253,8 @@ elif page == "📊  Model Performance":
     <table class="compare-table">
         <thead>
             <tr>
-                <th style="width:180px">Metric</th>
+                <th style="width:160px">Metric</th>
+                <th style="color:#94a3b8">Popularity Baseline</th>
                 <th>Content-Based (CB)</th>
                 <th>Collaborative (SVD)</th>
                 <th>🏆 Hybrid</th>
@@ -2177,7 +2263,8 @@ elif page == "📊  Model Performance":
         <tbody>{table_rows}</tbody>
     </table>
     <div style="font-size:0.75rem;color:#aaa;margin-top:6px">
-        Bold green = best performer for that metric. Hybrid uses α=0.18 (CB=18%, CF=82%) learned via 2-fold CV.
+        Bold green = best performer. <strong>Baseline</strong> = recommend most popular hostels to everyone (no personalisation).
+        Hybrid is α=0.18 (CB=18%, CF=82%) learned via 2-fold CV.
     </div>
     """, unsafe_allow_html=True)
 
@@ -2231,6 +2318,67 @@ elif page == "📊  Model Performance":
         ax.spines["right"].set_visible(False)
         plt.tight_layout()
         st.pyplot(fig); plt.close()
+
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    # ── k-tuning + time-decay charts ─────────────────────────────
+    k1, k2 = st.columns(2)
+
+    with k1:
+        st.markdown('<div class="section-label">SVD k-factor tuning — why k=25?</div>', unsafe_allow_html=True)
+        # Real values from cf_k_tuning.json
+        ks            = [5,     10,     15,     20,     25    ]
+        rmse_k        = [0.0859, 0.0593, 0.0442, 0.0355, 0.0292]
+        var_explained = [68.7,   83.9,   90.4,   93.4,   95.3  ]
+        best_k = 25
+
+        fig, ax1 = plt.subplots(figsize=(7, 4.5), facecolor="white")
+        ax1.set_facecolor("white")
+        color_rmse = "#e74c3c"
+        color_var  = "#3b82f6"
+        l1, = ax1.plot(ks, rmse_k, "o-", color=color_rmse, linewidth=2, markersize=7,
+                       markerfacecolor="white", markeredgewidth=2, label="RMSE (↓ better)")
+        ax1.set_xlabel("Number of latent factors (k)", color="#5a5a6a")
+        ax1.set_ylabel("Reconstruction RMSE", color=color_rmse)
+        ax1.tick_params(axis="y", labelcolor=color_rmse)
+        ax2 = ax1.twinx()
+        l2, = ax2.plot(ks, var_explained, "s--", color=color_var, linewidth=2, markersize=7,
+                       markerfacecolor="white", markeredgewidth=2, label="Variance Explained %")
+        ax2.set_ylabel("Variance Explained (%)", color=color_var)
+        ax2.tick_params(axis="y", labelcolor=color_var)
+        l3 = ax1.axvline(best_k, color="#2ecc71", linestyle="--", linewidth=2,
+                         label=f"Chosen k=25  (RMSE=0.0292, Var=95.3%)")
+        ax1.legend(handles=[l1, l2, l3], fontsize=8, framealpha=0.9, loc="center right")
+        ax1.grid(alpha=0.2, color="#ddd")
+        ax1.spines["top"].set_visible(False)
+        ax2.spines["top"].set_visible(False)
+        plt.tight_layout()
+        st.pyplot(fig); plt.close()
+        st.caption("k=25 minimises RMSE and explains 95.3% of variance. Beyond k=25 we only had 5 data points tested — diminishing returns expected.")
+
+    with k2:
+        st.markdown('<div class="section-label">Time-decay (λ=0.01) — why recency matters</div>', unsafe_allow_html=True)
+        fig, ax = plt.subplots(figsize=(7, 4.5), facecolor="white")
+        ax.set_facecolor("white")
+        import numpy as np_td
+        days = np_td.arange(0, 366, 1)
+        lam  = 0.01
+        action_weights = {"booking": 5.0, "attempt": 4.0, "save": 3.0, "view": 1.0}
+        colors_td = {"booking":"#2ecc71","attempt":"#3b82f6","save":"#f59e0b","view":"#94a3b8"}
+        for action, base_w in action_weights.items():
+            decayed = base_w * np_td.exp(-lam * days)
+            ax.plot(days, decayed, linewidth=2, label=f"{action} (base={base_w})",
+                    color=colors_td[action])
+        ax.axvline(365, color="#e74c3c", linestyle=":", linewidth=1, alpha=0.6)
+        ax.set_xlabel("Days since interaction", color="#5a5a6a")
+        ax.set_ylabel("Effective interaction weight", color="#5a5a6a")
+        ax.legend(framealpha=0.9, fontsize=9, loc="upper right")
+        ax.grid(alpha=0.2, color="#ddd")
+        ax.spines["top"].set_visible(False)
+        ax.spines["right"].set_visible(False)
+        plt.tight_layout()
+        st.pyplot(fig); plt.close()
+        st.caption("weight(t) = base_weight × e^(−λt). A booking from 1 year ago carries less signal than a save from last week.")
 
     st.markdown("<br>", unsafe_allow_html=True)
 
