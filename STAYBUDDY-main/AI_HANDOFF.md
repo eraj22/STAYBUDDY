@@ -107,7 +107,9 @@ The disposable owner authorization regression is `test/owner_authorization.integ
 - `GET /api/notifications`, `PATCH /api/notifications/:id/read` \u2014 user-scoped notification inbox and read-state.
 - `POST /api/payments/intents` (student-only, requires `STRIPE_SECRET_KEY`), `GET /api/payments` (student-only), `POST /api/payments/webhook/stripe` (HMAC-signature verified, the only route allowed to move a payment out of `pending`).
 
-The disposable regression covering all of the above is `test/warden_notifications.integration.test.js`, run through the same `node scripts/run_db_integration_tests.js` entrypoint. It proves warden-to-warden isolation across bookings/complaints/room-assignment, a full check-in/check-out cycle with exactly-once capacity restoration, and preference-gated announcement delivery to a student's favorited hostel. The Stripe payment flow has no automated integration test yet because it requires real Stripe test-mode credentials; validate manually with `STRIPE_SECRET_KEY`/`STRIPE_WEBHOOK_SECRET` set before treating use case 29 as fully verified.
+The disposable regression covering all of the above is `test/warden_notifications.integration.test.js`, run through the same `node scripts/run_db_integration_tests.js` entrypoint. It proves warden-to-warden isolation across bookings/complaints/room-assignment, a full check-in/check-out cycle with exactly-once capacity restoration, and preference-gated announcement delivery to a student's favorited hostel.
+
+**Payments (use case 29) is now covered by `test/payments.integration.test.js`.** `index.js` reads `STRIPE_API_BASE` (default `https://api.stripe.com`) so the test can point `POST /api/payments/intents` at a local HTTP server that mimics Stripe's `payment_intents` response, avoiding any need for real Stripe credentials in CI. The test proves: a non-`confirmed` booking cannot get a payment intent (`409`); a confirmed booking gets a `pending` payment row and `client_secret`; another student cannot see the payment (`GET /api/payments` is user-scoped); a forged `stripe-signature` webhook is rejected (`400`) and never changes payment status; and a correctly HMAC-signed webhook settles the payment to `succeeded` with the receipt URL. **This only proves StayBuddy's own webhook/authorization contract** \u2014 it does not validate against Stripe's real API surface. Before treating use case 29 as production-ready, configure real `STRIPE_SECRET_KEY`/`STRIPE_WEBHOOK_SECRET` values and perform one live test-mode round trip (create a real payment intent, complete it with a Stripe test card, and confirm the real webhook delivery settles the `payments` row).
 
 ### Migration 001: rooms, locations, favorites
 
@@ -287,7 +289,7 @@ The verified end-to-end path returned a FastAPI-ranked `HST-014`, hydrated it to
 ## ML Service Caveats
 
 - The recommender artifacts were saved with scikit-learn 1.6.1. The current local environment loaded them with scikit-learn 1.8.0 and emitted compatibility warnings, although the tested request succeeded.
-- Add and pin a Python dependency file before deployment/retraining so the ML runtime is reproducible.
+- **Resolved (use case 30).** `ml-notebooks/requirements.txt` and `ml-notebooks/ml_ai_complaint/requirements.txt` now pin exact versions (`fastapi==0.139.2`, `uvicorn==0.51.0`, `pydantic==2.13.4`, `numpy==2.5.1`, `pandas==3.0.3`/`scipy==1.18.0`, `scikit-learn==1.9.0`, `joblib==1.5.3`) matching the versions actually installed in the project `.venv`. Install with `pip install -r requirements.txt` from each service's directory before running `app_api.py`. Both docstrings were updated to reference the requirements file instead of an ad hoc `pip install fastapi uvicorn`.
 - `app_api.py` can install FastAPI dependencies as a fallback, but package setup should be explicit rather than relying on startup installation.
 - The room matcher under `ml-notebooks/room_matcher/` is an independent Flask prototype with hardcoded/in-memory room data and its own resident dataset. It is not connected to PostgreSQL and can conflict with Node because it also uses port 5000 by default.
 
@@ -314,11 +316,13 @@ Last result: 3 passing, 0 failed.
 
 `package.json` contains `"test": "node --test"`, but this machine's npm installation is broken before scripts start because it cannot locate `npm-prefix.js`. Until npm is repaired, use direct Node commands.
 
+**Resolved npm dependency gap (use case 30):** `index.js` requires `nodemailer`, but `STAYBUDDY-main/package.json` never declared it — it only worked locally because Node's module resolution walked up to the workspace-root `node_modules/nodemailer` (declared in the root `package.json`). A standalone deploy of `STAYBUDDY-main/` alone would have failed with `Cannot find module 'nodemailer'`. `nodemailer` is now declared in both `STAYBUDDY-main/package.json` and `STAYBUDDY-main/package-lock.json`, with its exact resolved version/integrity recorded. On a machine with working npm, run `npm ci` from `STAYBUDDY-main/` for a reproducible standalone install. The local npm executable remains broken (`npm-prefix.js` missing), so this repository could not run that final install command here.
+
 ### Isolated booking integration test
 
 The dedicated runner `scripts/run_db_integration_tests.js` now provides a real API and database test without writing to the active `DB_NAME` database.
 
-It creates `staybuddy_test`, restores a disposable full copy of the configured source database through `pg_dump` and `psql`, launches `index.js` on port 5002, runs `test/booking_capacity.integration.test.js`, and drops the test database in cleanup.
+It creates `staybuddy_test`, restores a disposable full copy of the configured source database through `pg_dump` and `psql`, launches `index.js` on port 5002 (each test file launches its own additional server instance on its own port), and runs, serialized via `--test-concurrency=1`: `test/booking_capacity.integration.test.js`, `test/owner_authorization.integration.test.js`, `test/warden_notifications.integration.test.js`, and `test/payments.integration.test.js`. The test database is dropped in cleanup.
 
 The runner refuses to use any `TEST_DB_NAME` that does not begin with `staybuddy_test` or that equals `DB_NAME`. The normal `node --test` command skips this database test. Run it explicitly with:
 
@@ -327,6 +331,8 @@ node scripts/run_db_integration_tests.js
 ```
 
 The initial verified run passed one integration test. It exercised both `POST /api/bookings/:id/cancel` and `PUT /api/bookings/:id` with `status: cancelled`, confirming each restored catalog availability after a pending booking.
+
+Latest full run: **5 passed, 0 failed** (booking lifecycle, student isolation, owner isolation, Stripe payment intents/webhook, warden/room/stay/notification regression).
 
 Useful validation commands:
 

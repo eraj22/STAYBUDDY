@@ -4,7 +4,7 @@ Exposes the hybrid ML engine as a REST endpoint for the Flutter app.
 
 Run with:
   cd STAYBUDDY-main/ml-notebooks
-  pip install fastapi uvicorn
+  pip install -r requirements.txt
   python app_api.py
 
 Runs on: http://127.0.0.1:8000

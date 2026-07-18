@@ -101,7 +101,7 @@ async function main() {
   try {
     await resetTestDatabase();
     await restoreSourceDatabase();
-    await run(process.execPath, ["--test", "--test-concurrency=1", "test/booking_capacity.integration.test.js", "test/owner_authorization.integration.test.js", "test/warden_notifications.integration.test.js"], {
+    await run(process.execPath, ["--test", "--test-concurrency=1", "test/booking_capacity.integration.test.js", "test/owner_authorization.integration.test.js", "test/warden_notifications.integration.test.js", "test/payments.integration.test.js"], {
       cwd: path.join(__dirname, ".."),
       env: {
         ...process.env,

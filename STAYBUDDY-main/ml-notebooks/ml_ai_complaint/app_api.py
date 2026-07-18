@@ -4,7 +4,8 @@ StayBuddy — AI Complaint Categorization Server
 SEPARATE from the main AI recommendation server.
 
 Run with:
-  cd STAYBUDDY-main/ml-notebooks/complaint_ai
+  cd STAYBUDDY-main/ml-notebooks/ml_ai_complaint
+  pip install -r requirements.txt
   python app_api.py
 
 Runs on: http://127.0.0.1:8001
