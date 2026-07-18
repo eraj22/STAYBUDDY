@@ -53,3 +53,31 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# ML - Large CSV datasets (regenerate with generate_dataset.py)
+ml-notebooks/data/*.csv
+
+# ML - Trained model binaries
+ml-notebooks/models/*.pkl
+ml-notebooks/models/*.joblib
+ml-notebooks/models/*.h5
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# Large model files
+*.npy
+*.bin
+*.pt
+ml-notebooks/chatbot/intent_model/model.safetensors
+ml-notebooks/intent_model/model.safetensors
+ml-notebooks/intent_model/checkpoint-369/
+ml-notebooks/intent_model/checkpoint-410/
+ml-notebooks/intent_model/models/
+models/
+intent_model/
+ml-notebooks - Shortcut.lnk

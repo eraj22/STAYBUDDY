@@ -1,17 +1,21 @@
-# staybuddy_student
+# StayBuddy
 
-A new Flutter project.
+StayBuddy is a Flutter hostel-discovery application with a Node/PostgreSQL operational API and Python recommendation services.
 
-## Getting Started
+## Workspace Layout
 
-This project is a starting point for a Flutter application.
+- `lib/`: Flutter client.
+- `STAYBUDDY-main/`: active Node/Express API, PostgreSQL migrations, integration tests, and ML services.
+- `assets/data/hostels_featured.csv`: catalog import source.
+- `STUDENT_USE_CASE_HANDOFF.md`: prioritized product use-case roadmap and implementation status.
 
-A few resources to get you started if this is your first Flutter project:
+## Local Validation
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+```powershell
+Set-Location D:\staybuddy\STAYBUDDY-main
+node --check index.js
+node --test
+node scripts/run_db_integration_tests.js
+```
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Read `STUDENT_USE_CASE_HANDOFF.md` and `STAYBUDDY-main/AI_HANDOFF.md` before changing operational workflows.
