@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../api.dart';
 import '../routes.dart';
 import '../theme.dart';
 import '../widgets/responsive_shell.dart';
 import '../widgets/video_background.dart';
 import 'discover_hostel_home_page.dart';
+import 'password_reset_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -16,6 +18,9 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen>
     with SingleTickerProviderStateMixin {
   bool _obscurePassword = true;
+  bool _loggingIn = false;
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
   late final AnimationController _controller;
   late final Animation<double> _sheetSlide;
   late final Animation<double> _sheetFade;
@@ -42,8 +47,39 @@ class _LoginScreenState extends State<LoginScreen>
 
   @override
   void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
     _controller.dispose();
     super.dispose();
+  }
+
+  Future<void> _login() async {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text;
+    if (email.isEmpty || password.isEmpty) {
+      _showError('Enter your email address and password.');
+      return;
+    }
+
+    setState(() => _loggingIn = true);
+    try {
+      await Api().login(email, password);
+      if (!mounted) return;
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const DiscoverHostelHomePage()),
+      );
+    } catch (error) {
+      _showError(error.toString());
+    } finally {
+      if (mounted) setState(() => _loggingIn = false);
+    }
+  }
+
+  void _showError(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message), backgroundColor: Colors.red.shade700),
+    );
   }
 
   @override
@@ -142,6 +178,8 @@ class _LoginScreenState extends State<LoginScreen>
                           _buildField(
                             hint: 'Email address',
                             icon: Icons.mail_outline_rounded,
+                            controller: _emailController,
+                            keyboardType: TextInputType.emailAddress,
                           ),
                           const SizedBox(height: 12),
 
@@ -149,6 +187,7 @@ class _LoginScreenState extends State<LoginScreen>
                           _buildField(
                             hint: 'Password',
                             icon: Icons.lock_outline_rounded,
+                            controller: _passwordController,
                             obscure: _obscurePassword,
                             suffix: IconButton(
                               icon: Icon(
@@ -158,8 +197,9 @@ class _LoginScreenState extends State<LoginScreen>
                                 size: 20,
                                 color: AppTheme.textMuted,
                               ),
-                              onPressed: () =>
-                                  setState(() => _obscurePassword = !_obscurePassword),
+                              onPressed: () => setState(
+                                () => _obscurePassword = !_obscurePassword,
+                              ),
                             ),
                           ),
 
@@ -168,7 +208,12 @@ class _LoginScreenState extends State<LoginScreen>
                           Align(
                             alignment: Alignment.centerRight,
                             child: TextButton(
-                              onPressed: () {},
+                              onPressed: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => const PasswordResetScreen(),
+                                ),
+                              ),
                               style: TextButton.styleFrom(
                                 foregroundColor: AppTheme.teal,
                                 padding: EdgeInsets.zero,
@@ -190,14 +235,7 @@ class _LoginScreenState extends State<LoginScreen>
                             width: double.infinity,
                             height: 52,
                             child: ElevatedButton(
-                              onPressed: () {
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => const DiscoverHostelHomePage(),
-                                  ),
-                                );
-                              },
+                              onPressed: _loggingIn ? null : _login,
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: AppTheme.teal,
                                 foregroundColor: Colors.white,
@@ -206,13 +244,22 @@ class _LoginScreenState extends State<LoginScreen>
                                   borderRadius: BorderRadius.circular(16),
                                 ),
                               ),
-                              child: Text(
-                                'Login',
-                                style: GoogleFonts.dmSans(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
+                              child: _loggingIn
+                                  ? const SizedBox(
+                                      height: 22,
+                                      width: 22,
+                                      child: CircularProgressIndicator(
+                                        color: Colors.white,
+                                        strokeWidth: 2,
+                                      ),
+                                    )
+                                  : Text(
+                                      'Login',
+                                      style: GoogleFonts.dmSans(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
                             ),
                           ),
 
@@ -228,7 +275,9 @@ class _LoginScreenState extends State<LoginScreen>
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 14),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 14,
+                                ),
                                 child: Text(
                                   'or continue with',
                                   style: GoogleFonts.dmSans(
@@ -309,6 +358,8 @@ class _LoginScreenState extends State<LoginScreen>
   Widget _buildField({
     required String hint,
     required IconData icon,
+    required TextEditingController controller,
+    TextInputType? keyboardType,
     bool obscure = false,
     Widget? suffix,
   }) {
@@ -319,16 +370,23 @@ class _LoginScreenState extends State<LoginScreen>
         border: Border.all(color: AppTheme.border, width: 0.5),
       ),
       child: TextField(
+        controller: controller,
+        keyboardType: keyboardType,
         obscureText: obscure,
         style: GoogleFonts.dmSans(fontSize: 14, color: AppTheme.textPrimary),
         decoration: InputDecoration(
           hintText: hint,
-          hintStyle: GoogleFonts.dmSans(color: AppTheme.textMuted, fontSize: 14),
+          hintStyle: GoogleFonts.dmSans(
+            color: AppTheme.textMuted,
+            fontSize: 14,
+          ),
           prefixIcon: Icon(icon, size: 20, color: AppTheme.textMuted),
           suffixIcon: suffix,
           border: InputBorder.none,
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 15,
+          ),
         ),
       ),
     );

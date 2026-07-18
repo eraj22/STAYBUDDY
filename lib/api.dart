@@ -145,6 +145,24 @@ class Api {
     return _parse(r, 'GetMe') as Map<String, dynamic>;
   }
 
+  Future<void> requestPasswordReset(String email) async {
+    final r = await http.post(
+      Uri.parse('$_base/api/auth/password-reset/request'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'email': email}),
+    );
+    _parse(r, 'RequestPasswordReset');
+  }
+
+  Future<void> confirmPasswordReset(String token, String password) async {
+    final r = await http.post(
+      Uri.parse('$_base/api/auth/password-reset/confirm'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'token': token, 'password': password}),
+    );
+    _parse(r, 'ConfirmPasswordReset');
+  }
+
   Future<void> logout() async {
     await AuthStore.clear();
   }
@@ -306,6 +324,44 @@ class Api {
     return _parse(r, 'GetRecommendations') as Map<String, dynamic>;
   }
 
+  Future<Map<String, dynamic>> getStudentProfile() async {
+    final r = await http.get(
+      Uri.parse('$_base/api/student/profile'),
+      headers: await _authHeaders(),
+    );
+    return _parse(r, 'GetStudentProfile') as Map<String, dynamic>;
+  }
+
+  Future<Map<String, dynamic>> updateStudentProfile(
+    Map<String, dynamic> profile,
+  ) async {
+    final r = await http.put(
+      Uri.parse('$_base/api/student/profile'),
+      headers: await _authHeaders(),
+      body: jsonEncode(profile),
+    );
+    return _parse(r, 'UpdateStudentProfile') as Map<String, dynamic>;
+  }
+
+  Future<Map<String, dynamic>> getNotificationPreferences() async {
+    final r = await http.get(
+      Uri.parse('$_base/api/notification-preferences'),
+      headers: await _authHeaders(),
+    );
+    return _parse(r, 'GetNotificationPreferences') as Map<String, dynamic>;
+  }
+
+  Future<Map<String, dynamic>> updateNotificationPreferences(
+    Map<String, bool> preferences,
+  ) async {
+    final r = await http.put(
+      Uri.parse('$_base/api/notification-preferences'),
+      headers: await _authHeaders(),
+      body: jsonEncode(preferences),
+    );
+    return _parse(r, 'UpdateNotificationPreferences') as Map<String, dynamic>;
+  }
+
   // ══════════════════════════════════════════════════════════════════
   // OWNER APIs
   // ══════════════════════════════════════════════════════════════════
@@ -354,6 +410,18 @@ class Api {
       headers: await _authHeaders(),
     );
     return _parse(r, 'GetOwnerHostels') as List<dynamic>;
+  }
+
+  Future<Map<String, dynamic>> updateOwnerHostel(
+    int hostelId,
+    Map<String, dynamic> updates,
+  ) async {
+    final r = await http.patch(
+      Uri.parse('$_base/api/owner/hostels/$hostelId'),
+      headers: await _authHeaders(),
+      body: jsonEncode(updates),
+    );
+    return _parse(r, 'UpdateOwnerHostel') as Map<String, dynamic>;
   }
 
   Future<Map<String, dynamic>> getOwnerDashboard() async {
@@ -417,6 +485,18 @@ class Api {
     return _parse(r, 'GetOwnerComplaints') as List<dynamic>;
   }
 
+  Future<Map<String, dynamic>> updateOwnerComplaint(
+    int complaintId,
+    String status,
+  ) async {
+    final r = await http.patch(
+      Uri.parse('$_base/api/owner/complaints/$complaintId'),
+      headers: await _authHeaders(),
+      body: jsonEncode({'status': status}),
+    );
+    return _parse(r, 'UpdateOwnerComplaint') as Map<String, dynamic>;
+  }
+
   // ══════════════════════════════════════════════════════════════════
   // WARDEN APIs
   // ══════════════════════════════════════════════════════════════════
@@ -469,32 +549,112 @@ class Api {
     return _parse(r, 'UpdateWardenBooking') as Map<String, dynamic>;
   }
 
-  Future<List<dynamic>> getWardenAnnouncements() async {
-    final r = await http.get(
-      Uri.parse('$_base/api/warden/announcements'),
-      headers: await _authHeaders(),
-    );
-    return _parse(r, 'GetWardenAnnouncements') as List<dynamic>;
-  }
-
-  Future<Map<String, dynamic>> postAnnouncement({
-    required String title,
-    required String body,
-    String audience = 'All Students',
-  }) async {
-    final r = await http.post(
-      Uri.parse('$_base/api/warden/announcements'),
-      headers: await _authHeaders(),
-      body: jsonEncode({'title': title, 'body': body, 'audience': audience}),
-    );
-    return _parse(r, 'PostAnnouncement') as Map<String, dynamic>;
-  }
-
   Future<List<dynamic>> getWardenStudents() async {
     final r = await http.get(
       Uri.parse('$_base/api/warden/students'),
       headers: await _authHeaders(),
     );
     return _parse(r, 'GetWardenStudents') as List<dynamic>;
+  }
+
+  Future<Map<String, dynamic>> checkInBooking(int bookingId) async {
+    final r = await http.post(
+      Uri.parse('$_base/api/warden/bookings/$bookingId/check-in'),
+      headers: await _authHeaders(),
+    );
+    return _parse(r, 'CheckInBooking') as Map<String, dynamic>;
+  }
+
+  Future<Map<String, dynamic>> checkOutBooking(int bookingId) async {
+    final r = await http.post(
+      Uri.parse('$_base/api/warden/bookings/$bookingId/check-out'),
+      headers: await _authHeaders(),
+    );
+    return _parse(r, 'CheckOutBooking') as Map<String, dynamic>;
+  }
+
+  Future<List<dynamic>> getAvailableRooms(int bookingId) async {
+    final r = await http.get(
+      Uri.parse('$_base/api/bookings/$bookingId/available-rooms'),
+      headers: await _authHeaders(),
+    );
+    return _parse(r, 'GetAvailableRooms') as List<dynamic>;
+  }
+
+  Future<Map<String, dynamic>> assignRoom(int bookingId, int roomId) async {
+    final r = await http.post(
+      Uri.parse('$_base/api/bookings/$bookingId/assign-room'),
+      headers: await _authHeaders(),
+      body: jsonEncode({'room_id': roomId}),
+    );
+    return _parse(r, 'AssignRoom') as Map<String, dynamic>;
+  }
+
+  // ══════════════════════════════════════════════════════════════════
+  // ANNOUNCEMENTS & NOTIFICATIONS
+  // ══════════════════════════════════════════════════════════════════
+
+  Future<List<dynamic>> getAnnouncements() async {
+    final r = await http.get(
+      Uri.parse('$_base/api/announcements'),
+      headers: await _authHeaders(),
+    );
+    return _parse(r, 'GetAnnouncements') as List<dynamic>;
+  }
+
+  Future<Map<String, dynamic>> postAnnouncement({
+    required int hostelId,
+    required String title,
+    required String body,
+    String audience = 'residents',
+  }) async {
+    final r = await http.post(
+      Uri.parse('$_base/api/announcements'),
+      headers: await _authHeaders(),
+      body: jsonEncode({
+        'hostel_id': hostelId,
+        'title': title,
+        'body': body,
+        'audience': audience,
+      }),
+    );
+    return _parse(r, 'PostAnnouncement') as Map<String, dynamic>;
+  }
+
+  Future<List<dynamic>> getNotifications() async {
+    final r = await http.get(
+      Uri.parse('$_base/api/notifications'),
+      headers: await _authHeaders(),
+    );
+    return _parse(r, 'GetNotifications') as List<dynamic>;
+  }
+
+  Future<Map<String, dynamic>> markNotificationRead(int notificationId) async {
+    final r = await http.patch(
+      Uri.parse('$_base/api/notifications/$notificationId/read'),
+      headers: await _authHeaders(),
+    );
+    return _parse(r, 'MarkNotificationRead') as Map<String, dynamic>;
+  }
+
+  // ══════════════════════════════════════════════════════════════════
+  // PAYMENTS
+  // ══════════════════════════════════════════════════════════════════
+
+  Future<Map<String, dynamic>> createPaymentIntent(int bookingId) async {
+    final r = await http.post(
+      Uri.parse('$_base/api/payments/intents'),
+      headers: await _authHeaders(),
+      body: jsonEncode({'booking_id': bookingId}),
+    );
+    return _parse(r, 'CreatePaymentIntent') as Map<String, dynamic>;
+  }
+
+  Future<List<dynamic>> getPayments() async {
+    final r = await http.get(
+      Uri.parse('$_base/api/payments'),
+      headers: await _authHeaders(),
+    );
+    return _parse(r, 'GetPayments') as List<dynamic>;
   }
 }

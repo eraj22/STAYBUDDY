@@ -53,7 +53,6 @@ test("booking lifecycle maintains catalog availability", { skip: !shouldRun }, a
   await client.connect();
   await waitForApi();
 
-  const userResult = await client.query("SELECT id, email FROM users ORDER BY id LIMIT 1");
   const hostelResult = await client.query(
     `SELECT id, available_capacity, source_available_capacity
      FROM hostels
@@ -61,23 +60,100 @@ test("booking lifecycle maintains catalog availability", { skip: !shouldRun }, a
      ORDER BY external_id
      LIMIT 1`
   );
-  assert.equal(userResult.rowCount, 1, "test database must contain one user");
   assert.equal(hostelResult.rowCount, 1, "test database must contain an available catalog hostel");
 
-  const userId = userResult.rows[0].id;
   const hostel = hostelResult.rows[0];
   const before = Number(hostel.available_capacity);
+  const password = "booking-test-password";
 
-  const login = await request("/api/auth/login", {
+  const registration = await request("/api/auth/register", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email: userResult.rows[0].email, password: "anything" }),
+    body: JSON.stringify({
+      name: "Booking Lifecycle Student",
+      email: "booking.lifecycle@example.test",
+      password,
+      role: "student",
+    }),
   });
-  assert.equal(login.response.status, 200);
+  assert.equal(registration.response.status, 200);
+  const userId = registration.body.user.id;
+  assert.equal(Object.hasOwn(registration.body.user, "password_hash"), false);
   const authHeaders = {
     "Content-Type": "application/json",
-    Authorization: `Bearer ${login.body.token}`,
+    Authorization: `Bearer ${registration.body.token}`,
   };
+
+  const storedPassword = await client.query("SELECT password_hash FROM users WHERE id=$1", [userId]);
+  assert.notEqual(storedPassword.rows[0].password_hash, password);
+  assert.match(storedPassword.rows[0].password_hash, /^scrypt\$/);
+
+  const rejectedLogin = await request("/api/auth/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email: "booking.lifecycle@example.test", password: "wrong-password" }),
+  });
+  assert.equal(rejectedLogin.response.status, 401);
+
+  const successfulLogin = await request("/api/auth/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email: "booking.lifecycle@example.test", password }),
+  });
+  assert.equal(successfulLogin.response.status, 200);
+  assert.equal(successfulLogin.body.user.id, userId);
+  assert.equal(Object.hasOwn(successfulLogin.body.user, "password_hash"), false);
+
+  const unknownResetRequest = await request("/api/auth/password-reset/request", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email: "missing.account@example.test" }),
+  });
+  assert.equal(unknownResetRequest.response.status, 200);
+  assert.equal(unknownResetRequest.body.test_reset_token, undefined);
+
+  const resetRequest = await request("/api/auth/password-reset/request", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email: "booking.lifecycle@example.test" }),
+  });
+  assert.equal(resetRequest.response.status, 200);
+  assert.equal(typeof resetRequest.body.test_reset_token, "string");
+
+  const invalidReset = await request("/api/auth/password-reset/confirm", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ token: "invalid-token", password: "new-booking-password" }),
+  });
+  assert.equal(invalidReset.response.status, 400);
+
+  const passwordReset = await request("/api/auth/password-reset/confirm", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ token: resetRequest.body.test_reset_token, password: "new-booking-password" }),
+  });
+  assert.equal(passwordReset.response.status, 200);
+
+  const oldPasswordLogin = await request("/api/auth/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email: "booking.lifecycle@example.test", password }),
+  });
+  assert.equal(oldPasswordLogin.response.status, 401);
+
+  const resetPasswordLogin = await request("/api/auth/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email: "booking.lifecycle@example.test", password: "new-booking-password" }),
+  });
+  assert.equal(resetPasswordLogin.response.status, 200);
+
+  const reusedReset = await request("/api/auth/password-reset/confirm", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ token: resetRequest.body.test_reset_token, password: "another-password" }),
+  });
+  assert.equal(reusedReset.response.status, 400);
 
   const firstBooking = await request("/api/bookings", {
     method: "POST",
@@ -169,26 +245,25 @@ test("a student cannot read, cancel, or forge another student's data", { skip: !
     const body = await response.json();
     return { response, body };
   }
-  async function loginAs(email) {
-    const login = await authRequest("/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password: "anything" }),
-    });
-    assert.equal(login.response.status, 200);
-    return {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${login.body.token}`,
-    };
-  }
-
   await waitForAuthApi();
 
-  const usersResult = await client.query("SELECT id, email FROM users WHERE role='student' ORDER BY id LIMIT 1");
-  assert.equal(usersResult.rowCount, 1, "test database must contain a student for isolation checks");
-  const userA = usersResult.rows[0];
+  const firstStudent = await authRequest("/api/auth/register", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      name: "Isolation Student A",
+      email: "isolation.student.a@example.test",
+      password: "isolation-a-password",
+      role: "student",
+    }),
+  });
+  assert.equal(firstStudent.response.status, 200);
+  const userA = firstStudent.body.user;
+  const headersA = {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${firstStudent.body.token}`,
+  };
 
-  const headersA = await loginAs(userA.email);
   const secondStudent = await authRequest("/api/auth/register", {
     method: "POST",
     headers: { "Content-Type": "application/json" },

@@ -35,6 +35,14 @@ The Node API already includes operational endpoints for:
 - A catalog-backed ML recommendation endpoint at `POST /api/recommendations/ml`.
 - A basic Node chat endpoint.
 
+Recent role-scoped work adds student profile and notification preferences, owner-owned hostel registration/profile management, booking and complaint queues, occupancy summaries, explicit warden-to-hostel assignments, assignment-scoped warden booking/complaint operations, hostel announcements, in-app notification delivery, owner/warden-scoped room inventory, warden-only room assignment for confirmed bookings, check-in/check-out move workflows, and a server-verified Stripe payment intent/webhook flow. Public `/api/auth/register` creates **student** accounts only; owner, warden, and admin roles must be provisioned through a controlled administrative process. Do not restore client-selected privileged roles.
+
+**Known client gap:** `lib/api.dart` still has an `Api().registerOwner(...)` helper that calls `POST /api/auth/register` with `role: 'owner'`. The backend now rejects any non-student role on that public route with `403`. Do not "fix" this by re-allowing client-selected roles; instead, route owner account creation through a controlled admin/staff provisioning flow before wiring that client method to any UI.
+
+Owner data access is always established by `hostel_owners`; warden access is always established by `warden_assignments`. Do not accept a client-provided hostel ID as authorization. Owner and warden complaint status changes append to `complaint_status_history`, while preserving the original student report. Room capacity edits, reassignment releases, and check-out releases are always bounded by each room's declared `capacity`, and hostel capacity releases are always bounded by `source_available_capacity` (catalog rows) or `total_capacity` (manual/owner rows) via `releaseHostelCapacity`. A confirmed booking's room can only be assigned by a warden explicitly assigned to that hostel, and only `confirmed` bookings are eligible; every assignment is recorded in `room_assignment_history`. Check-in requires a confirmed booking with an assigned room; check-out is idempotent-safe (returns `409` on repeat) and marks the booking `completed`.
+
+Announcements are always scoped to the hostel an owner or assigned warden controls (`staffCanManageHostel`), and delivered only to the hostel's active bookers and/or favoriters, filtered again by each recipient's `notification_preferences.announcements`. Booking-status and complaint-status changes create notifications through the shared `createNotification` helper, which is a no-op when the recipient has disabled that preference category. Stripe payment intents are only created for a `confirmed` booking owned by the requesting student and require `STRIPE_SECRET_KEY`; without it, `POST /api/payments/intents` returns `503` rather than silently succeeding. A payment only transitions out of `pending` through the signature-verified `POST /api/payments/webhook/stripe` route — never from client-supplied status.
+
 The primary implementation file is `index.js`. Preserve the existing endpoint contracts unless there is an explicit reason to version or migrate them.
 
 ## PostgreSQL Catalog State
@@ -56,8 +64,50 @@ Apply the incremental migration files instead, in this order:
 1. `migrations/001_rooms_locations_favorites.sql`
 2. `migrations/002_hostel_catalog.sql`
 3. `migrations/003_catalog_capacity_baseline.sql`
+4. `migrations/004_password_reset_tokens.sql`
+5. `migrations/005_profiles_staff_ownership.sql`
+6. `migrations/006_announcements_notifications.sql`
+7. `migrations/007_inventory_stays_payments.sql`
 
 All are written to be additive/idempotent and have already been applied locally.
+
+### Migration 005: profiles and operational role ownership
+
+`005_profiles_staff_ownership.sql` creates `student_profiles`, `notification_preferences`, `hostel_owners`, `warden_assignments`, and `complaint_status_history`; it also adds `owner` to the permitted `users.role` values. The API initializes these additive tables on startup for local development and disposable regression databases, but production deployments must apply the migration explicitly.
+
+### Migration 006: announcements and notifications
+
+`006_announcements_notifications.sql` creates `announcements` (hostel-scoped, authored by an owner or assigned warden) and `notifications` (per-user, optionally linked to an announcement, with `read_at` state). Delivery always checks `notification_preferences` before inserting a row.
+
+### Migration 007: authoritative inventory, stays, and payments
+
+`007_inventory_stays_payments.sql` creates `room_assignment_history` (audit trail for every room assignment), `booking_stays` (one row per booking, enforcing `checked_out_at >= checked_in_at` and requiring a check-in before a checkout), and `payments` (provider-agnostic payment/receipt ledger with a `pending -> succeeded/failed/cancelled/refunded` status lifecycle). Only the Stripe webhook route may transition a payment out of `pending`.
+
+Relevant protected endpoints:
+
+- `GET`/`PUT /api/student/profile`
+- `GET`/`PUT /api/notification-preferences`
+- `GET`/`POST /api/owner/hostels`, `PATCH /api/owner/hostels/:id`
+- `GET /api/owner/bookings`, `PATCH /api/owner/bookings/:id`
+- `GET`/`PATCH /api/owner/complaints`
+- `GET /api/owner/dashboard`
+- `GET`/`POST /api/owner/wardens`
+
+The disposable owner authorization regression is `test/owner_authorization.integration.test.js` and runs through `node scripts/run_db_integration_tests.js` with the existing student/capacity tests.
+
+### Warden, announcement, notification, room, stay, and payment endpoints (use cases 22-29)
+
+- `GET`/`PATCH /api/warden/bookings`, `/api/warden/bookings/:id` \u2014 scoped via `warden_assignments`; sends a `booking_status` notification on change.
+- `GET`/`PATCH /api/warden/complaints`, `/api/warden/complaints/:id` \u2014 scoped via `warden_assignments`; appends to `complaint_status_history`.
+- `POST /api/warden/bookings/:id/check-in`, `POST /api/warden/bookings/:id/check-out` \u2014 require a confirmed booking with an assigned room; check-out releases hostel/room capacity exactly once and marks the booking `completed`.
+- `GET /api/bookings/:id/available-rooms`, `POST /api/bookings/:id/assign-room` \u2014 warden-scoped; assignment requires a `confirmed` booking and records `room_assignment_history`.
+- `GET /api/bookings/:id/stay` \u2014 student-owned stay lookup.
+- `GET`/`POST /api/hostels/:hostel_id/rooms`, `POST /api/rooms`, `PATCH /api/rooms/:id` \u2014 owner-scoped via `hostel_owners`; capacity edits are bounded by room capacity and current occupancy.
+- `POST`/`GET /api/announcements` \u2014 owner/warden authors scoped via `staffCanManageHostel`; students see only announcements matching their active bookings or favorites, gated by `notification_preferences.announcements`.
+- `GET /api/notifications`, `PATCH /api/notifications/:id/read` \u2014 user-scoped notification inbox and read-state.
+- `POST /api/payments/intents` (student-only, requires `STRIPE_SECRET_KEY`), `GET /api/payments` (student-only), `POST /api/payments/webhook/stripe` (HMAC-signature verified, the only route allowed to move a payment out of `pending`).
+
+The disposable regression covering all of the above is `test/warden_notifications.integration.test.js`, run through the same `node scripts/run_db_integration_tests.js` entrypoint. It proves warden-to-warden isolation across bookings/complaints/room-assignment, a full check-in/check-out cycle with exactly-once capacity restoration, and preference-gated announcement delivery to a student's favorited hostel. The Stripe payment flow has no automated integration test yet because it requires real Stripe test-mode credentials; validate manually with `STRIPE_SECRET_KEY`/`STRIPE_WEBHOOK_SECRET` set before treating use case 29 as fully verified.
 
 ### Migration 001: rooms, locations, favorites
 
@@ -328,7 +378,8 @@ Important current limitation:
 - The booking UI still has a visual room-type preference and price preview inherited from the prototype. Catalog booking remains hostel-capacity only because the CSV lacks authoritative physical room inventory. The request does not assign a room or persist the preference. Do not represent that UI choice as a room reservation until an authoritative room model exists.
 - The chatbot and room-matcher screens remain prototypes with separate contracts. Do not connect them to this vertical slice without reconciling their data models.
 - **Authorization hardening is now done for the student routes.** Login/register issue an HMAC-SHA256-signed token (`AUTH_SECRET` in `.env`); `requireAuth` middleware verifies it and derives `req.user.id`. `GET/POST /api/bookings`, `PUT /api/bookings/:id`, `POST /api/bookings/:id/cancel`, `POST/DELETE/GET /api/favorites*`, `POST /api/reviews`, and `GET/POST /api/complaints` now require a valid token and enforce that the acting user matches the token identity (403 on mismatch); any client-supplied `user_id` in these routes is ignored in favor of the token. See `STAYBUDDY-main/test/booking_capacity.integration.test.js` (`a student cannot read, cancel, or forge another student's data`) for the isolation proof.
-- Remaining gap: `/api/auth/login` still accepts any password for a known email (an explicit, commented dev-mode shortcut). Token forgery is fixed, but real password verification is not yet enforced — required before real deployment.
+- **Password verification is now enabled.** `passwords.js` uses Node `crypto.scrypt` with a random salt; login uses a timing-safe comparison, registration stores only the derived hash, and auth responses omit `password_hash`. The disposable integration suite proves that plaintext is not stored, a correct password succeeds, and an incorrect password receives `401`. The existing two local seed accounts still contain unrecoverable `dummyhash*` values; reset each only by setting `NEW_PASSWORD` directly in the terminal and running `node scripts/reset_legacy_password.js --email user@example.com` from `STAYBUDDY-main/`.
+- **Password recovery is now enabled.** `POST /api/auth/password-reset/request` always returns the same response for known and unknown accounts, stores only a SHA-256 reset-token digest in `password_reset_tokens`, invalidates prior unused tokens, and emails a 15-minute reset link. `POST /api/auth/password-reset/confirm` validates the token transactionally, replaces the password hash, and invalidates all remaining reset tokens for that user. `PASSWORD_RESET_URL` in `.env` controls the link base; the Flutter `PasswordResetScreen` accepts either the token or the complete link. The isolated test runner enables test-only token delivery and verifies invalid-token rejection, old-password rejection, new-password login, and single-use behavior.
 
 The complete two-student regression is now automated and terminal-only. `node scripts/run_db_integration_tests.js` clones the active database into a disposable `staybuddy_test` database, registers a second disposable student, and proves booking capacity restoration plus token-derived isolation of bookings, favorites, reviews, and complaints. It also verifies that a submitted review reappears in the operational hostel-detail response. The test passed on 2026-07-18.
 

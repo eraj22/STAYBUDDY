@@ -12,6 +12,7 @@ const cors = require("cors");
 const crypto = require("crypto");
 const { Pool } = require("pg");
 const nodemailer = require("nodemailer");
+const { hashPassword, isPassword, verifyPassword } = require("./passwords");
 
 const {
   buildUserPreferenceFromHistory,
@@ -24,6 +25,32 @@ const {
 
 const app = express();
 app.use(cors());
+app.post("/api/payments/webhook/stripe", express.raw({ type: "application/json" }), async (req, res) => {
+  try {
+    const secret = process.env.STRIPE_WEBHOOK_SECRET;
+    const signature = req.headers["stripe-signature"];
+    if (!secret || !signature || !Buffer.isBuffer(req.body)) return res.status(400).json({ error: "Invalid payment webhook" });
+    const parts = Object.fromEntries(signature.split(",").map((part) => part.split("=")));
+    const timestamp = Number(parts.t);
+    if (!Number.isFinite(timestamp) || Math.abs(Date.now() / 1000 - timestamp) > 300 || !parts.v1) return res.status(400).json({ error: "Expired payment webhook" });
+    const expected = crypto.createHmac("sha256", secret).update(`${timestamp}.${req.body.toString("utf8")}`).digest("hex");
+    const received = Buffer.from(parts.v1, "hex");
+    const expectedBuffer = Buffer.from(expected, "hex");
+    if (received.length !== expectedBuffer.length || !crypto.timingSafeEqual(received, expectedBuffer)) return res.status(400).json({ error: "Invalid payment webhook signature" });
+    const event = JSON.parse(req.body.toString("utf8"));
+    const intent = event?.data?.object;
+    if (!intent?.id) return res.status(200).json({ received: true });
+    if (event.type === "payment_intent.succeeded" || event.type === "payment_intent.payment_failed") {
+      const status = event.type === "payment_intent.succeeded" ? "succeeded" : "failed";
+      const receiptUrl = intent?.charges?.data?.[0]?.receipt_url || null;
+      await pool.query("UPDATE payments SET status=$1, receipt_url=COALESCE($2,receipt_url), updated_at=NOW() WHERE provider='stripe' AND provider_payment_id=$3", [status, receiptUrl, intent.id]);
+    }
+    res.status(200).json({ received: true });
+  } catch (error) {
+    console.error("Stripe webhook failed:", error.message);
+    res.status(400).json({ error: "Invalid payment webhook" });
+  }
+});
 app.use(express.json());
 
 // Connect PostgreSQL
@@ -61,6 +88,134 @@ const transporter = nodemailer.createTransport({
 
 // In-memory OTP store: email -> { otp, expiresAt }
 const otpStore = new Map();
+
+const PASSWORD_RESET_TTL_MINUTES = 15;
+let passwordResetTableReady;
+
+async function ensurePasswordResetTable() {
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS password_reset_tokens (
+      id SERIAL PRIMARY KEY,
+      user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      token_hash CHAR(64) NOT NULL UNIQUE,
+      expires_at TIMESTAMPTZ NOT NULL,
+      used_at TIMESTAMPTZ,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `);
+  await pool.query(`
+    CREATE INDEX IF NOT EXISTS password_reset_tokens_active_user_idx
+      ON password_reset_tokens (user_id, expires_at)
+      WHERE used_at IS NULL
+  `);
+  console.log("✅ password reset tokens table ready");
+}
+passwordResetTableReady = ensurePasswordResetTable().catch((error) => {
+  console.error("❌ password reset tokens table setup failed:", error.message);
+  throw error;
+});
+
+let operationalTablesReady;
+async function ensureOperationalTables() {
+  await pool.query("ALTER TABLE users DROP CONSTRAINT IF EXISTS users_role_check");
+  await pool.query("ALTER TABLE users ADD CONSTRAINT users_role_check CHECK (role IN ('student', 'owner', 'warden', 'admin'))");
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS student_profiles (
+      user_id INTEGER PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+      university VARCHAR(150), department VARCHAR(150), gender VARCHAR(30),
+      budget_max NUMERIC(12, 2) CHECK (budget_max IS NULL OR budget_max >= 0),
+      max_distance_km NUMERIC(6, 2) CHECK (max_distance_km IS NULL OR max_distance_km >= 0),
+      study_preference NUMERIC(3, 2) CHECK (study_preference IS NULL OR (study_preference >= 0 AND study_preference <= 1)),
+      food_preference VARCHAR(30), updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `);
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS notification_preferences (
+      user_id INTEGER PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+      booking_updates BOOLEAN NOT NULL DEFAULT true, complaint_updates BOOLEAN NOT NULL DEFAULT true,
+      announcements BOOLEAN NOT NULL DEFAULT true, email_enabled BOOLEAN NOT NULL DEFAULT true,
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `);
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS hostel_owners (
+      owner_user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      hostel_id INTEGER NOT NULL REFERENCES hostels(id) ON DELETE CASCADE,
+      claimed_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      PRIMARY KEY (owner_user_id, hostel_id), UNIQUE (hostel_id)
+    )
+  `);
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS warden_assignments (
+      warden_user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      hostel_id INTEGER NOT NULL REFERENCES hostels(id) ON DELETE CASCADE,
+      assigned_by_user_id INTEGER NOT NULL REFERENCES users(id),
+      assigned_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      PRIMARY KEY (warden_user_id, hostel_id)
+    )
+  `);
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS complaint_status_history (
+      id SERIAL PRIMARY KEY, complaint_id INTEGER NOT NULL REFERENCES complaints(id) ON DELETE CASCADE,
+      previous_status VARCHAR(30), next_status VARCHAR(30) NOT NULL,
+      changed_by_user_id INTEGER NOT NULL REFERENCES users(id), changed_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `);
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS announcements (
+      id SERIAL PRIMARY KEY, hostel_id INTEGER NOT NULL REFERENCES hostels(id) ON DELETE CASCADE,
+      author_user_id INTEGER NOT NULL REFERENCES users(id), title VARCHAR(180) NOT NULL, body TEXT NOT NULL,
+      audience VARCHAR(20) NOT NULL DEFAULT 'residents' CHECK (audience IN ('residents', 'booked', 'favorited')),
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `);
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS notifications (
+      id SERIAL PRIMARY KEY, user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      announcement_id INTEGER REFERENCES announcements(id) ON DELETE CASCADE, type VARCHAR(40) NOT NULL,
+      title VARCHAR(180) NOT NULL, body TEXT NOT NULL, data JSONB NOT NULL DEFAULT '{}'::jsonb,
+      read_at TIMESTAMPTZ, created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `);
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS room_assignment_history (
+      id SERIAL PRIMARY KEY, booking_id INTEGER NOT NULL REFERENCES bookings(id) ON DELETE CASCADE,
+      previous_room_id INTEGER REFERENCES rooms(id) ON DELETE SET NULL, next_room_id INTEGER NOT NULL REFERENCES rooms(id),
+      assigned_by_user_id INTEGER NOT NULL REFERENCES users(id), assigned_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `);
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS booking_stays (
+      booking_id INTEGER PRIMARY KEY REFERENCES bookings(id) ON DELETE CASCADE,
+      checked_in_at TIMESTAMPTZ, checked_in_by_user_id INTEGER REFERENCES users(id),
+      checked_out_at TIMESTAMPTZ, checked_out_by_user_id INTEGER REFERENCES users(id),
+      CHECK (checked_out_at IS NULL OR checked_in_at IS NOT NULL),
+      CHECK (checked_out_at IS NULL OR checked_out_at >= checked_in_at)
+    )
+  `);
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS payments (
+      id SERIAL PRIMARY KEY, booking_id INTEGER NOT NULL REFERENCES bookings(id) ON DELETE CASCADE,
+      user_id INTEGER NOT NULL REFERENCES users(id), provider VARCHAR(30) NOT NULL,
+      provider_payment_id VARCHAR(255) UNIQUE, amount NUMERIC(12, 2) NOT NULL CHECK (amount > 0),
+      currency CHAR(3) NOT NULL DEFAULT 'PKR', status VARCHAR(20) NOT NULL DEFAULT 'pending'
+        CHECK (status IN ('pending', 'succeeded', 'failed', 'cancelled', 'refunded')),
+      receipt_url TEXT, created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(), updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `);
+  await pool.query("CREATE INDEX IF NOT EXISTS hostel_owners_owner_idx ON hostel_owners (owner_user_id)");
+  await pool.query("CREATE INDEX IF NOT EXISTS warden_assignments_hostel_idx ON warden_assignments (hostel_id)");
+  await pool.query("CREATE INDEX IF NOT EXISTS complaint_status_history_complaint_idx ON complaint_status_history (complaint_id, changed_at DESC)");
+  await pool.query("CREATE INDEX IF NOT EXISTS announcements_hostel_created_idx ON announcements (hostel_id, created_at DESC)");
+  await pool.query("CREATE INDEX IF NOT EXISTS notifications_user_created_idx ON notifications (user_id, created_at DESC)");
+  await pool.query("CREATE INDEX IF NOT EXISTS room_assignment_history_booking_idx ON room_assignment_history (booking_id, assigned_at DESC)");
+  await pool.query("CREATE INDEX IF NOT EXISTS payments_user_created_idx ON payments (user_id, created_at DESC)");
+  console.log("✅ profiles and staff ownership tables ready");
+}
+operationalTablesReady = ensureOperationalTables().catch((error) => {
+  console.error("❌ profiles and staff ownership table setup failed:", error.message);
+  throw error;
+});
 
 // ── Auth token signing (HMAC-SHA256) ───────────────────────────────
 // Tokens are opaque and forgeable unless they carry a signature that only
@@ -112,6 +267,22 @@ function verifyAuthToken(token) {
     return null;
   }
 }
+function hashPasswordResetToken(token) {
+  return crypto.createHash("sha256").update(token).digest("hex");
+}
+function passwordResetUrl(token) {
+  const baseUrl = process.env.PASSWORD_RESET_URL || "staybuddy://reset-password";
+  const separator = baseUrl.includes("?") ? "&" : "?";
+  return `${baseUrl}${separator}token=${encodeURIComponent(token)}`;
+}
+async function sendPasswordResetEmail(user, token) {
+  await transporter.sendMail({
+    from: `"StayBuddy" <${process.env.EMAIL_USER}>`,
+    to: user.email,
+    subject: "Reset your StayBuddy password",
+    text: `Use this link within ${PASSWORD_RESET_TTL_MINUTES} minutes to reset your password: ${passwordResetUrl(token)}`,
+  });
+}
 // Express middleware: requires a valid signed token and attaches req.user = { id, role }.
 function requireAuth(req, res, next) {
   const auth = req.headers.authorization || "";
@@ -120,6 +291,38 @@ function requireAuth(req, res, next) {
   if (!user) return res.status(401).json({ error: "Missing or invalid auth token" });
   req.user = user;
   next();
+}
+function requireRole(...roles) {
+  return (req, res, next) => {
+    if (!roles.includes(req.user.role)) {
+      return res.status(403).json({ error: "You do not have permission for this action" });
+    }
+    next();
+  };
+}
+async function ownerHasHostel(client, ownerUserId, hostelId) {
+  const result = await client.query(
+    "SELECT 1 FROM hostel_owners WHERE owner_user_id=$1 AND hostel_id=$2",
+    [ownerUserId, hostelId]
+  );
+  return result.rowCount === 1;
+}
+async function wardenHasHostel(client, wardenUserId, hostelId) {
+  const result = await client.query(
+    "SELECT 1 FROM warden_assignments WHERE warden_user_id=$1 AND hostel_id=$2",
+    [wardenUserId, hostelId]
+  );
+  return result.rowCount === 1;
+}
+async function createNotification(client, userId, type, title, body, data, preferenceColumn) {
+  const preferenceColumns = new Set(["booking_updates", "complaint_updates", "announcements"]);
+  if (!preferenceColumns.has(preferenceColumn)) throw new Error("Invalid notification preference");
+  await client.query(
+    `INSERT INTO notifications (user_id, type, title, body, data)
+     SELECT $1,$2,$3,$4,$5::jsonb
+     WHERE COALESCE((SELECT ${preferenceColumn} FROM notification_preferences WHERE user_id=$1), true)`,
+    [userId, type, title, body, JSON.stringify(data)]
+  );
 }
 
 // ---------- helpers ----------
@@ -1216,21 +1419,17 @@ app.post("/api/auth/login", async (req, res) => {
       return res.status(400).json({ error: "email and password are required" });
 
     const result = await pool.query(
-      "SELECT id, name, email, role, phone FROM public.users WHERE email=$1",
+      "SELECT id, name, email, role, phone, password_hash FROM public.users WHERE email=$1",
       [email]
     );
 
     if (result.rows.length === 0)
-      return res.status(404).json({ error: "No account found with this email." });
+      return res.status(401).json({ error: "Invalid email or password" });
 
     const user = result.rows[0];
-
-    // NOTE: passwords stored as plain text / dummyhash in dev DB.
-    // In production replace with: bcrypt.compare(password, user.password_hash)
-    // For now accept any password so warden can log in during testing.
-    // To require real password comparison uncomment the check below:
-    // const stored = await pool.query("SELECT password_hash FROM users WHERE id=$1",[user.id]);
-    // if (stored.rows[0].password_hash !== password) return res.status(401).json({ error: "Invalid password." });
+    if (!await verifyPassword(password, user.password_hash)) {
+      return res.status(401).json({ error: "Invalid email or password" });
+    }
 
     const token = signAuthToken(user);
 
@@ -1257,20 +1456,121 @@ app.post("/api/auth/register", async (req, res) => {
     const { name, email, password, role = "student" } = req.body;
     if (!name || !email || !password)
       return res.status(400).json({ error: "name, email and password are required" });
+    if (role !== "student") {
+      return res.status(403).json({ error: "Public registration is available for students only" });
+    }
+    if (!isPassword(password)) {
+      return res.status(400).json({ error: "password must be at least 8 characters long" });
+    }
 
     const exists = await pool.query("SELECT id FROM public.users WHERE email=$1", [email]);
     if (exists.rows.length > 0)
       return res.status(409).json({ error: "Email already registered." });
 
+    const passwordHash = await hashPassword(password);
     const result = await pool.query(
       "INSERT INTO public.users (name, email, password_hash, role) VALUES ($1,$2,$3,$4) RETURNING id, name, email, role",
-      [name, email, password, role]
+      [name, email, passwordHash, role]
     );
     const user = result.rows[0];
     const token = signAuthToken(user);
     res.json({ success: true, token, user });
   } catch (err) {
     res.status(500).json({ error: "Registration failed: " + err.message });
+  }
+});
+
+// POST /api/auth/password-reset/request
+// Body: { email }. Always returns the same message to avoid account enumeration.
+app.post("/api/auth/password-reset/request", async (req, res) => {
+  try {
+    const email = String(req.body.email || "").trim().toLowerCase();
+    const genericResponse = { success: true, message: "If an account exists, a password reset link has been sent." };
+    if (!email) return res.status(400).json({ error: "email is required" });
+
+    await passwordResetTableReady;
+    const userResult = await pool.query(
+      "SELECT id, name, email FROM users WHERE LOWER(email)=LOWER($1)",
+      [email]
+    );
+    if (userResult.rowCount === 0) return res.json(genericResponse);
+
+    const user = userResult.rows[0];
+    const token = crypto.randomBytes(32).toString("base64url");
+    const tokenHash = hashPasswordResetToken(token);
+    const client = await pool.connect();
+    try {
+      await client.query("BEGIN");
+      await client.query(
+        "UPDATE password_reset_tokens SET used_at=NOW() WHERE user_id=$1 AND used_at IS NULL",
+        [user.id]
+      );
+      await client.query(
+        "INSERT INTO password_reset_tokens (user_id, token_hash, expires_at) VALUES ($1,$2,NOW() + ($3 * INTERVAL '1 minute'))",
+        [user.id, tokenHash, PASSWORD_RESET_TTL_MINUTES]
+      );
+      await client.query("COMMIT");
+    } catch (error) {
+      await client.query("ROLLBACK");
+      throw error;
+    } finally {
+      client.release();
+    }
+
+    if (process.env.TEST_PASSWORD_RESET_TOKENS === "1") {
+      return res.json({ ...genericResponse, test_reset_token: token });
+    }
+
+    try {
+      await sendPasswordResetEmail(user, token);
+      return res.json(genericResponse);
+    } catch (error) {
+      await pool.query("DELETE FROM password_reset_tokens WHERE token_hash=$1", [tokenHash]);
+      console.error("Password reset email failed:", error.message);
+      return res.status(500).json({ error: "Unable to send password reset email. Please try again later." });
+    }
+  } catch (error) {
+    console.error("Password reset request failed:", error);
+    res.status(500).json({ error: "Unable to request a password reset" });
+  }
+});
+
+// POST /api/auth/password-reset/confirm
+// Body: { token, password }
+app.post("/api/auth/password-reset/confirm", async (req, res) => {
+  const { token, password } = req.body;
+  if (!token || !isPassword(password)) {
+    return res.status(400).json({ error: "A valid reset token and password of at least 8 characters are required" });
+  }
+
+  const client = await pool.connect();
+  try {
+    await passwordResetTableReady;
+    const tokenHash = hashPasswordResetToken(token);
+    await client.query("BEGIN");
+    const tokenResult = await client.query(
+      `SELECT id, user_id FROM password_reset_tokens
+       WHERE token_hash=$1 AND used_at IS NULL AND expires_at > NOW()
+       FOR UPDATE`,
+      [tokenHash]
+    );
+    if (tokenResult.rowCount === 0) {
+      await client.query("ROLLBACK");
+      return res.status(400).json({ error: "This password reset token is invalid or expired" });
+    }
+
+    const passwordHash = await hashPassword(password);
+    const userId = tokenResult.rows[0].user_id;
+    await client.query("UPDATE users SET password_hash=$1 WHERE id=$2", [passwordHash, userId]);
+    await client.query("UPDATE password_reset_tokens SET used_at=NOW() WHERE user_id=$1 AND used_at IS NULL", [userId]);
+    await client.query("COMMIT");
+    res.json({ success: true, message: "Password reset successfully. Please sign in with your new password." });
+  } catch (error) {
+    await client.query("ROLLBACK");
+    console.error("Password reset confirmation failed:", error);
+    res.status(500).json({ error: "Unable to reset password" });
+  } finally {
+    client.release();
   }
 });
 
@@ -1288,30 +1588,366 @@ app.get("/api/auth/me", requireAuth, async (req, res) => {
   }
 });
 
-// GET /api/warden/dashboard
-app.get("/api/warden/dashboard", async (req, res) => {
+app.get("/api/student/profile", requireAuth, requireRole("student"), async (req, res) => {
   try {
-    // Return a basic dashboard — extend with real hostel assignment later
-    const hostelResult = await pool.query(
-      "SELECT id, name, city, total_capacity, available_capacity FROM hostels LIMIT 1"
+    await operationalTablesReady;
+    const result = await pool.query(
+      `SELECT u.id, u.name, u.email, u.phone, p.university, p.department, p.gender,
+              p.budget_max, p.max_distance_km, p.study_preference, p.food_preference
+       FROM users u LEFT JOIN student_profiles p ON p.user_id=u.id WHERE u.id=$1`,
+      [req.user.id]
     );
-    const hostel = hostelResult.rows[0] || {};
-    const bookings = await pool.query("SELECT COUNT(*) FROM bookings");
-    const complaints = await pool.query("SELECT COUNT(*) FROM complaints WHERE status != 'resolved'");
+    res.json(result.rows[0]);
+  } catch (error) { res.status(500).json({ error: "Failed to fetch student profile" }); }
+});
 
-    res.json({
-      success: true,
-      hostel_name:         hostel.name  || "My Hostel",
-      hostel_id:           hostel.id    || 1,
-      hostel_city:         hostel.city  || "",
-      total_capacity:      hostel.total_capacity     || 0,
-      available_capacity:  hostel.available_capacity || 0,
-      total_bookings:      parseInt(bookings.rows[0].count)   || 0,
-      pending_complaints:  parseInt(complaints.rows[0].count) || 0,
+app.put("/api/student/profile", requireAuth, requireRole("student"), async (req, res) => {
+  try {
+    await operationalTablesReady;
+    const { name, phone, university, department, gender, budget_max, max_distance_km, study_preference, food_preference } = req.body;
+    for (const value of [budget_max, max_distance_km, study_preference]) {
+      if (value != null && (!Number.isFinite(Number(value)) || Number(value) < 0)) {
+        return res.status(400).json({ error: "Numeric profile preferences must be non-negative" });
+      }
+    }
+    if (study_preference != null && Number(study_preference) > 1) {
+      return res.status(400).json({ error: "study_preference must be between 0 and 1" });
+    }
+    await pool.query("UPDATE users SET name=COALESCE($1,name), phone=COALESCE($2,phone) WHERE id=$3", [name || null, phone || null, req.user.id]);
+    const result = await pool.query(
+      `INSERT INTO student_profiles (user_id, university, department, gender, budget_max, max_distance_km, study_preference, food_preference)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8)
+       ON CONFLICT (user_id) DO UPDATE SET university=COALESCE(EXCLUDED.university, student_profiles.university),
+         department=COALESCE(EXCLUDED.department, student_profiles.department), gender=COALESCE(EXCLUDED.gender, student_profiles.gender),
+         budget_max=COALESCE(EXCLUDED.budget_max, student_profiles.budget_max), max_distance_km=COALESCE(EXCLUDED.max_distance_km, student_profiles.max_distance_km),
+         study_preference=COALESCE(EXCLUDED.study_preference, student_profiles.study_preference), food_preference=COALESCE(EXCLUDED.food_preference, student_profiles.food_preference), updated_at=NOW()
+       RETURNING *`,
+      [req.user.id, university || null, department || null, gender || null, budget_max ?? null, max_distance_km ?? null, study_preference ?? null, food_preference || null]
+    );
+    res.json({ success: true, profile: result.rows[0] });
+  } catch (error) { res.status(500).json({ error: "Failed to update student profile" }); }
+});
+
+app.get("/api/notification-preferences", requireAuth, async (req, res) => {
+  try {
+    await operationalTablesReady;
+    const result = await pool.query(
+      "INSERT INTO notification_preferences (user_id) VALUES ($1) ON CONFLICT (user_id) DO UPDATE SET user_id=EXCLUDED.user_id RETURNING *", [req.user.id]
+    );
+    res.json(result.rows[0]);
+  } catch (error) { res.status(500).json({ error: "Failed to fetch notification preferences" }); }
+});
+
+app.put("/api/notification-preferences", requireAuth, async (req, res) => {
+  try {
+    await operationalTablesReady;
+    const { booking_updates, complaint_updates, announcements, email_enabled } = req.body;
+    if ([booking_updates, complaint_updates, announcements, email_enabled].some((value) => value != null && typeof value !== "boolean")) {
+      return res.status(400).json({ error: "Notification preferences must be boolean values" });
+    }
+    const result = await pool.query(
+      `INSERT INTO notification_preferences (user_id, booking_updates, complaint_updates, announcements, email_enabled)
+       VALUES ($1,COALESCE($2,true),COALESCE($3,true),COALESCE($4,true),COALESCE($5,true))
+       ON CONFLICT (user_id) DO UPDATE SET booking_updates=COALESCE($2,notification_preferences.booking_updates), complaint_updates=COALESCE($3,notification_preferences.complaint_updates), announcements=COALESCE($4,notification_preferences.announcements), email_enabled=COALESCE($5,notification_preferences.email_enabled), updated_at=NOW()
+       RETURNING *`, [req.user.id, booking_updates ?? null, complaint_updates ?? null, announcements ?? null, email_enabled ?? null]
+    );
+    res.json(result.rows[0]);
+  } catch (error) { res.status(500).json({ error: "Failed to update notification preferences" }); }
+});
+
+app.get("/api/owner/hostels", requireAuth, requireRole("owner"), async (req, res) => {
+  try {
+    await operationalTablesReady;
+    const result = await pool.query(`SELECT ${hostelResponseColumns} FROM hostels h JOIN hostel_owners ho ON ho.hostel_id=h.id WHERE ho.owner_user_id=$1 ORDER BY h.id`, [req.user.id]);
+    res.json(result.rows);
+  } catch (error) { res.status(500).json({ error: "Failed to fetch owner hostels" }); }
+});
+
+app.post("/api/owner/hostels", requireAuth, requireRole("owner"), async (req, res) => {
+  const client = await pool.connect();
+  try {
+    await operationalTablesReady;
+    const { name, address, city, university, total_capacity, description } = req.body;
+    const totalCapacity = Number(total_capacity);
+    if (!name || !address || !city || !Number.isInteger(totalCapacity) || totalCapacity <= 0) return res.status(400).json({ error: "name, address, city, and a positive total_capacity are required" });
+    await client.query("BEGIN");
+    const hostel = await client.query(
+      "INSERT INTO hostels (name,address,city,university,total_capacity,available_capacity,source_available_capacity,description,source) VALUES ($1,$2,$3,$4,$5,$5,$5,$6,'owner') RETURNING *",
+      [name, address, city, university || null, totalCapacity, description || null]
+    );
+    await client.query("INSERT INTO hostel_owners (owner_user_id,hostel_id) VALUES ($1,$2)", [req.user.id, hostel.rows[0].id]);
+    await client.query("COMMIT");
+    res.status(201).json({ hostel: hostel.rows[0] });
+  } catch (error) { await client.query("ROLLBACK"); res.status(500).json({ error: "Failed to register hostel" }); } finally { client.release(); }
+});
+
+app.get("/api/owner/bookings", requireAuth, requireRole("owner"), async (req, res) => {
+  try {
+    await operationalTablesReady;
+    const result = await pool.query(`SELECT b.*, u.name AS student_name, u.email AS student_email, h.name AS hostel_name FROM bookings b JOIN hostel_owners ho ON ho.hostel_id=b.hostel_id JOIN users u ON u.id=b.user_id JOIN hostels h ON h.id=b.hostel_id WHERE ho.owner_user_id=$1 ORDER BY b.created_at DESC`, [req.user.id]);
+    res.json(result.rows);
+  } catch (error) { res.status(500).json({ error: "Failed to fetch owner bookings" }); }
+});
+
+app.patch("/api/owner/bookings/:id", requireAuth, requireRole("owner"), async (req, res) => {
+  const client = await pool.connect();
+  try {
+    const bookingId = Number(req.params.id); const nextStatus = normalizeBookingStatus(req.body.status);
+    if (!isValidInt(bookingId) || !isBookingStatus(nextStatus)) return res.status(400).json({ error: "A valid booking id and status are required" });
+    await client.query("BEGIN");
+    const booking = await client.query("SELECT b.* FROM bookings b JOIN hostel_owners ho ON ho.hostel_id=b.hostel_id WHERE b.id=$1 AND ho.owner_user_id=$2 FOR UPDATE", [bookingId, req.user.id]);
+    if (booking.rowCount === 0) { await client.query("ROLLBACK"); return res.status(404).json({ error: "Booking not found" }); }
+    const current = normalizeBookingStatus(booking.rows[0].status);
+    if (isCapacityHoldingStatus(current) && !isCapacityHoldingStatus(nextStatus)) await releaseHostelCapacity(client, booking.rows[0].hostel_id);
+    if (!isCapacityHoldingStatus(current) && isCapacityHoldingStatus(nextStatus)) { const hostel = await client.query("SELECT available_capacity FROM hostels WHERE id=$1 FOR UPDATE", [booking.rows[0].hostel_id]); if (Number(hostel.rows[0].available_capacity) <= 0) { await client.query("ROLLBACK"); return res.status(409).json({ error: "No beds available" }); } await client.query("UPDATE hostels SET available_capacity=available_capacity-1 WHERE id=$1", [booking.rows[0].hostel_id]); }
+    const updated = await client.query("UPDATE bookings SET status=$1 WHERE id=$2 RETURNING *", [nextStatus, bookingId]);
+    await client.query("COMMIT"); res.json({ booking: updated.rows[0] });
+  } catch (error) { await client.query("ROLLBACK"); console.error("Warden booking update failed:", error.message); res.status(500).json({ error: "Failed to update booking" }); } finally { client.release(); }
+});
+
+app.patch("/api/owner/hostels/:id", requireAuth, requireRole("owner"), async (req, res) => {
+  try {
+    await operationalTablesReady;
+    const hostelId = Number(req.params.id);
+    if (!isValidInt(hostelId) || !await ownerHasHostel(pool, req.user.id, hostelId)) return res.status(404).json({ error: "Hostel not found" });
+    const allowed = ["name", "address", "city", "university", "description", "area", "hostel_type", "single_room_price", "double_room_price", "dorm_room_price", "amenities"];
+    const entries = Object.entries(req.body).filter(([key, value]) => allowed.includes(key) && value != null);
+    if (entries.length === 0) return res.status(400).json({ error: "No editable hostel fields supplied" });
+    if (entries.some(([key, value]) => key.endsWith("_price") && (!Number.isFinite(Number(value)) || Number(value) < 0))) return res.status(400).json({ error: "Prices must be non-negative" });
+    const values = entries.map(([, value]) => value);
+    const columns = entries.map(([key], index) => `${key}=$${index + 1}`);
+    const result = await pool.query(`UPDATE hostels SET ${columns.join(", ")} WHERE id=$${values.length + 1} RETURNING *`, [...values, hostelId]);
+    res.json({ hostel: result.rows[0] });
+  } catch (error) { res.status(500).json({ error: "Failed to update hostel profile" }); }
+});
+
+app.get("/api/owner/complaints", requireAuth, requireRole("owner"), async (req, res) => {
+  try {
+    await operationalTablesReady;
+    const result = await pool.query(`SELECT c.*, u.name AS student_name, h.name AS hostel_name FROM complaints c JOIN hostel_owners ho ON ho.hostel_id=c.hostel_id JOIN users u ON u.id=c.user_id JOIN hostels h ON h.id=c.hostel_id WHERE ho.owner_user_id=$1 ORDER BY c.created_at DESC`, [req.user.id]);
+    res.json(result.rows);
+  } catch (error) { res.status(500).json({ error: "Failed to fetch owner complaints" }); }
+});
+
+app.patch("/api/owner/complaints/:id", requireAuth, requireRole("owner"), async (req, res) => {
+  const client = await pool.connect();
+  try {
+    await operationalTablesReady;
+    const complaintId = Number(req.params.id); const status = req.body.status;
+    if (!isValidInt(complaintId) || !isValidComplaintStatus(status)) return res.status(400).json({ error: "A valid complaint id and status are required" });
+    await client.query("BEGIN");
+    const complaint = await client.query("SELECT c.* FROM complaints c JOIN hostel_owners ho ON ho.hostel_id=c.hostel_id WHERE c.id=$1 AND ho.owner_user_id=$2 FOR UPDATE", [complaintId, req.user.id]);
+    if (complaint.rowCount === 0) { await client.query("ROLLBACK"); return res.status(404).json({ error: "Complaint not found" }); }
+    const updated = await client.query("UPDATE complaints SET status=$1, resolved_at=CASE WHEN $1 IN ('resolved','closed') THEN NOW() ELSE NULL END WHERE id=$2 RETURNING *", [status, complaintId]);
+    await client.query("INSERT INTO complaint_status_history (complaint_id, previous_status, next_status, changed_by_user_id) VALUES ($1,$2,$3,$4)", [complaintId, complaint.rows[0].status, status, req.user.id]);
+    await client.query("COMMIT"); res.json({ complaint: updated.rows[0] });
+  } catch (error) {
+    await client.query("ROLLBACK");
+    console.error("Warden complaint update failed:", error.message);
+    res.status(500).json({
+      error: "Failed to update complaint",
+      ...(process.env.RUN_DB_TESTS === "1" ? { detail: error.message } : {}),
     });
+  } finally { client.release(); }
+});
+
+app.get("/api/owner/dashboard", requireAuth, requireRole("owner"), async (req, res) => {
+  try {
+    await operationalTablesReady;
+    const result = await pool.query(`SELECT h.id, h.name, h.total_capacity, h.available_capacity,
+      COUNT(b.id) FILTER (WHERE b.status='pending')::int AS pending_bookings,
+      COUNT(b.id) FILTER (WHERE b.status='confirmed')::int AS confirmed_bookings,
+      COUNT(b.id) FILTER (WHERE b.status='cancelled')::int AS cancelled_bookings
+      FROM hostels h JOIN hostel_owners ho ON ho.hostel_id=h.id LEFT JOIN bookings b ON b.hostel_id=h.id
+      WHERE ho.owner_user_id=$1 GROUP BY h.id ORDER BY h.id`, [req.user.id]);
+    res.json({ hostels: result.rows });
+  } catch (error) { res.status(500).json({ error: "Failed to fetch owner dashboard" }); }
+});
+
+app.get("/api/owner/wardens", requireAuth, requireRole("owner"), async (req, res) => {
+  try {
+    await operationalTablesReady;
+    const result = await pool.query(`SELECT wa.hostel_id, wa.assigned_at, u.id, u.name, u.email, h.name AS hostel_name FROM warden_assignments wa JOIN hostel_owners ho ON ho.hostel_id=wa.hostel_id JOIN users u ON u.id=wa.warden_user_id JOIN hostels h ON h.id=wa.hostel_id WHERE ho.owner_user_id=$1 ORDER BY wa.assigned_at DESC`, [req.user.id]);
+    res.json(result.rows);
+  } catch (error) { res.status(500).json({ error: "Failed to fetch wardens" }); }
+});
+
+app.post("/api/owner/wardens", requireAuth, requireRole("owner"), async (req, res) => {
+  try {
+    await operationalTablesReady;
+    const hostelId = Number(req.body.hostel_id); const email = String(req.body.email || "").trim().toLowerCase();
+    if (!isValidInt(hostelId) || !email) return res.status(400).json({ error: "hostel_id and warden email are required" });
+    if (!await ownerHasHostel(pool, req.user.id, hostelId)) return res.status(404).json({ error: "Hostel not found" });
+    const warden = await pool.query("SELECT id, name, email FROM users WHERE LOWER(email)=LOWER($1) AND role='warden'", [email]);
+    if (warden.rowCount === 0) return res.status(404).json({ error: "A warden account with this email was not found" });
+    const assignment = await pool.query("INSERT INTO warden_assignments (warden_user_id,hostel_id,assigned_by_user_id) VALUES ($1,$2,$3) ON CONFLICT (warden_user_id,hostel_id) DO UPDATE SET assigned_by_user_id=EXCLUDED.assigned_by_user_id, assigned_at=NOW() RETURNING *", [warden.rows[0].id, hostelId, req.user.id]);
+    res.status(201).json({ assignment: assignment.rows[0], warden: warden.rows[0] });
+  } catch (error) { res.status(500).json({ error: "Failed to assign warden" }); }
+});
+
+// GET /api/warden/dashboard
+app.get("/api/warden/dashboard", requireAuth, requireRole("warden"), async (req, res) => {
+  try {
+    await operationalTablesReady;
+    const result = await pool.query(
+      `SELECT h.id, h.name, h.city, h.total_capacity, h.available_capacity,
+        COUNT(DISTINCT b.id)::int AS total_bookings,
+        COUNT(DISTINCT c.id) FILTER (WHERE c.status NOT IN ('resolved','closed'))::int AS pending_complaints
+       FROM warden_assignments wa JOIN hostels h ON h.id=wa.hostel_id
+       LEFT JOIN bookings b ON b.hostel_id=h.id LEFT JOIN complaints c ON c.hostel_id=h.id
+       WHERE wa.warden_user_id=$1 GROUP BY h.id ORDER BY h.id`, [req.user.id]
+    );
+    res.json({ success: true, hostels: result.rows });
   } catch (err) {
     res.status(500).json({ error: "Dashboard fetch failed: " + err.message });
   }
+});
+
+app.get("/api/warden/bookings", requireAuth, requireRole("warden"), async (req, res) => {
+  try {
+    await operationalTablesReady;
+    const result = await pool.query(
+      `SELECT b.*, u.name AS student_name, u.email AS student_email, h.name AS hostel_name
+       FROM bookings b JOIN warden_assignments wa ON wa.hostel_id=b.hostel_id
+       JOIN users u ON u.id=b.user_id JOIN hostels h ON h.id=b.hostel_id
+       WHERE wa.warden_user_id=$1 ORDER BY b.created_at DESC`, [req.user.id]
+    );
+    res.json(result.rows);
+  } catch (error) { res.status(500).json({ error: "Failed to fetch warden bookings" }); }
+});
+
+app.patch("/api/warden/bookings/:id", requireAuth, requireRole("warden"), async (req, res) => {
+  const client = await pool.connect();
+  try {
+    await operationalTablesReady;
+    const bookingId = Number(req.params.id); const nextStatus = normalizeBookingStatus(req.body.status);
+    if (!isValidInt(bookingId) || !isBookingStatus(nextStatus)) return res.status(400).json({ error: "A valid booking id and status are required" });
+    await client.query("BEGIN");
+    const booking = await client.query(
+      "SELECT b.* FROM bookings b JOIN warden_assignments wa ON wa.hostel_id=b.hostel_id WHERE b.id=$1 AND wa.warden_user_id=$2 FOR UPDATE",
+      [bookingId, req.user.id]
+    );
+    if (booking.rowCount === 0) { await client.query("ROLLBACK"); return res.status(404).json({ error: "Booking not found" }); }
+    const currentStatus = normalizeBookingStatus(booking.rows[0].status);
+    if (isCapacityHoldingStatus(currentStatus) && !isCapacityHoldingStatus(nextStatus)) await releaseHostelCapacity(client, booking.rows[0].hostel_id);
+    if (!isCapacityHoldingStatus(currentStatus) && isCapacityHoldingStatus(nextStatus)) {
+      const hostel = await client.query("SELECT available_capacity FROM hostels WHERE id=$1 FOR UPDATE", [booking.rows[0].hostel_id]);
+      if (Number(hostel.rows[0].available_capacity) <= 0) { await client.query("ROLLBACK"); return res.status(409).json({ error: "No beds available" }); }
+      await client.query("UPDATE hostels SET available_capacity=available_capacity-1 WHERE id=$1", [booking.rows[0].hostel_id]);
+    }
+    const updated = await client.query("UPDATE bookings SET status=$1 WHERE id=$2 RETURNING *", [nextStatus, bookingId]);
+    await createNotification(client, booking.rows[0].user_id, "booking_status", "Booking status updated", `Your booking is now ${nextStatus}.`, { booking_id: bookingId, status: nextStatus }, "booking_updates");
+    await client.query("COMMIT");
+    res.json({ booking: updated.rows[0] });
+  } catch (error) { await client.query("ROLLBACK"); res.status(500).json({ error: "Failed to update booking" }); } finally { client.release(); }
+});
+
+app.get("/api/warden/complaints", requireAuth, requireRole("warden"), async (req, res) => {
+  try {
+    await operationalTablesReady;
+    const result = await pool.query(
+      `SELECT c.*, u.name AS student_name, u.email AS student_email, h.name AS hostel_name
+       FROM complaints c JOIN warden_assignments wa ON wa.hostel_id=c.hostel_id
+       JOIN users u ON u.id=c.user_id JOIN hostels h ON h.id=c.hostel_id
+       WHERE wa.warden_user_id=$1 ORDER BY c.created_at DESC`, [req.user.id]
+    );
+    res.json(result.rows);
+  } catch (error) { res.status(500).json({ error: "Failed to fetch warden complaints" }); }
+});
+
+app.patch("/api/warden/complaints/:id", requireAuth, requireRole("warden"), async (req, res) => {
+  const client = await pool.connect();
+  try {
+    await operationalTablesReady;
+    const complaintId = Number(req.params.id); const status = req.body.status;
+    if (!isValidInt(complaintId) || !isValidComplaintStatus(status)) return res.status(400).json({ error: "A valid complaint id and status are required" });
+    await client.query("BEGIN");
+    const complaint = await client.query(
+      "SELECT c.* FROM complaints c JOIN warden_assignments wa ON wa.hostel_id=c.hostel_id WHERE c.id=$1 AND wa.warden_user_id=$2 FOR UPDATE",
+      [complaintId, req.user.id]
+    );
+    if (complaint.rowCount === 0) { await client.query("ROLLBACK"); return res.status(404).json({ error: "Complaint not found" }); }
+    const updated = await client.query("UPDATE complaints SET status=$1::varchar, assigned_to=$2, resolved_at=CASE WHEN $1::varchar IN ('resolved','closed') THEN NOW() ELSE NULL END WHERE id=$3 RETURNING *", [status, req.user.id, complaintId]);
+    await client.query("INSERT INTO complaint_status_history (complaint_id, previous_status, next_status, changed_by_user_id) VALUES ($1,$2,$3,$4)", [complaintId, complaint.rows[0].status, status, req.user.id]);
+    await createNotification(client, complaint.rows[0].user_id, "complaint_status", "Complaint status updated", `Your complaint is now ${status}.`, { complaint_id: complaintId, status }, "complaint_updates");
+    await client.query("COMMIT");
+    res.json({ complaint: updated.rows[0] });
+  } catch (error) { await client.query("ROLLBACK"); console.error("Warden complaint update failed:", error.message); res.status(500).json({ error: "Failed to update complaint" }); } finally { client.release(); }
+});
+
+async function staffCanManageHostel(client, user, hostelId) {
+  if (user.role === "owner") return ownerHasHostel(client, user.id, hostelId);
+  if (user.role === "warden") return wardenHasHostel(client, user.id, hostelId);
+  return false;
+}
+
+app.post("/api/announcements", requireAuth, requireRole("owner", "warden"), async (req, res) => {
+  const client = await pool.connect();
+  try {
+    await operationalTablesReady;
+    const hostelId = Number(req.body.hostel_id); const title = String(req.body.title || "").trim();
+    const body = String(req.body.body || "").trim(); const audience = req.body.audience || "residents";
+    if (!isValidInt(hostelId) || !title || !body || !["residents", "booked", "favorited"].includes(audience)) return res.status(400).json({ error: "hostel_id, title, body, and a valid audience are required" });
+    if (!await staffCanManageHostel(client, req.user, hostelId)) return res.status(404).json({ error: "Hostel not found" });
+    await client.query("BEGIN");
+    const announcement = await client.query("INSERT INTO announcements (hostel_id,author_user_id,title,body,audience) VALUES ($1,$2,$3,$4,$5) RETURNING *", [hostelId, req.user.id, title, body, audience]);
+    const includeBookings = audience !== "favorited";
+    const includeFavorites = audience !== "booked";
+    await client.query(
+      `WITH recipients AS (
+        SELECT DISTINCT user_id FROM bookings WHERE hostel_id=$1 AND status IN ('pending','confirmed') AND $2
+        UNION
+        SELECT DISTINCT user_id FROM favorites WHERE hostel_id=$1 AND $3
+      )
+      INSERT INTO notifications (user_id,announcement_id,type,title,body,data)
+      SELECT r.user_id,$4,'announcement',$5,$6,jsonb_build_object('hostel_id',$1)
+      FROM recipients r LEFT JOIN notification_preferences np ON np.user_id=r.user_id
+      WHERE COALESCE(np.announcements,true)`,
+      [hostelId, includeBookings, includeFavorites, announcement.rows[0].id, title, body]
+    );
+    await client.query("COMMIT");
+    res.status(201).json({ announcement: announcement.rows[0] });
+  } catch (error) { await client.query("ROLLBACK"); res.status(500).json({ error: "Failed to post announcement" }); } finally { client.release(); }
+});
+
+app.get("/api/announcements", requireAuth, async (req, res) => {
+  try {
+    await operationalTablesReady;
+    if (req.user.role === "student") {
+      const result = await pool.query(
+        `SELECT DISTINCT a.* FROM announcements a
+         LEFT JOIN bookings b ON b.hostel_id=a.hostel_id AND b.user_id=$1 AND b.status IN ('pending','confirmed')
+         LEFT JOIN favorites f ON f.hostel_id=a.hostel_id AND f.user_id=$1
+         WHERE (a.audience IN ('residents','booked') AND b.user_id IS NOT NULL) OR (a.audience IN ('residents','favorited') AND f.user_id IS NOT NULL)
+         ORDER BY a.created_at DESC`, [req.user.id]
+      );
+      return res.json(result.rows);
+    }
+    const result = await pool.query(
+      `SELECT DISTINCT a.* FROM announcements a LEFT JOIN hostel_owners ho ON ho.hostel_id=a.hostel_id LEFT JOIN warden_assignments wa ON wa.hostel_id=a.hostel_id
+       WHERE (ho.owner_user_id=$1 OR wa.warden_user_id=$1) ORDER BY a.created_at DESC`, [req.user.id]
+    );
+    res.json(result.rows);
+  } catch (error) { res.status(500).json({ error: "Failed to fetch announcements" }); }
+});
+
+app.get("/api/notifications", requireAuth, async (req, res) => {
+  try {
+    await operationalTablesReady;
+    const result = await pool.query("SELECT * FROM notifications WHERE user_id=$1 ORDER BY created_at DESC", [req.user.id]);
+    res.json(result.rows);
+  } catch (error) { res.status(500).json({ error: "Failed to fetch notifications" }); }
+});
+
+app.patch("/api/notifications/:id/read", requireAuth, async (req, res) => {
+  try {
+    await operationalTablesReady;
+    const notificationId = Number(req.params.id);
+    if (!isValidInt(notificationId)) return res.status(400).json({ error: "Invalid notification id" });
+    const result = await pool.query("UPDATE notifications SET read_at=COALESCE(read_at,NOW()) WHERE id=$1 AND user_id=$2 RETURNING *", [notificationId, req.user.id]);
+    if (result.rowCount === 0) return res.status(404).json({ error: "Notification not found" });
+    res.json({ notification: result.rows[0] });
+  } catch (error) { res.status(500).json({ error: "Failed to mark notification as read" }); }
 });
 
 // ══════════════════════════════════════════════════════════════════
@@ -1319,10 +1955,12 @@ app.get("/api/warden/dashboard", async (req, res) => {
 // ══════════════════════════════════════════════════════════════════
 
 // GET /api/hostels/:hostel_id/rooms
-app.get("/api/hostels/:hostel_id/rooms", async (req, res) => {
+app.get("/api/hostels/:hostel_id/rooms", requireAuth, requireRole("owner", "warden"), async (req, res) => {
   try {
+    await operationalTablesReady;
     const hostelId = parseInt(req.params.hostel_id, 10);
     if (!isValidInt(hostelId)) return res.status(400).json({ error: "Invalid hostel id" });
+    if (!await staffCanManageHostel(pool, req.user, hostelId)) return res.status(404).json({ error: "Hostel not found" });
     
     const hostelResult = await pool.query("SELECT id FROM hostels WHERE id=$1", [hostelId]);
     if (hostelResult.rows.length === 0) return res.status(404).json({ error: "Hostel not found" });
@@ -1336,8 +1974,9 @@ app.get("/api/hostels/:hostel_id/rooms", async (req, res) => {
 });
 
 // POST /api/rooms
-app.post("/api/rooms", async (req, res) => {
+app.post("/api/rooms", requireAuth, requireRole("owner"), async (req, res) => {
   try {
+    await operationalTablesReady;
     const { hostel_id, room_number, capacity, room_type } = req.body;
     const hostelId = parseInt(hostel_id, 10);
     const capacityInt = parseInt(capacity, 10);
@@ -1346,8 +1985,7 @@ app.post("/api/rooms", async (req, res) => {
     if (!room_number) return res.status(400).json({ error: "room_number is required" });
     if (!isValidInt(capacityInt) || capacityInt <= 0) return res.status(400).json({ error: "capacity must be a positive integer" });
     
-    const hostelResult = await pool.query("SELECT id FROM hostels WHERE id=$1", [hostelId]);
-    if (hostelResult.rows.length === 0) return res.status(404).json({ error: "Hostel not found" });
+    if (!await ownerHasHostel(pool, req.user.id, hostelId)) return res.status(404).json({ error: "Hostel not found" });
     
     const roomResult = await pool.query(
       "INSERT INTO rooms (hostel_id, room_number, capacity, available_capacity, room_type) VALUES ($1,$2,$3,$4,$5) RETURNING *",
@@ -1359,15 +1997,17 @@ app.post("/api/rooms", async (req, res) => {
 });
 
 // PATCH /api/rooms/:id
-app.patch("/api/rooms/:id", async (req, res) => {
+app.patch("/api/rooms/:id", requireAuth, requireRole("owner"), async (req, res) => {
   try {
+    await operationalTablesReady;
     const roomId = parseInt(req.params.id, 10);
     if (!isValidInt(roomId)) return res.status(400).json({ error: "Invalid room id" });
     
     const { room_number, capacity, available_capacity, room_type } = req.body;
     
-    const roomResult = await pool.query("SELECT id FROM rooms WHERE id=$1", [roomId]);
+    const roomResult = await pool.query("SELECT id, hostel_id, capacity, available_capacity FROM rooms WHERE id=$1", [roomId]);
     if (roomResult.rows.length === 0) return res.status(404).json({ error: "Room not found" });
+    if (!await ownerHasHostel(pool, req.user.id, roomResult.rows[0].hostel_id)) return res.status(404).json({ error: "Room not found" });
     
     let updates = [];
     let params = [];
@@ -1381,13 +2021,15 @@ app.patch("/api/rooms/:id", async (req, res) => {
     if (capacity != null) {
       const capacityInt = parseInt(capacity, 10);
       if (!isValidInt(capacityInt)) return res.status(400).json({ error: "capacity must be a positive integer" });
+      if (available_capacity == null && capacityInt < Number(roomResult.rows[0].available_capacity)) return res.status(409).json({ error: "capacity cannot be below occupied beds" });
       updates.push(`capacity=$${paramCount}`);
       params.push(capacityInt);
       paramCount++;
     }
     if (available_capacity != null) {
       const availInt = parseInt(available_capacity, 10);
-      if (availInt < 0) return res.status(400).json({ error: "available_capacity cannot be negative" });
+      const resultingCapacity = capacity == null ? Number(roomResult.rows[0].capacity) : parseInt(capacity, 10);
+      if (availInt < 0 || availInt > resultingCapacity) return res.status(400).json({ error: "available_capacity must be between zero and capacity" });
       updates.push(`available_capacity=$${paramCount}`);
       params.push(availInt);
       paramCount++;
@@ -1409,7 +2051,7 @@ app.patch("/api/rooms/:id", async (req, res) => {
 });
 
 // POST /api/bookings/:id/assign-room (assign a specific room to a booking)
-app.post("/api/bookings/:id/assign-room", async (req, res) => {
+app.post("/api/bookings/:id/assign-room", requireAuth, requireRole("warden"), async (req, res) => {
   const client = await pool.connect();
   try {
     const bookingId = parseInt(req.params.id, 10);
@@ -1430,6 +2072,10 @@ app.post("/api/bookings/:id/assign-room", async (req, res) => {
     }
     
     const booking = bookingResult.rows[0];
+    if (!await wardenHasHostel(client, req.user.id, booking.hostel_id)) {
+      await client.query("ROLLBACK");
+      return res.status(404).json({ error: "Booking not found" });
+    }
     
     const roomResult = await client.query(
       "SELECT id, hostel_id, available_capacity FROM rooms WHERE id=$1 FOR UPDATE",
@@ -1457,16 +2103,16 @@ app.post("/api/bookings/:id/assign-room", async (req, res) => {
     }
     
     const bookingStatus = normalizeBookingStatus(booking.status);
-    if (!isCapacityHoldingStatus(bookingStatus)) {
+    if (bookingStatus !== "confirmed") {
       await client.query("ROLLBACK");
-      return res.status(409).json({ error: "Booking is not pending or confirmed" });
+      return res.status(409).json({ error: "Only confirmed bookings can be assigned a room" });
     }
     
     const oldRoomId = booking.room_id;
     
     if (oldRoomId != null) {
       await client.query(
-        "UPDATE rooms SET available_capacity = available_capacity + 1 WHERE id=$1",
+        "UPDATE rooms SET available_capacity = LEAST(available_capacity + 1, capacity) WHERE id=$1",
         [oldRoomId]
       );
     }
@@ -1480,6 +2126,10 @@ app.post("/api/bookings/:id/assign-room", async (req, res) => {
       "UPDATE bookings SET room_id=$1 WHERE id=$2 RETURNING *",
       [roomId, bookingId]
     );
+    await client.query(
+      "INSERT INTO room_assignment_history (booking_id,previous_room_id,next_room_id,assigned_by_user_id) VALUES ($1,$2,$3,$4)",
+      [bookingId, oldRoomId, roomId, req.user.id]
+    );
     
     await client.query("COMMIT");
     res.json({ message: "Room assigned to booking ✅", booking: updatedBooking.rows[0] });
@@ -1492,7 +2142,7 @@ app.post("/api/bookings/:id/assign-room", async (req, res) => {
 });
 
 // GET /api/bookings/:id/available-rooms
-app.get("/api/bookings/:id/available-rooms", async (req, res) => {
+app.get("/api/bookings/:id/available-rooms", requireAuth, requireRole("warden"), async (req, res) => {
   try {
     const bookingId = parseInt(req.params.id, 10);
     if (!isValidInt(bookingId)) return res.status(400).json({ error: "Invalid booking id" });
@@ -1504,6 +2154,7 @@ app.get("/api/bookings/:id/available-rooms", async (req, res) => {
     if (bookingResult.rows.length === 0) return res.status(404).json({ error: "Booking not found" });
     
     const booking = bookingResult.rows[0];
+    if (!await wardenHasHostel(pool, req.user.id, booking.hostel_id)) return res.status(404).json({ error: "Booking not found" });
     const roomsResult = await pool.query(
       "SELECT id, room_number, capacity, available_capacity, room_type FROM rooms WHERE hostel_id=$1 AND available_capacity > 0 ORDER BY room_number ASC",
       [booking.hostel_id]
@@ -1511,6 +2162,88 @@ app.get("/api/bookings/:id/available-rooms", async (req, res) => {
     
     res.json(roomsResult.rows);
   } catch (err) { res.status(500).json({ error: "Failed to fetch available rooms: " + err.message }); }
+});
+
+app.post("/api/warden/bookings/:id/check-in", requireAuth, requireRole("warden"), async (req, res) => {
+  const client = await pool.connect();
+  try {
+    await operationalTablesReady;
+    const bookingId = Number(req.params.id);
+    if (!isValidInt(bookingId)) return res.status(400).json({ error: "Invalid booking id" });
+    await client.query("BEGIN");
+    const booking = await client.query("SELECT b.* FROM bookings b JOIN warden_assignments wa ON wa.hostel_id=b.hostel_id WHERE b.id=$1 AND wa.warden_user_id=$2 FOR UPDATE", [bookingId, req.user.id]);
+    if (booking.rowCount === 0) { await client.query("ROLLBACK"); return res.status(404).json({ error: "Booking not found" }); }
+    if (normalizeBookingStatus(booking.rows[0].status) !== "confirmed" || booking.rows[0].room_id == null) { await client.query("ROLLBACK"); return res.status(409).json({ error: "A confirmed booking with an assigned room is required" }); }
+    const stay = await client.query("INSERT INTO booking_stays (booking_id,checked_in_at,checked_in_by_user_id) VALUES ($1,NOW(),$2) ON CONFLICT (booking_id) DO UPDATE SET checked_in_at=COALESCE(booking_stays.checked_in_at,EXCLUDED.checked_in_at), checked_in_by_user_id=COALESCE(booking_stays.checked_in_by_user_id,EXCLUDED.checked_in_by_user_id) WHERE booking_stays.checked_out_at IS NULL RETURNING *", [bookingId, req.user.id]);
+    if (stay.rowCount === 0) { await client.query("ROLLBACK"); return res.status(409).json({ error: "Stay has already been checked out" }); }
+    await client.query("COMMIT");
+    res.json({ stay: stay.rows[0] });
+  } catch (error) { await client.query("ROLLBACK"); res.status(500).json({ error: "Failed to check in booking" }); } finally { client.release(); }
+});
+
+app.post("/api/warden/bookings/:id/check-out", requireAuth, requireRole("warden"), async (req, res) => {
+  const client = await pool.connect();
+  try {
+    await operationalTablesReady;
+    const bookingId = Number(req.params.id);
+    if (!isValidInt(bookingId)) return res.status(400).json({ error: "Invalid booking id" });
+    await client.query("BEGIN");
+    const booking = await client.query("SELECT b.* FROM bookings b JOIN warden_assignments wa ON wa.hostel_id=b.hostel_id WHERE b.id=$1 AND wa.warden_user_id=$2 FOR UPDATE", [bookingId, req.user.id]);
+    if (booking.rowCount === 0) { await client.query("ROLLBACK"); return res.status(404).json({ error: "Booking not found" }); }
+    const stay = await client.query("SELECT * FROM booking_stays WHERE booking_id=$1 FOR UPDATE", [bookingId]);
+    if (stay.rowCount === 0 || stay.rows[0].checked_in_at == null || stay.rows[0].checked_out_at != null) { await client.query("ROLLBACK"); return res.status(409).json({ error: "An active checked-in stay is required" }); }
+    if (!await releaseHostelCapacity(client, booking.rows[0].hostel_id)) { await client.query("ROLLBACK"); return res.status(409).json({ error: "Hostel availability is already fully restored" }); }
+    await client.query("UPDATE rooms SET available_capacity=LEAST(available_capacity+1,capacity) WHERE id=$1", [booking.rows[0].room_id]);
+    const updatedStay = await client.query("UPDATE booking_stays SET checked_out_at=NOW(), checked_out_by_user_id=$1 WHERE booking_id=$2 RETURNING *", [req.user.id, bookingId]);
+    await client.query("UPDATE bookings SET status='completed' WHERE id=$1", [bookingId]);
+    await createNotification(client, booking.rows[0].user_id, "booking_status", "Move-out recorded", "Your hostel stay has been checked out.", { booking_id: bookingId, status: "completed" }, "booking_updates");
+    await client.query("COMMIT");
+    res.json({ stay: updatedStay.rows[0] });
+  } catch (error) { await client.query("ROLLBACK"); res.status(500).json({ error: "Failed to check out booking" }); } finally { client.release(); }
+});
+
+app.get("/api/bookings/:id/stay", requireAuth, async (req, res) => {
+  try {
+    await operationalTablesReady;
+    const bookingId = Number(req.params.id);
+    if (!isValidInt(bookingId)) return res.status(400).json({ error: "Invalid booking id" });
+    const result = await pool.query("SELECT bs.* FROM booking_stays bs JOIN bookings b ON b.id=bs.booking_id WHERE bs.booking_id=$1 AND b.user_id=$2", [bookingId, req.user.id]);
+    if (result.rowCount === 0) return res.status(404).json({ error: "Stay not found" });
+    res.json({ stay: result.rows[0] });
+  } catch (error) { res.status(500).json({ error: "Failed to fetch stay" }); }
+});
+
+app.post("/api/payments/intents", requireAuth, requireRole("student"), async (req, res) => {
+  try {
+    await operationalTablesReady;
+    if (!process.env.STRIPE_SECRET_KEY) return res.status(503).json({ error: "Online payments are not configured" });
+    const bookingId = Number(req.body.booking_id);
+    if (!isValidInt(bookingId)) return res.status(400).json({ error: "booking_id is required" });
+    const booking = await pool.query(
+      `SELECT b.id, b.user_id, b.status, h.name, COALESCE(h.single_room_price,h.double_room_price,h.dorm_room_price) AS price
+       FROM bookings b JOIN hostels h ON h.id=b.hostel_id WHERE b.id=$1 AND b.user_id=$2`, [bookingId, req.user.id]
+    );
+    if (booking.rowCount === 0) return res.status(404).json({ error: "Booking not found" });
+    if (normalizeBookingStatus(booking.rows[0].status) !== "confirmed") return res.status(409).json({ error: "Only confirmed bookings can be paid" });
+    const amount = Number(booking.rows[0].price);
+    if (!Number.isFinite(amount) || amount <= 0) return res.status(409).json({ error: "The hostel has no configured online payment amount" });
+    const payload = new URLSearchParams({ amount: String(Math.round(amount * 100)), currency: "pkr", "metadata[booking_id]": String(bookingId) });
+    const stripeResponse = await fetch("https://api.stripe.com/v1/payment_intents", {
+      method: "POST", headers: { Authorization: `Bearer ${process.env.STRIPE_SECRET_KEY}`, "Content-Type": "application/x-www-form-urlencoded" }, body: payload,
+    });
+    const intent = await stripeResponse.json();
+    if (!stripeResponse.ok) return res.status(502).json({ error: "Payment provider rejected the request" });
+    const payment = await pool.query("INSERT INTO payments (booking_id,user_id,provider,provider_payment_id,amount,currency,status) VALUES ($1,$2,'stripe',$3,$4,'PKR','pending') RETURNING *", [bookingId, req.user.id, intent.id, amount]);
+    res.status(201).json({ payment: payment.rows[0], client_secret: intent.client_secret });
+  } catch (error) { res.status(500).json({ error: "Failed to create payment intent" }); }
+});
+
+app.get("/api/payments", requireAuth, requireRole("student"), async (req, res) => {
+  try {
+    await operationalTablesReady;
+    const result = await pool.query("SELECT * FROM payments WHERE user_id=$1 ORDER BY created_at DESC", [req.user.id]);
+    res.json(result.rows);
+  } catch (error) { res.status(500).json({ error: "Failed to fetch payments" }); }
 });
 
 const PORT = process.env.PORT || 5000;

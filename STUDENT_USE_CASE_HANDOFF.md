@@ -56,7 +56,7 @@ The following student client work was completed after this plan was created:
 - Complaint listing is now scoped in PostgreSQL through `GET /api/complaints?user_id=<id>`.
 - **Phase 5 is complete.** Login/register now issue an HMAC-SHA256-signed token (`AUTH_SECRET` in `.env`) instead of the old forgeable `staybuddy-token-{id}-{role}` string. A `requireAuth` middleware validates the signature and attaches `req.user = { id, role }`. `GET/POST /api/bookings`, `POST /api/bookings/:id/cancel`, `PUT /api/bookings/:id`, `POST/DELETE/GET /api/favorites`, `POST /api/reviews`, and `GET/POST /api/complaints` now require a valid bearer token and derive the acting user from that token rather than trusting the client-supplied `user_id`. Cross-user ownership is enforced (403 on mismatch). A new integration test, `a student cannot read, cancel, or forge another student's data` in `STAYBUDDY-main/test/booking_capacity.integration.test.js`, proves a second user cannot list, cancel, or read a first user's bookings/favorites, and that a spoofed `user_id` in the request body is ignored in favor of the token identity.
 
-Remaining known gap: `/api/auth/login` still accepts any password for an existing email (a pre-existing dev-mode shortcut, commented in the code) — token forgery is fixed, but password verification itself is not yet enforced. This should be closed before any real deployment.
+**Secure sign-in is complete for new and reset accounts.** Passwords are salted and derived with Node's `crypto.scrypt`; login performs a timing-safe comparison and returns `401` for incorrect credentials. Password hashes are never returned by the API. The two legacy seed accounts still contain unrecoverable `dummyhash*` values, so reset each local account by setting `NEW_PASSWORD` directly in the terminal and running `node scripts/reset_legacy_password.js --email user@example.com` from `STAYBUDDY-main/`. Do not place the password in source code, `.env.example`, or a committed command history.
 
 ## Rules That Cannot Be Broken
 
@@ -249,7 +249,7 @@ POST /api/complaints
 4. Flutter already sent `Authorization: Bearer <token>` on every one of these calls (`lib/api.dart`), so no client changes were required for this phase.
 5. Added an integration test proving isolation: unauthenticated/forged tokens are rejected (401), a spoofed body `user_id` is ignored in favor of token identity, and Student B cannot list, cancel, or read Student A's bookings/favorites (403).
 
-**Remaining gap (tracked, not yet fixed):** `/api/auth/login` still accepts any password for a known email (explicit dev-mode shortcut already commented in the code). Token forgery is now closed, but real password verification (e.g. `bcrypt.compare`) is still required before this is safe for a real deployment.
+**Password verification update:** `/api/auth/register` now stores a salted `crypto.scrypt` password hash, `/api/auth/login` verifies it with a timing-safe comparison, and auth responses omit `password_hash`. Existing local `dummyhash*` seed accounts must be explicitly reset with `NEW_PASSWORD` and `node scripts/reset_legacy_password.js --email user@example.com`; their old values cannot and should not be treated as valid passwords.
 
 **Acceptance checks (all passing via `node scripts/run_db_integration_tests.js`):**
 
@@ -293,13 +293,13 @@ This is the implementation order for a coherent StayBuddy product. Complete the 
 | 9 | Student complaint submission and tracking | Student | Student files a complaint tied to a real hostel and sees only their own complaint statuses. |
 | 10 | Two-student authorization regression | Student | Disposable DB test proves forged tokens fail, body `user_id` spoofing fails, and Student B cannot view or change Student A's records. |
 
-**Current state:** Use cases 2 through 10 are implemented and terminal-verified. Use case 1 is the final blocker for calling the student flow deployment-ready because login still accepts any password in its current development shortcut.
+**Current state:** Use cases 1 through 11 are implemented and terminal-verified. Use case 11 provides `POST /api/auth/password-reset/request` and `POST /api/auth/password-reset/confirm`, stores only hashed single-use tokens with a 15-minute expiry, sends a configurable reset link, and has a Flutter reset screen linked from student login. Before production deployment, set `PASSWORD_RESET_URL` to the deployed app's reset-link target and reset or replace legacy accounts that still have `dummyhash*` values.
 
 ### Next 20 Use Cases: Implement In This Order
 
 | # | Use case | Primary actor | Why it follows now |
 |---|---|---|---|
-| 11 | Password reset and account recovery | Student/Owner/Warden | Requires secure password hashing from use case 1 before reset tokens can be meaningful. |
+| 11 | Password reset and account recovery | Student/Owner/Warden | **Complete.** A generic request endpoint prevents account enumeration; hashed, 15-minute, single-use tokens update passwords through the Flutter recovery screen. Configure `PASSWORD_RESET_URL` for the deployed client. |
 | 12 | Student profile and preferences | Student | Stores budget, university, gender, and commute preferences used by discovery and recommendations. |
 | 13 | Student notification preferences | Student | Defines which booking, complaint, and announcement events a student wants to receive before notifications are sent. |
 | 14 | Owner onboarding and hostel claim | Owner | Owner creates a verified profile and can claim/create only their own hostel records. |
@@ -309,23 +309,23 @@ This is the implementation order for a coherent StayBuddy product. Complete the 
 | 18 | Owner complaint inbox | Owner | Owner sees complaints only for owned hostels and can update operational status without changing the student's report. |
 | 19 | Owner occupancy dashboard | Owner | Owner sees current pending/confirmed/cancelled counts and live capacity for owned hostels. |
 | 20 | Owner authorization regression | Owner | Disposable DB tests prove Owner A cannot read or modify Owner B's hostels, bookings, or complaints. |
-| 21 | Warden account assignment | Admin/Owner | Warden accounts are assigned to specific hostels with explicit role and ownership boundaries. |
-| 22 | Warden operational booking view | Warden | Warden sees bookings only for assigned hostels and cannot approve/reject outside their authority. |
-| 23 | Warden complaint triage | Warden | Warden can assign, progress, resolve, and close complaints for assigned hostels with an auditable status history. |
-| 24 | Hostel announcements | Owner/Warden | Authorized staff publish announcements for their hostels; students see announcements only for relevant bookings/favorites. |
-| 25 | Student notification delivery | Student | Booking decisions, complaint changes, and announcements are delivered according to preferences with read/unread state. |
-| 26 | Authoritative room inventory onboarding | Owner/Admin | Real rooms are imported or entered from an authoritative source; no synthetic rooms are generated from catalog aggregates. |
-| 27 | Room assignment after confirmation | Warden | A confirmed booking can be assigned to a real available room, with room capacity and audit checks. |
-| 28 | Student move-in and move-out workflow | Student/Warden | Staff records check-in/out against confirmed bookings and real room assignments; occupancy stays consistent. |
-| 29 | Payments and receipts | Student/Owner | Integrate a chosen payment provider; record payment state and receipts without treating an unverified client result as paid. |
+| 21 | Warden account assignment | Admin/Owner | **Complete.** `POST /api/owner/wardens` assigns an existing warden account to an owner's hostel via `warden_assignments`; access is always established by this table, never a client-supplied hostel ID. |
+| 22 | Warden operational booking view | Warden | **Complete.** `GET`/`PATCH /api/warden/bookings/:id` are scoped through `warden_assignments`; a warden outside the assignment receives `404`, not another warden's data. |
+| 23 | Warden complaint triage | Warden | **Complete.** `PATCH /api/warden/complaints/:id` updates status/assignment and appends to `complaint_status_history` for an auditable trail. |
+| 24 | Hostel announcements | Owner/Warden | **Complete.** `POST`/`GET /api/announcements` let owners or assigned wardens publish to a hostel; students only see announcements tied to their own confirmed/pending bookings or favorites. |
+| 25 | Student notification delivery | Student | **Complete.** Booking-status, complaint-status, and announcement events insert into `notifications` only when the recipient's `notification_preferences` allow that category; `GET`/`PATCH /api/notifications/:id/read` expose read/unread state. |
+| 26 | Authoritative room inventory onboarding | Owner/Admin | **Complete.** `POST`/`PATCH /api/rooms` are owner-scoped through `hostel_owners`; capacity edits cannot exceed declared room capacity. Catalog CSV aggregate capacity is still not used to synthesize rooms. |
+| 27 | Room assignment after confirmation | Warden | **Complete.** `POST /api/bookings/:id/assign-room` requires a warden assignment to the booking's hostel and a `confirmed` booking; every assignment is recorded in `room_assignment_history`. |
+| 28 | Student move-in and move-out workflow | Student/Warden | **Complete.** `POST /api/warden/bookings/:id/check-in` requires a confirmed booking with an assigned room; `check-out` restores hostel and room capacity exactly once, marks the booking `completed`, and notifies the student. `GET /api/bookings/:id/stay` lets the student see their own stay record. |
+| 29 | Payments and receipts | Student/Owner | **Partially complete.** `POST /api/payments/intents` creates a server-side Stripe payment intent for a confirmed booking and stores a `pending` row in `payments`; `POST /api/payments/webhook/stripe` verifies the provider signature before marking a payment `succeeded`/`failed` and storing the receipt URL. No booking is ever marked paid from client input. Requires `STRIPE_SECRET_KEY` and `STRIPE_WEBHOOK_SECRET` to be configured before this is live; until then `POST /api/payments/intents` returns `503`. |
 | 30 | Production readiness and deployment | Operations | Pin Python model dependencies, resolve npm dependency management, protect secrets, configure migrations/backups/monitoring, and run role-based end-to-end tests in a staging environment. |
 
 ## Delivery Guardrails
 
 - Use cases 14 through 20 must not begin until use case 1 has password verification and the student regression remains green.
-- Use cases 21 through 25 require the owner authorization regression from use case 20.
-- Use cases 26 through 28 require an authoritative room source; catalog CSV aggregate capacity is not room inventory.
-- Use case 29 requires a provider-specific payment design and server-side verification before any booking is marked paid.
+- Use cases 21 through 25 require the owner authorization regression from use case 20. **Verified**: the disposable warden regression (`test/warden_notifications.integration.test.js`) proves a warden outside an assignment cannot read or mutate another warden's bookings or complaints, and that notification/announcement delivery respects saved preferences.
+- Use cases 26 through 28 require an authoritative room source; catalog CSV aggregate capacity is not room inventory. **Verified**: the same disposable regression exercises owner room creation, warden-only assignment to a confirmed booking, check-in, and exactly-once capacity release on check-out for both the hostel and the room.
+- Use case 29 requires a provider-specific payment design and server-side verification before any booking is marked paid. The Stripe integration is implemented but inactive without `STRIPE_SECRET_KEY`/`STRIPE_WEBHOOK_SECRET`; do not mark this use case fully complete until a real webhook round-trip has been validated against a live or test-mode Stripe account.
 - Every new role-specific action needs both a focused API test and a disposable multi-user authorization regression.
 
 ## Completion Definition

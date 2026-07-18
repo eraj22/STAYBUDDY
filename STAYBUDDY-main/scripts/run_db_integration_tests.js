@@ -101,12 +101,13 @@ async function main() {
   try {
     await resetTestDatabase();
     await restoreSourceDatabase();
-    await run(process.execPath, ["--test", "test/booking_capacity.integration.test.js"], {
+    await run(process.execPath, ["--test", "--test-concurrency=1", "test/booking_capacity.integration.test.js", "test/owner_authorization.integration.test.js", "test/warden_notifications.integration.test.js"], {
       cwd: path.join(__dirname, ".."),
       env: {
         ...process.env,
         DB_NAME: testDatabase,
         RUN_DB_TESTS: "1",
+        TEST_PASSWORD_RESET_TOKENS: "1",
         TEST_API_PORT: process.env.TEST_API_PORT || "5002",
       },
     });
