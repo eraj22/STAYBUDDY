@@ -45,6 +45,12 @@ Announcements are always scoped to the hostel an owner or assigned warden contro
 
 The primary implementation file is `index.js`. Preserve the existing endpoint contracts unless there is an explicit reason to version or migrate them.
 
+## Flutter Contract Status
+
+The Flutter client methods for the role and notification/payment contracts live in `../lib/api.dart`. The first post-roadmap UI slice is now implemented: `../lib/screens/notifications_screen.dart` is an authenticated student inbox for `GET /api/notifications`. It handles loading, refresh, error, and empty states; tapping an unread item calls `PATCH /api/notifications/:id/read` and updates the local row from the server response. The signed-in discovery header in `../lib/screens/hostels_screen.dart` presents the inbox through a notification icon. Focused `flutter analyze lib/screens/notifications_screen.dart` passed clean on 2026-07-18.
+
+The next UI contracts to wire are payment status/checkout (`GET /api/payments`, `POST /api/payments/intents`), the student announcement feed (`GET /api/announcements`), the warden operational queue and move workflow, and owner operational management. Keep all authorization server-derived: UI state and client-supplied hostel IDs must never decide what a role may read or mutate.
+
 ## PostgreSQL Catalog State
 
 ### Current live data
