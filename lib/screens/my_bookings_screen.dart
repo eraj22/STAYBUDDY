@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../api.dart';
 import '../theme.dart';
 import '../widgets/responsive_shell.dart';
+import 'payments_screen.dart';
 
 class MyBookingsScreen extends StatefulWidget {
   const MyBookingsScreen({super.key});
@@ -288,6 +289,18 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
             icon: const Icon(Icons.arrow_back_rounded),
             onPressed: () => Navigator.pop(context),
           ),
+          actions: [
+            IconButton(
+              tooltip: 'Payments',
+              icon: const Icon(Icons.receipt_long_rounded),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const PaymentsScreen()),
+                );
+              },
+            ),
+          ],
           bottom: TabBar(
             controller: _tabs,
             labelColor: Colors.white,
@@ -361,7 +374,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
             Icon(
               Icons.hotel_outlined,
               size: 60,
-              color: AppTheme.textMuted.withOpacity(0.3),
+              color: AppTheme.textMuted.withValues(alpha: 0.3),
             ),
             const SizedBox(height: 14),
             Text(
@@ -407,7 +420,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
         border: Border.all(color: AppTheme.border, width: 0.5),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -569,13 +582,27 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
               padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
               child: Row(
                 children: [
-                  // View Details
+                  // Payment is only available after a booking is confirmed.
                   Expanded(
                     child: OutlinedButton.icon(
-                      onPressed: () {},
-                      icon: const Icon(Icons.info_outline_rounded, size: 15),
+                      onPressed: isConfirmed
+                          ? () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => PaymentsScreen(booking: b),
+                                ),
+                              );
+                            }
+                          : null,
+                      icon: Icon(
+                        isConfirmed
+                            ? Icons.lock_outline_rounded
+                            : Icons.schedule_rounded,
+                        size: 15,
+                      ),
                       label: Text(
-                        'Details',
+                        isConfirmed ? 'Pay' : 'Awaiting approval',
                         style: GoogleFonts.dmSans(
                           fontSize: 13,
                           fontWeight: FontWeight.w600,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'theme.dart';
 import 'routes.dart';
 import 'firebase_options.dart';
@@ -15,14 +16,17 @@ import 'screens/location_access_screen.dart';
 import 'screens/owner_login_screen.dart';
 import 'screens/owner_info_screen.dart';
 import 'screens/ai_recommendation_screen.dart';
-import 'screens/ai_room_search_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  const stripePublishableKey = String.fromEnvironment('STRIPE_PUBLISHABLE_KEY');
+  if (stripePublishableKey.isNotEmpty) {
+    Stripe.publishableKey = stripePublishableKey;
+    await Stripe.instance.applySettings();
+  }
+
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   runApp(const StayBuddyStudentApp());
 }

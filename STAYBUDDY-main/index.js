@@ -2227,7 +2227,7 @@ app.post("/api/payments/intents", requireAuth, requireRole("student"), async (re
     if (normalizeBookingStatus(booking.rows[0].status) !== "confirmed") return res.status(409).json({ error: "Only confirmed bookings can be paid" });
     const amount = Number(booking.rows[0].price);
     if (!Number.isFinite(amount) || amount <= 0) return res.status(409).json({ error: "The hostel has no configured online payment amount" });
-    const payload = new URLSearchParams({ amount: String(Math.round(amount * 100)), currency: "pkr", "metadata[booking_id]": String(bookingId) });
+    const payload = new URLSearchParams({ amount: String(Math.round(amount * 100)), currency: "pkr", "metadata[booking_id]": String(bookingId), "automatic_payment_methods[enabled]": "true" });
     const stripeApiBase = process.env.STRIPE_API_BASE || "https://api.stripe.com";
     const stripeResponse = await fetch(`${stripeApiBase}/v1/payment_intents`, {
       method: "POST", headers: { Authorization: `Bearer ${process.env.STRIPE_SECRET_KEY}`, "Content-Type": "application/x-www-form-urlencoded" }, body: payload,
