@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "620915948190",
+    "project_id": "staybuddy-c936b",
+    "storage_bucket": "staybuddy-c936b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:620915948190:android:da141401e5978f9a38598f",
+        "android_client_info": {
+          "package_name": "com.example.staybuddy_student"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBXPjRUA56bfydZIFekocVnPWCHfCjmnEU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
