@@ -1,0 +1,106 @@
+{
+  "model": "Logistic Regression + TF-IDF (word+char ngrams)",
+  "accuracy": 0.9955,
+  "categories": [
+    "Billing/Payment Dispute",
+    "Cleanliness",
+    "Food Quality",
+    "Maintenance",
+    "Noise/Disturbance",
+    "Other",
+    "Roommate Issue",
+    "Safety/Security",
+    "Staff Behavior"
+  ],
+  "suggestions": {
+    "Billing/Payment Dispute": [
+      "Review charges with account; provide receipt."
+    ],
+    "Cleanliness": [
+      "Schedule housekeeping to clean the area immediately."
+    ],
+    "Food Quality": [
+      "Inspect kitchen and food storage; check hygiene."
+    ],
+    "Maintenance": [
+      "Assign technician to fix the issue within 24 hours."
+    ],
+    "Noise/Disturbance": [
+      "Warn the noisy party and enforce quiet hours."
+    ],
+    "Other": [
+  "Review student request and respond within 48 hours.",
+  "Discuss with student to understand the full issue.",
+  "For room change requests — check availability and process within 3 days.",
+  "For curfew concerns — discuss with hostel management.",
+  "Escalate to owner if cannot resolve at warden level."
+  ],
+    "Roommate Issue": [
+      "Mediate between roommates; offer room change if needed."
+    ],
+    "Safety/Security": [
+      "Investigate immediately; if serious call police."
+    ],
+    "Staff Behavior": [
+      "Counsel the staff member; involve owner if repeated."
+    ]
+  },
+  "subcategories": {
+    "Billing/Payment Dispute": [
+      "Deposit Refund",
+      "Unexpected Fee",
+      "Overcharging"
+    ],
+    "Cleanliness": [
+      "Room Cleaning",
+      "Pest Control",
+      "Common Area",
+      "Bathroom"
+    ],
+    "Food Quality": [
+      "Portion Size",
+      "Hygiene",
+      "Spoilage/Poisoning",
+      "Taste"
+    ],
+    "Maintenance": [
+      "Other Maintenance",
+      "AC",
+      "Plumbing",
+      "Furniture",
+      "Door/Window"
+    ],
+    "Noise/Disturbance": [
+      "External Noise",
+      "Roommate Noise",
+      "Night Noise"
+    ],
+    "Other": [
+      "Suggestion",
+      "General",
+      "Room Change",
+      "Curfew"
+    ],
+    "Roommate Issue": [
+      "Personal Space",
+      "Cleanliness",
+      "Guests",
+      "Noise"
+    ],
+    "Safety/Security": [
+      "Security Guard",
+      "Theft",
+      "CCTV Issue",
+      "Unauthorized Entry"
+    ],
+    "Staff Behavior": [
+      "Security",
+      "Warden",
+      "Cleaner",
+      "Cook"
+    ]
+  },
+  "n_train": 888,
+  "n_test": 222,
+  "augmented_total": 1110
+}
