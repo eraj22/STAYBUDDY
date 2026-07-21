@@ -1,0 +1,136 @@
+StayBuddy Backend / AI Sticker Checklist
+Scope: backend + AI only. Frontend excluded.
+
+Legend
+- [x] Implemented
+- [~] Partial
+- [ ] Pending
+
+[x] Core backend modules already implemented
+- [x] Node API: owner OTP flow, auth, hostel/user/review/complaint/interaction endpoints, hybrid recommendations, basic chat, warden dashboard.
+- [x] AI recommendation service: FastAPI /recommend service with hybrid scoring.
+- [x] Complaint AI service: FastAPI categorization, pattern detection, batch analysis.
+- [x] Room matcher service: roommate and room matching endpoints.
+- [x] Database schema: hostels, bookings, complaints, interactions tables are defined.
+
+[x] Student use cases
+
+[x] UC-1 Search Hostels Using GPS Location
+- GET /api/hostels/search/nearby accepts latitude, longitude, and optional radius_km.
+- Returns nearby hostels with calculated distance_km, ordered nearest first.
+
+[x] UC-2 Search Hostels by University Name
+- GET /api/hostels/search/by-university provides case-insensitive university filtering.
+- Hostels support optional university, latitude, and longitude data.
+
+[~] UC-3 Apply Basic Price Filter
+- AI recommendation service accepts budget_max.
+- Missing a general hostel search filter endpoint for price-only browsing.
+
+[~] UC-4 Apply Advanced Filters (Amenities, Location, Preferences)
+- AI recommendation service supports budget, distance, study, food, room type, comfort, noise, curfew, transport, and must-have amenities.
+- GET /api/hostels/search/filter provides city, university, available-capacity, and text filters.
+- Amenity-specific browsing filters remain pending.
+
+[x] UC-5 AI-Powered Smart Recommendations
+- Supported by /api/recommendations in Node and /recommend in the Python AI service.
+- Hybrid content + collaborative scoring is already wired.
+
+[ ] UC-6 Voice Search for Hostels
+- No backend voice-to-text, intent parsing, or speech search API.
+
+[x] UC-7 View Hostel on Map & Explore Nearby
+- Nearby search responses include coordinates and calculated distance for map clients.
+
+[x] UC-8 Save Hostels to Favorites/Wishlist
+- Favorites table and add, remove, and list endpoints are available.
+
+[x] UC-9 View Complete Hostel Details
+- /api/hostels/:id returns hostel details with reviews.
+
+[x] UC-10 Compare Multiple Hostels Side-by-Side
+- GET /api/hostels/compare?ids=1,2 returns selected hostels in request order.
+- Response includes location, capacity, availability, and aggregate review data.
+
+[x] UC-11 Book Hostel & Select Room
+- Rooms have hostel-scoped capacity, type, and room number data.
+- Booking room assignment, availability lookup, cancellation, and reactivation keep room capacity synchronized.
+
+[x] UC-12 File Complaint/Issue
+- Complaint creation now calls the AI categorizer service at port 8001.
+- AI category, priority, and suggestion are returned in the response.
+- Warden endpoints added: PATCH /api/complaints/:id to update status, assign, and resolve.
+- End-to-end complaint workflow from student filing to warden resolution is now functional.
+
+[~] UC-13 Interact with AI Chatbot for Support
+- /api/chat exists.
+- Current backend reply is basic and not a full hostel-aware support bot.
+
+[ ] UC-14 Send Emergency Alert
+- No emergency alert endpoint, escalation workflow, or notification integration.
+
+[x] Parent use cases
+
+[~] P-1 View Child's Hostel Data
+- Existing booking/hostel/user data can support parts of this.
+- Missing parent-child linkage, permissions, and a dedicated parent data API.
+
+[ ] P-2 Receive Child's IN/OUT Attendance Notifications
+- No attendance model or notification pipeline.
+
+[ ] P-3 Use Voice Commands for Quick Actions
+- No voice-command backend support.
+
+[~] P-4 Communicate with Hostel Admin/Warden
+- Complaint and chat routes exist, but no dedicated parent-to-warden/admin communication workflow.
+
+[~] P-5 Chat with AI Bot (FAQs)
+- /api/chat can answer basic hostel questions.
+- Needs richer FAQ grounding and parent-specific context.
+
+[ ] P-6 Receive Fee Reminders
+- No fee reminder job, payment schedule model, or notification service.
+
+[ ] P-7 Track Child's Location (Real-time)
+- No live location tracking backend.
+
+[ ] P-8 View Transport Details
+- No transport data or transport API.
+
+[ ] P-9 View Hostel Announcements
+- No announcement/notice model or endpoint.
+
+[ ] P-10 Chat with Child
+- No parent-child messaging backend.
+
+[ ] P-11 Receive Emergency Alerts
+- No parent emergency alert routing.
+
+[x] System administrator use cases
+
+[~] A-1 Manage Hostel Registration & Verification
+- Owner signup, OTP verification, and owner login exist.
+- Missing full admin review, compliance verification, document approval/rejection, and inspection workflow.
+
+[x] Warden use cases
+
+[~] W-1 View & Manage Complaints
+- Complaint creation uses AI categorization when category or severity is omitted.
+- Wardens can update status, assignment, and resolved time.
+- SLA tracking, notifications, and analytics remain pending.
+
+[ ] W-2 View All Students' Attendance
+- No attendance ingestion, reporting, or monitoring backend.
+
+[x] Priority backend work order
+- [x] 1. Add room assignment and stronger booking business rules.
+- [x] 2. Integrate complaint CRUD with AI categorization and warden workflow.
+- [x] 3. Add location-based discovery (GPS, university, map nearby).
+- [x] 4. Add wishlist/favorites, compare, and hostel discovery/filter APIs.
+- [ ] 5. Add parent linkage, fee reminders, and emergency notification flows.
+- [ ] 6. Upgrade admin verification into a full approval/compliance pipeline.
+- [ ] 7. Add attendance tracking APIs and reporting.
+
+[x] Notes
+- [x] The backend is already strongest in recommendation, hostel detail retrieval, complaint CRUD, and basic chat.
+- [x] The biggest gaps are booking lifecycle, parent workflows, location-based discovery, and operational admin/warden automation.
