@@ -1,0 +1,1256 @@
+<!-- templates/index.html - COMPLETE WITH DETAILED BREAKDOWNS -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Room Matching System | StayBuddy</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .main-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            margin-bottom: 30px;
+        }
+        
+        .student-selector {
+            background: #f7f9fc;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+        
+        select, input, button {
+            padding: 12px 20px;
+            font-size: 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            margin: 5px;
+            transition: all 0.3s;
+        }
+        
+        select {
+            min-width: 300px;
+        }
+        
+        select:focus, input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+            flex-wrap: wrap;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 16px;
+            font-weight: bold;
+            color: #666;
+            transition: all 0.3s;
+        }
+        
+        .tab:hover {
+            color: #667eea;
+        }
+        
+        .tab.active {
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .result-card {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 20px;
+            transition: all 0.3s;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .result-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        
+        .score {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+            text-align: center;
+            margin: 10px 0;
+        }
+        
+        .progress-bar {
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            height: 30px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .match-breakdown {
+            background: #f7f9fc;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .match-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .match-item:last-child {
+            border-bottom: none;
+        }
+        
+        .match-label {
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .match-status {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .match-status.yes {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .match-status.no {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .match-status.partial {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin: 5px;
+        }
+        
+        .badge-success {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .badge-info {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+        
+        .badge-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .badge-professional {
+            background: #cce5ff;
+            color: #004085;
+        }
+        
+        .filter-section {
+            background: #f7f9fc;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            font-size: 1.2em;
+            color: #667eea;
+        }
+        
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+        
+        .student-info {
+            background: linear-gradient(135deg, #667eea20 0%, #764ba220 100%);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .student-info h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏠 AI Room Matching System</h1>
+            <p>Find your perfect roommate and room based on AI-powered compatibility matching</p>
+        </div>
+        
+        <div class="main-card">
+            <div class="student-selector">
+                <label style="font-weight: bold;">📚 Select Your Profile:</label>
+                <select id="studentSelect" onchange="loadStudentData()">
+                    <option value="">-- Loading students... --</option>
+                </select>
+                <button onclick="loadStudentData()">🔄 Load My Profile</button>
+                <button onclick="refreshStudentList()">📋 Refresh List</button>
+            </div>
+            
+            <!-- Selected Student Info -->
+            <div id="studentInfo" style="display: none;" class="student-info">
+                <h4>📋 Your Profile</h4>
+                <div id="studentInfoContent" class="info-grid"></div>
+            </div>
+            
+            <div class="tabs">
+    <button class="tab active" onclick="switchTab('roommates')">👥 Find Roommates</button>
+    <button class="tab" onclick="switchTab('rooms')">🏠 Find Rooms</button>
+    <button class="tab" onclick="switchTab('compatibility')">💑 Check Compatibility</button>
+    <button class="tab" onclick="switchTab('culture')">🌍 Cultural Matches</button>
+    <button class="tab" onclick="switchTab('department')">📚 Department Matches</button>
+    <button class="tab" onclick="switchTab('hometown')">🏠 Same Hometown</button>
+    <button class="tab" onclick="switchTab('filters')">🔍 Filter Rooms</button>
+</div>
+
+<!-- Roommates Tab -->
+<div id="roommatesTab" class="tab-content active">
+    <h3>👥 Top Potential Roommates</h3>
+    <p>AI-suggested roommates based on comprehensive compatibility analysis</p>
+    <div id="roommatesResults"></div>
+</div>
+
+<!-- Rooms Tab -->
+<div id="roomsTab" class="tab-content">
+    <h3>🏠 Available Room Recommendations</h3>
+    <p>Best rooms based on compatibility with existing occupants</p>
+    <div id="roomsResults"></div>
+</div>
+
+<!-- Compatibility Tab -->
+<div id="compatibilityTab" class="tab-content">
+    <h3>💑 Check Pair Compatibility</h3>
+    <p>Enter two student IDs to see detailed match analysis</p>
+    <div style="margin: 20px 0;">
+        <input type="text" id="compStudentA" placeholder="Student A ID (e.g., STU-001)">
+        <input type="text" id="compStudentB" placeholder="Student B ID (e.g., STU-002)">
+        <button onclick="checkCompatibility()">🔍 Analyze Match</button>
+    </div>
+    <div id="compatibilityResults"></div>
+</div>
+
+<!-- Cultural Matches Tab -->
+<div id="cultureTab" class="tab-content">
+    <h3>🌍 Same Cultural Background</h3>
+    <p>Find roommates from the same ethnicity and cultural background</p>
+    <button onclick="findByCulture()" style="margin: 10px 0;">🔍 Find Cultural Matches</button>
+    <div id="cultureResults"></div>
+</div>
+
+<!-- Department Matches Tab -->
+<div id="departmentTab" class="tab-content">
+    <h3>📚 Same Department/Field</h3>
+    <p>Find roommates from the same academic or professional field</p>
+    <button onclick="findByDepartment()" style="margin: 10px 0;">🔍 Find Department Matches</button>
+    <div id="departmentResults"></div>
+</div>
+
+<!-- Hometown Tab -->
+<div id="hometownTab" class="tab-content">
+    <h3>🏠 Same Hometown/City Matches</h3>
+    <p>Find roommates who come from the same city as you</p>
+    <button onclick="findByHometown()" style="margin: 10px 0;">🔍 Find Hometown Matches</button>
+    <div id="hometownResults"></div>
+</div>
+
+<!-- Filters Tab -->
+<div id="filtersTab" class="tab-content">
+    <h3>🔍 Filter Rooms by Preferences</h3>
+    <div class="filter-section">
+        <h4>Filter Rooms By:</h4>
+        <input type="text" id="filterUniversity" placeholder="University name">
+        <input type="text" id="filterRoomType" placeholder="Room type (Single/Double/Dormitory)">
+        <input type="text" id="filterGender" placeholder="Gender (Boys/Girls)">
+        <select id="filterResidentType">
+            <option value="">All residents</option>
+            <option value="students">Students only</option>
+            <option value="professionals">Professionals only</option>
+            <option value="mixed">Mixed (Students &amp; Professionals)</option>
+        </select>
+        <button onclick="applyFilters()">🔍 Apply Filters</button>
+        <button onclick="clearFilters()">🗑️ Clear Filters</button>
+    </div>
+    <div id="filterResults"></div>
+</div>
+        
+        <div class="main-card">
+            <h3>📊 System Statistics</h3>
+            <div class="results-grid" id="stats">
+                <div class="result-card">
+                    <h4>📚 Total Residents</h4>
+                    <div class="score" id="totalStudents">Loading...</div>
+                </div>
+                <div class="result-card">
+                    <h4>👔 Professionals</h4>
+                    <div class="score" id="totalProfessionals">Loading...</div>
+                </div>
+                <div class="result-card">
+                    <h4>🎓 Students</h4>
+                    <div class="score" id="totalStudentsOnly">Loading...</div>
+                </div>
+                <div class="result-card">
+                    <h4>🏠 Available Rooms</h4>
+                    <div class="score" id="totalRooms">Loading...</div>
+                </div>
+                <div class="result-card">
+                    <h4>🌍 Cultures</h4>
+                    <div class="score" id="totalCultures">Loading...</div>
+                </div>
+                <div class="result-card">
+                    <h4>📚 Departments</h4>
+                    <div class="score" id="totalDepts">Loading...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let currentStudent = null;
+        let currentStudentProfile = null;
+        let apiBase = '/api';
+        
+        // Load student list
+        // In the loadStudentList function
+async function loadStudentList() {
+    try {
+        const response = await fetch(`${apiBase}/all_students`);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const students = await response.json();
+        
+        const select = document.getElementById('studentSelect');
+        select.innerHTML = '<option value="">-- Choose a resident --</option>';
+        
+        students.forEach(student => {
+            const option = document.createElement('option');
+            option.value = student.id;
+            // Show JOB- prefix for professionals, STU- for students
+            let icon = '';
+            let displayId = student.id;
+            
+            if (student.id.startsWith('JOB-')) {
+                icon = '👔 ';
+                displayId = student.id;
+            } else if (student.id.startsWith('STU-')) {
+                icon = '🎓 ';
+                displayId = student.id;
+            } else {
+                icon = (student.is_professional && student.id.startsWith('JOB-')) ? '👔 ' : '🎓 ';
+            }
+            
+            option.textContent = `${icon}${displayId} - ${student.department} - ${student.ethnicity || 'N/A'}`;
+            select.appendChild(option);
+        });
+        
+        console.log(`Loaded ${students.length} residents`);
+        console.log(`Students: ${students.filter(s => !s.is_professional).length}`);
+        console.log(`Professionals: ${students.filter(s => s.is_professional).length}`);
+        return students;
+    } catch (error) {
+        console.error('Error loading students:', error);
+        document.getElementById('studentSelect').innerHTML = '<option value="">Error loading residents</option>';
+        return [];
+    }
+}
+        
+        // Load statistics
+        async function loadStats() {
+            try {
+                const response = await fetch(`${apiBase}/stats`);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                const stats = await response.json();
+                
+                document.getElementById('totalStudents').textContent = stats.total_students || 'N/A';
+                document.getElementById('totalProfessionals').textContent = stats.professional_count || 'N/A';
+                document.getElementById('totalStudentsOnly').textContent = stats.student_count || 'N/A';
+                document.getElementById('totalRooms').textContent = stats.available_rooms || 'N/A';
+                document.getElementById('totalCultures').textContent = stats.total_ethnicities || 'N/A';
+                document.getElementById('totalDepts').textContent = stats.total_departments || 'N/A';
+            } catch (error) {
+                console.error('Error loading stats:', error);
+            }
+        }
+        
+        // Refresh student list
+        async function refreshStudentList() {
+            await loadStudentList();
+            await loadStats();
+        }
+        
+        async function loadStudentData() {
+            const studentId = document.getElementById('studentSelect').value;
+            if (!studentId) {
+                alert('Please select a student');
+                return;
+            }
+            
+            currentStudent = studentId;
+            console.log(`Loading data for student: ${currentStudent}`);
+            
+            // Load student profile
+            try {
+                const response = await fetch(`${apiBase}/student/${studentId}`);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                currentStudentProfile = await response.json();
+                displayStudentInfo(currentStudentProfile);
+            } catch (error) {
+                console.error('Error loading student profile:', error);
+            }
+            
+            // Show loading states
+            document.getElementById('roommatesResults').innerHTML = '<div class="loading">🔍 Finding best roommates...</div>';
+            document.getElementById('roomsResults').innerHTML = '<div class="loading">🏠 Finding best rooms...</div>';
+            
+            // Load data
+            await findRoommates();
+            await findRooms();
+        }
+        
+        function displayStudentInfo(profile) {
+    const infoDiv = document.getElementById('studentInfo');
+    const contentDiv = document.getElementById('studentInfoContent');
+    
+    // Check if professional by ID or job_title
+    const isProfessional = currentStudent.startsWith('JOB-') || profile.job_title;
+    
+    // Clean up values that might be NaN
+    const cleanValue = (val, defaultVal = 'N/A') => {
+        if (val === undefined || val === null || val === 'nan' || val === 'NaN') return defaultVal;
+        return val;
+    };
+    
+    contentDiv.innerHTML = `
+        <div><strong>ID:</strong> ${currentStudent}</div>
+        <div><strong>Type:</strong> ${(isProfessional && currentStudent.startsWith('JOB-')) ? '👔 Working Professional' : '🎓 Student'}</div>
+        ${isProfessional ? `<div><strong>Job:</strong> ${cleanValue(profile.job_title, 'Professional')}</div>` : ''}
+        <div><strong>Department:</strong> ${cleanValue(profile.department)}</div>
+        <div><strong>Degree:</strong> ${cleanValue(profile.degree)}</div>
+        <div><strong>University:</strong> ${cleanValue(profile.university)}</div>
+        <div><strong>Ethnicity:</strong> ${cleanValue(profile.ethnicity)}</div>
+        <div><strong>Hometown:</strong> ${cleanValue(profile.home_city)}</div>
+        <div><strong>Personality:</strong> ${cleanValue(profile.personality)}</div>
+        <div><strong>Sleep Schedule:</strong> ${cleanValue(profile.sleep_schedule)}</div>
+        <div><strong>Cleanliness:</strong> ${cleanValue(profile.cleanliness_level)}/5</div>
+        <div><strong>Study Habit:</strong> ${cleanValue(profile.study_habits * 100, 'N/A')}%</div>
+    `;
+    infoDiv.style.display = 'block';
+}
+        
+
+        function switchTab(tabName) {
+    // Update tab buttons
+    document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+    event.target.classList.add('active');
+    
+    // Update content
+    document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+    document.getElementById(`${tabName}Tab`).classList.add('active');
+    
+    // Load data for specific tabs if needed
+    if (tabName === 'culture' && currentStudent) {
+        findByCulture();
+    } else if (tabName === 'department' && currentStudent) {
+        findByDepartment();
+    } else if (tabName === 'hometown' && currentStudent) {
+        findByHometown();
+    }
+}
+
+        async function findRoommates() {
+            if (!currentStudent) return;
+            
+            try {
+                const response = await fetch(`${apiBase}/find_roommates`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({student_id: currentStudent, top_k: 5})
+                });
+                
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                
+                const data = await response.json();
+                console.log('Roommates data:', data);
+                
+                if (data.success && data.roommates && data.roommates.length > 0) {
+                    displayRoommatesWithBreakdown(data.roommates);
+                } else {
+                    document.getElementById('roommatesResults').innerHTML = '<div class="error">No roommates found</div>';
+                }
+            } catch (error) {
+                console.error('Error finding roommates:', error);
+                document.getElementById('roommatesResults').innerHTML = `<div class="error">Error: ${error.message}</div>`;
+            }
+        }
+        
+        function displayRoommatesWithBreakdown(roommates) {
+            const resultsDiv = document.getElementById('roommatesResults');
+            resultsDiv.innerHTML = '<div class="results-grid"></div>';
+            const grid = resultsDiv.querySelector('.results-grid');
+            
+            roommates.forEach(rm => {
+                const scorePercent = (rm.similarity_score * 100).toFixed(0);
+                const matchDetails = rm.match_details || {};
+                
+                // Determine match level
+                let matchLevel = '';
+                let matchColor = '';
+                if (rm.similarity_score >= 0.8) {
+                    matchLevel = 'Excellent Match!';
+                    matchColor = '#d4edda';
+                } else if (rm.similarity_score >= 0.6) {
+                    matchLevel = 'Good Match';
+                    matchColor = '#d1ecf1';
+                } else {
+                    matchLevel = 'Potential Match';
+                    matchColor = '#fff3cd';
+                }
+                
+                const card = document.createElement('div');
+                card.className = 'result-card';
+                card.innerHTML = `
+                    <h4>${rm.student_id} ${rm.is_professional ? '👔' : '🎓'}</h4>
+                    <div class="score">${scorePercent}% Match</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${scorePercent}%">
+                            ${scorePercent}%
+                        </div>
+                    </div>
+                    <div class="match-breakdown">
+                        <h4>📊 Match Breakdown:</h4>
+                        <div class="match-item">
+                            <span class="match-label">🏫 Same University:</span>
+                            <span class="match-status ${matchDetails.university ? 'yes' : 'no'}">${matchDetails.university ? '✓ Yes' : '✗ No'}</span>
+                        </div>
+                        <div class="match-item">
+                            <span class="match-label">📚 Same Department:</span>
+                            <span class="match-status ${matchDetails.department ? 'yes' : 'no'}">${matchDetails.department ? '✓ Yes' : '✗ No'}</span>
+                        </div>
+                        <div class="match-item">
+                            <span class="match-label">🌍 Same Ethnicity:</span>
+                            <span class="match-status ${matchDetails.ethnicity ? 'yes' : 'no'}">${matchDetails.ethnicity ? '✓ Yes' : '✗ No'}</span>
+                        </div>
+                        <div class="match-item">
+                            <span class="match-label">🏠 Same Hometown:</span>
+                            <span class="match-status ${matchDetails.home_city ? 'yes' : 'no'}">${matchDetails.home_city ? '✓ Yes' : '✗ No'}</span>
+                        </div>
+                        <div class="match-item">
+                            <span class="match-label">💭 Similar Personality:</span>
+                            <span class="match-status ${matchDetails.personality ? 'yes' : 'partial'}">${matchDetails.personality ? '✓ Yes' : '🔄 Different'}</span>
+                        </div>
+                        <div class="match-item">
+                            <span class="match-label">😴 Same Sleep Schedule:</span>
+                            <span class="match-status ${matchDetails.sleep_schedule ? 'yes' : 'no'}">${matchDetails.sleep_schedule ? '✓ Yes' : '✗ No'}</span>
+                        </div>
+                        <div class="match-item">
+                            <span class="match-label">🍽️ Same Food Preference:</span>
+                            <span class="match-status ${matchDetails.food_preference ? 'yes' : 'partial'}">${matchDetails.food_preference ? '✓ Yes' : '🔄 Different'}</span>
+                        </div>
+                        <div class="match-item">
+                            <span class="match-label">📖 Similar Study Habits:</span>
+                            <span class="match-status ${matchDetails.study_similar ? 'yes' : 'partial'}">${matchDetails.study_similar ? '✓ Yes' : '🔄 Different'}</span>
+                        </div>
+                        <div class="match-item">
+                            <span class="match-label">🧹 Similar Cleanliness:</span>
+                            <span class="match-status ${matchDetails.cleanliness_similar ? 'yes' : 'partial'}">${matchDetails.cleanliness_similar ? '✓ Yes' : '🔄 Different'}</span>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="badge ${rm.similarity_score >= 0.7 ? 'badge-success' : 'badge-info'}">
+                            ${matchLevel}
+                        </span>
+                        ${(rm.is_professional && rm.student_id.startsWith('JOB-')) ? '<span class="badge badge-professional">Working Professional</span>' : ''}
+                    </div>
+                    <p style="margin-top: 10px;"><strong>Department:</strong> ${rm.department || 'N/A'}</p>
+                    <p><strong>Personality:</strong> ${rm.personality || 'N/A'}</p>
+                `;
+                grid.appendChild(card);
+            });
+        }
+        
+        async function findRooms() {
+            if (!currentStudent) return;
+            
+            try {
+                const response = await fetch(`${apiBase}/find_rooms`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({student_id: currentStudent})
+                });
+                
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                
+                const data = await response.json();
+                console.log('Rooms data:', data);
+                
+                if (data.success && data.rooms && data.rooms.length > 0) {
+                    displayRooms(data.rooms);
+                } else {
+                    document.getElementById('roomsResults').innerHTML = '<div class="error">No rooms available</div>';
+                }
+            } catch (error) {
+                console.error('Error finding rooms:', error);
+                document.getElementById('roomsResults').innerHTML = `<div class="error">Error: ${error.message}</div>`;
+            }
+        }
+        
+        function displayRooms(rooms) {
+            const resultsDiv = document.getElementById('roomsResults');
+            resultsDiv.innerHTML = '<div class="results-grid"></div>';
+            const grid = resultsDiv.querySelector('.results-grid');
+            
+            rooms.forEach(room => {
+                const scorePercent = (room.compatibility_score * 100).toFixed(0);
+                const card = document.createElement('div');
+                card.className = 'result-card';
+                card.innerHTML = `
+                    <h4>${room.room_id} (${room.room_type})</h4>
+                    <div class="score">${scorePercent}% Match</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${scorePercent}%">
+                            ${scorePercent}%
+                        </div>
+                    </div>
+                    <p><strong>Building:</strong> ${room.building || 'N/A'} | <strong>Floor:</strong> ${room.floor || 'N/A'}</p>
+                    <p><strong>Capacity:</strong> ${room.capacity} beds | <strong>Vacancies:</strong> ${room.vacancies}</p>
+                    <p><strong>Current Occupants:</strong> ${room.current_occupants.length}</p>
+                    <p><strong>Resident Type:</strong> ${room.resident_type === 'professionals' ? '👔 Professionals' : room.resident_type === 'mixed' ? '🎓👔 Students & Professionals' : '🎓 Students'}</p>
+                    <div class="match-breakdown">
+                        <h4>📊 Roommate Compatibility:</h4>
+                        ${room.reasons.map(reason => `<div class="match-item"><span>✓</span> <span>${reason}</span></div>`).join('')}
+                    </div>
+                    ${room.roommate_details && room.roommate_details.length > 0 ? `
+                        <details>
+                            <summary>👥 Current Roommates</summary>
+                            ${room.roommate_details.map(rm => `
+                                <p><strong>${rm.id}</strong> - ${rm.department || 'N/A'} (${rm.personality || 'N/A'})<br>
+                                Compatibility: ${(rm.similarity * 100).toFixed(0)}%</p>
+                            `).join('')}
+                        </details>
+                    ` : '<p>✨ Empty room - perfect for you!</p>'}
+                `;
+                grid.appendChild(card);
+            });
+        }
+        
+        async function checkCompatibility() {
+            const studentA = document.getElementById('compStudentA').value.toUpperCase();
+            const studentB = document.getElementById('compStudentB').value.toUpperCase();
+            
+            if (!studentA || !studentB) {
+                alert('Please enter both student IDs');
+                return;
+            }
+            
+            const resultsDiv = document.getElementById('compatibilityResults');
+            resultsDiv.innerHTML = '<div class="loading">🔍 Analyzing compatibility...</div>';
+            
+            try {
+                const response = await fetch(`${apiBase}/check_compatibility`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({student_a: studentA, student_b: studentB})
+                });
+                
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                
+                const data = await response.json();
+                console.log('Compatibility data:', data);
+                
+                if (data.overall_score !== undefined) {
+                    displayCompatibilityBreakdown(data);
+                } else if (data.error) {
+                    resultsDiv.innerHTML = `<div class="error">${data.error}</div>`;
+                } else {
+                    resultsDiv.innerHTML = '<div class="error">Compatibility check failed</div>';
+                }
+            } catch (error) {
+                console.error('Error checking compatibility:', error);
+                resultsDiv.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+            }
+        }
+        
+        function displayCompatibilityBreakdown(match) {
+            const resultsDiv = document.getElementById('compatibilityResults');
+            const scorePercent = (match.overall_score * 100).toFixed(0);
+            
+            let matchLevel = '';
+            if (match.overall_score >= 0.8) matchLevel = 'Excellent Match! 🌟';
+            else if (match.overall_score >= 0.6) matchLevel = 'Good Match 👍';
+            else if (match.overall_score >= 0.4) matchLevel = 'Fair Match 🤝';
+            else matchLevel = 'Low Match ⚠️';
+            
+            resultsDiv.innerHTML = `
+                <div class="result-card">
+                    <h3>${match.student_a} ↔ ${match.student_b}</h3>
+                    <div class="score">${scorePercent}% Match</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${scorePercent}%">
+                            ${scorePercent}%
+                        </div>
+                    </div>
+                    <p><strong>📝 Summary:</strong> ${match.reasons || 'Standard compatibility'}</p>
+                    <p><strong>🏆 Match Level:</strong> ${matchLevel}</p>
+                    <div class="match-breakdown">
+                        <h4>📊 Detailed Breakdown - What Matched and What Didn't:</h4>
+                        
+                        <div class="match-item">
+                            <span class="match-label">🏫 Same University:</span>
+                            <span class="match-status ${match.breakdown?.same_university ? 'yes' : 'no'}">
+                                ${match.breakdown?.same_university ? '✓ MATCHED' : '✗ NOT MATCHED'}
+                            </span>
+                        </div>
+                        
+                        <div class="match-item">
+                            <span class="match-label">📚 Same Department:</span>
+                            <span class="match-status ${match.breakdown?.same_department ? 'yes' : 'no'}">
+                                ${match.breakdown?.same_department ? '✓ MATCHED' : '✗ NOT MATCHED'}
+                            </span>
+                        </div>
+                        
+                        <div class="match-item">
+                            <span class="match-label">🎓 Degree Level:</span>
+                            <span class="match-status ${match.breakdown?.degree_compatibility > 0.8 ? 'yes' : match.breakdown?.degree_compatibility > 0.5 ? 'partial' : 'no'}">
+                                ${match.breakdown?.degree_compatibility > 0.8 ? '✓ MATCHED' : match.breakdown?.degree_compatibility > 0.5 ? '🔄 PARTIAL' : '✗ NOT MATCHED'}
+                                (${(match.breakdown?.degree_compatibility * 100).toFixed(0)}%)
+                            </span>
+                        </div>
+                        
+                        <div class="match-item">
+                            <span class="match-label">🌍 Same Ethnicity:</span>
+                            <span class="match-status ${match.breakdown?.same_ethnicity ? 'yes' : 'no'}">
+                                ${match.breakdown?.same_ethnicity ? '✓ MATCHED' : '✗ NOT MATCHED'}
+                            </span>
+                        </div>
+                        
+                        <div class="match-item">
+                            <span class="match-label">🏠 Same Hometown:</span>
+                            <span class="match-status ${match.breakdown?.same_hometown ? 'yes' : 'no'}">
+                                ${match.breakdown?.same_hometown ? '✓ MATCHED' : '✗ NOT MATCHED'}
+                            </span>
+                        </div>
+                        
+                        <div class="match-item">
+                            <span class="match-label">💭 Same Personality:</span>
+                            <span class="match-status ${match.breakdown?.personality === 1 ? 'yes' : 'partial'}">
+                                ${match.breakdown?.personality === 1 ? '✓ MATCHED' : '🔄 DIFFERENT'}
+                            </span>
+                        </div>
+                        
+                        <div class="match-item">
+                            <span class="match-label">📖 Study Habits:</span>
+                            <span class="match-status ${match.breakdown?.study_habits > 0.8 ? 'yes' : match.breakdown?.study_habits > 0.6 ? 'partial' : 'no'}">
+                                ${match.breakdown?.study_habits > 0.8 ? '✓ MATCHED' : match.breakdown?.study_habits > 0.6 ? '🔄 SIMILAR' : '✗ DIFFERENT'}
+                                (${(match.breakdown?.study_habits * 100).toFixed(0)}%)
+                            </span>
+                        </div>
+                        
+                        <div class="match-item">
+                            <span class="match-label">🧹 Cleanliness:</span>
+                            <span class="match-status ${match.breakdown?.cleanliness > 0.8 ? 'yes' : match.breakdown?.cleanliness > 0.6 ? 'partial' : 'no'}">
+                                ${match.breakdown?.cleanliness > 0.8 ? '✓ MATCHED' : match.breakdown?.cleanliness > 0.6 ? '🔄 SIMILAR' : '✗ DIFFERENT'}
+                                (${(match.breakdown?.cleanliness * 100).toFixed(0)}%)
+                            </span>
+                        </div>
+                        
+                        <div class="match-item">
+                            <span class="match-label">😴 Sleep Schedule:</span>
+                            <span class="match-status ${match.breakdown?.sleep_schedule ? 'yes' : 'no'}">
+                                ${match.breakdown?.sleep_schedule ? '✓ MATCHED' : '✗ NOT MATCHED'}
+                            </span>
+                        </div>
+                        
+                        <div class="match-item">
+                            <span class="match-label">🍽️ Food Preference:</span>
+                            <span class="match-status ${match.breakdown?.food === 1 ? 'yes' : 'partial'}">
+                                ${match.breakdown?.food === 1 ? '✓ MATCHED' : '🔄 DIFFERENT'}
+                            </span>
+                        </div>
+                        
+                        <div class="match-item">
+                            <span class="match-label">🔊 Noise Tolerance:</span>
+                            <span class="match-status ${match.breakdown?.noise > 0.8 ? 'yes' : match.breakdown?.noise > 0.6 ? 'partial' : 'no'}">
+                                ${match.breakdown?.noise > 0.8 ? '✓ MATCHED' : match.breakdown?.noise > 0.6 ? '🔄 SIMILAR' : '✗ DIFFERENT'}
+                                (${(match.breakdown?.noise * 100).toFixed(0)}%)
+                            </span>
+                        </div>
+                        
+                        <div class="match-item">
+                            <span class="match-label">👥 Social Preference:</span>
+                            <span class="match-status ${match.breakdown?.social > 0.8 ? 'yes' : match.breakdown?.social > 0.6 ? 'partial' : 'no'}">
+                                ${match.breakdown?.social > 0.8 ? '✓ MATCHED' : match.breakdown?.social > 0.6 ? '🔄 SIMILAR' : '✗ DIFFERENT'}
+                                (${(match.breakdown?.social * 100).toFixed(0)}%)
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ==================== CULTURAL MATCHES DISPLAY ====================
+async function findByCulture() {
+    if (!currentStudent) {
+        alert('Please select a student first');
+        return;
+    }
+    
+    const resultsDiv = document.getElementById('cultureResults');
+    resultsDiv.innerHTML = '<div class="loading">🔍 Finding cultural matches...</div>';
+    
+    try {
+        const response = await fetch(`${apiBase}/find_by_culture`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({student_id: currentStudent})
+        });
+        
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        
+        const data = await response.json();
+        console.log('Culture matches:', data);
+        
+        if (data.success && data.matches && data.matches.length > 0) {
+            displayCultureMatches(data.matches, data.ethnicity);
+        } else {
+            resultsDiv.innerHTML = `<div class="error">No cultural matches found for ${data.ethnicity || 'your ethnicity'}</div>`;
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        resultsDiv.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+    }
+}
+
+function displayCultureMatches(matches, ethnicity) {
+    const resultsDiv = document.getElementById('cultureResults');
+    resultsDiv.innerHTML = `
+        <div class="results-grid">
+            <div class="result-card" style="background: linear-gradient(135deg, #667eea20 0%, #764ba220 100%);">
+                <h4>🌍 Cultural Matches - ${ethnicity}</h4>
+                <p>Found ${matches.length} people from the same cultural background</p>
+            </div>
+            ${matches.map(m => `
+                <div class="result-card">
+                    <h4>${m.student_id} ${(m.is_professional && m.student_id && m.student_id.startsWith('JOB-')) ? '👔' : '🎓'}</h4>
+                    <div class="score">${(m.similarity_score * 100).toFixed(0)}% Match</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${(m.similarity_score * 100).toFixed(0)}%">
+                            ${(m.similarity_score * 100).toFixed(0)}%
+                        </div>
+                    </div>
+                    <p><strong>🌍 Culture:</strong> ${m.ethnicity}</p>
+                    <p><strong>📚 Department:</strong> ${m.department}</p>
+                    <p><strong>🏠 Hometown:</strong> ${m.home_city}</p>
+                    <p><strong>💭 Personality:</strong> ${m.personality}</p>
+                    <p><strong>😴 Sleep Schedule:</strong> ${m.sleep_schedule}</p>
+                    <p><strong>🧹 Cleanliness:</strong> ${m.cleanliness}</p>
+                    <p><strong>🍽️ Food Preference:</strong> ${m.food_preference}</p>
+                    <p><strong>🌍 Ethnicity:</strong> ${m.ethnicity || 'N/A'}</p>
+                    <p><strong>🎓 University:</strong> ${m.university}</p>
+                    ${(m.is_professional && m.student_id.startsWith('JOB-')) ? `<p><strong>💼 Job:</strong> ${m.job_title}</p>` : ''}
+                </div>
+            `).join('')}
+        </div>
+    `;
+}
+
+// ==================== DEPARTMENT MATCHES DISPLAY ====================
+async function findByDepartment() {
+    if (!currentStudent) {
+        alert('Please select a student first');
+        return;
+    }
+    
+    const resultsDiv = document.getElementById('departmentResults');
+    resultsDiv.innerHTML = '<div class="loading">🔍 Finding department matches...</div>';
+    
+    try {
+        const response = await fetch(`${apiBase}/find_by_department`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({student_id: currentStudent})
+        });
+        
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        
+        const data = await response.json();
+        console.log('Department matches:', data);
+        
+        if (data.success && data.matches && data.matches.length > 0) {
+            displayDepartmentMatches(data.matches, data.department);
+        } else {
+            resultsDiv.innerHTML = `<div class="error">No department matches found for ${data.department || 'your department'}</div>`;
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        resultsDiv.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+    }
+}
+
+function displayDepartmentMatches(matches, department) {
+    const resultsDiv = document.getElementById('departmentResults');
+    resultsDiv.innerHTML = `
+        <div class="results-grid">
+            <div class="result-card" style="background: linear-gradient(135deg, #667eea20 0%, #764ba220 100%);">
+                <h4>📚 Department Matches - ${department}</h4>
+                <p>Found ${matches.length} people from the same department</p>
+            </div>
+            ${matches.map(m => `
+                <div class="result-card">
+                    <h4>${m.student_id} ${(m.is_professional && m.student_id && m.student_id.startsWith('JOB-')) ? '👔' : '🎓'}</h4>
+                    <div class="score">${(m.similarity_score * 100).toFixed(0)}% Match</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${(m.similarity_score * 100).toFixed(0)}%">
+                            ${(m.similarity_score * 100).toFixed(0)}%
+                        </div>
+                    </div>
+                    <p><strong>📚 Department:</strong> ${m.department}</p>
+                    <p><strong>🎓 Degree:</strong> ${m.degree}</p>
+                    <p><strong>🌍 Ethnicity:</strong> ${m.ethnicity}</p>
+                    <p><strong>🏠 Hometown:</strong> ${m.home_city}</p>
+                    <p><strong>💭 Personality:</strong> ${m.personality}</p>
+                    <p><strong>😴 Sleep Schedule:</strong> ${m.sleep_schedule}</p>
+                    <p><strong>🌍 Ethnicity:</strong> ${m.ethnicity || 'N/A'}</p>
+                    <p><strong>🏫 University:</strong> ${m.university}</p>
+                    ${(m.is_professional && m.student_id.startsWith('JOB-')) ? `<p><strong>💼 Job:</strong> ${m.job_title}</p>` : ''}
+                </div>
+            `).join('')}
+        </div>
+    `;
+}
+
+// ==================== HOMETOWN MATCHES DISPLAY ====================
+async function findByHometown() {
+    if (!currentStudent) {
+        alert('Please select a student first');
+        return;
+    }
+    
+    const resultsDiv = document.getElementById('hometownResults');
+    resultsDiv.innerHTML = '<div class="loading">🔍 Finding hometown matches...</div>';
+    
+    try {
+        const response = await fetch(`${apiBase}/find_by_hometown`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({student_id: currentStudent})
+        });
+        
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        
+        const data = await response.json();
+        console.log('Hometown matches:', data);
+        
+        if (data.success && data.matches && data.matches.length > 0) {
+            displayHometownMatches(data.matches, data.hometown);
+        } else {
+            resultsDiv.innerHTML = `<div class="error">No hometown matches found for ${data.hometown || 'your hometown'}</div>`;
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        resultsDiv.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+    }
+}
+
+function displayHometownMatches(matches, hometown) {
+    const resultsDiv = document.getElementById('hometownResults');
+    resultsDiv.innerHTML = `
+        <div class="results-grid">
+            <div class="result-card" style="background: linear-gradient(135deg, #667eea20 0%, #764ba220 100%);">
+                <h4>🏠 Hometown Matches - ${hometown}</h4>
+                <p>Found ${matches.length} people from the same city</p>
+            </div>
+            ${matches.map(m => `
+                <div class="result-card">
+                    <h4>${m.student_id} ${(m.is_professional && m.student_id && m.student_id.startsWith('JOB-')) ? '👔' : '🎓'}</h4>
+                    <div class="score">${(m.similarity_score * 100).toFixed(0)}% Match</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${(m.similarity_score * 100).toFixed(0)}%">
+                            ${(m.similarity_score * 100).toFixed(0)}%
+                        </div>
+                    </div>
+                    <p><strong>🏠 Hometown:</strong> ${m.home_city}</p>
+                    <p><strong>🌍 Ethnicity:</strong> ${m.ethnicity}</p>
+                    <p><strong>📚 Department:</strong> ${m.department}</p>
+                    <p><strong>💭 Personality:</strong> ${m.personality}</p>
+                    <p><strong>😴 Sleep Schedule:</strong> ${m.sleep_schedule}</p>
+                    <p><strong>🏫 University:</strong> ${m.university}</p>
+                    ${m.is_professional ? `<p><strong>💼 Professional</strong></p>` : '<p><strong>🎓 Student</strong></p>'}
+                </div>
+            `).join('')}
+        </div>
+    `;
+}
+        
+        function displaySimpleMatches(matches, type, category) {
+            const resultsDiv = document.getElementById(`${type}Results`);
+            resultsDiv.innerHTML = `
+                <div class="results-grid">
+                    <div class="result-card">
+                        <h4>Found ${matches.length} matches from same ${type === 'culture' ? 'cultural background' : 'department'}</h4>
+                        <p><strong>Category:</strong> ${category}</p>
+                    </div>
+                    ${matches.map(m => `
+                        <div class="result-card">
+                            <h4>${m.student_id}</h4>
+                            <div class="score">${(m.similarity_score * 100).toFixed(0)}% Match</div>
+                            <p><strong>Department:</strong> ${m.department || 'N/A'}</p>
+                            <p><strong>Hometown:</strong> ${m.home_city || 'N/A'}</p>
+                            <p><strong>Personality:</strong> ${m.personality || 'N/A'}</p>
+                            ${m.is_professional ? '<span class="badge badge-professional">Professional</span>' : ''}
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+        
+async function applyFilters() {
+    if (!currentStudent) {
+        alert('Please select a student first');
+        return;
+    }
+    
+    const preferences = {};
+    const university = document.getElementById('filterUniversity').value;
+    const roomType = document.getElementById('filterRoomType').value;
+    const gender = document.getElementById('filterGender').value;
+    const residentType = document.getElementById('filterResidentType') ? document.getElementById('filterResidentType').value : '';
+    
+    if (university) preferences.university = university;
+    if (roomType) preferences.room_type = roomType;
+    if (gender) preferences.gender = gender;
+    if (residentType) preferences.resident_type = residentType;
+    
+    console.log('Applying filters:', preferences);
+    
+    const resultsDiv = document.getElementById('filterResults');
+    resultsDiv.innerHTML = '<div class="loading">🔍 Applying filters...</div>';
+    
+    try {
+        const response = await fetch(`${apiBase}/filter_rooms`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                student_id: currentStudent, 
+                preferences: preferences
+            })
+        });
+        
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`HTTP ${response.status}: ${errorText}`);
+        }
+        
+        const data = await response.json();
+        console.log('Filter results:', data);
+        
+        if (data.success && data.rooms && data.rooms.length > 0) {
+            displayFilteredRooms(data.rooms, preferences);
+        } else {
+            resultsDiv.innerHTML = '<div class="error">No rooms match your filters. Try different criteria.</div>';
+        }
+    } catch (error) {
+        console.error('Error applying filters:', error);
+        resultsDiv.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+    }
+}
+
+function clearFilters() {
+    document.getElementById('filterUniversity').value = '';
+    document.getElementById('filterRoomType').value = '';
+    document.getElementById('filterGender').value = '';
+    if (document.getElementById('filterResidentType')) {
+        document.getElementById('filterResidentType').value = '';
+    }
+    document.getElementById('filterResults').innerHTML = '';
+}
+
+function displayFilteredRooms(rooms, preferences) {
+    const resultsDiv = document.getElementById('filterResults');
+    
+    let filterSummary = '';
+    if (preferences.university) filterSummary += `🏫 University: ${preferences.university} | `;
+    if (preferences.room_type) filterSummary += `🛏️ Room Type: ${preferences.room_type} | `;
+    if (preferences.gender) filterSummary += `👥 Gender: ${preferences.gender} | `;
+    if (preferences.resident_type) filterSummary += `👔 Type: ${preferences.resident_type} | `;
+    
+    resultsDiv.innerHTML = `
+        <div class="results-grid">
+            <div class="result-card" style="background: linear-gradient(135deg, #667eea20 0%, #764ba220 100%);">
+                <h4>🔍 Filter Results</h4>
+                <p>${filterSummary || 'No filters applied'}</p>
+                <p>Found ${rooms.length} matching rooms</p>
+            </div>
+            ${rooms.map(room => `
+                <div class="result-card">
+                    <h4>${room.room_id} (${room.room_type})</h4>
+                    <div class="score">${(room.compatibility_score * 100).toFixed(0)}% Match</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${(room.compatibility_score * 100).toFixed(0)}%">
+                            ${(room.compatibility_score * 100).toFixed(0)}%
+                        </div>
+                    </div>
+                    <p><strong>📍 Building:</strong> ${room.building || 'N/A'} | <strong>Floor:</strong> ${room.floor || 'N/A'}</p>
+                    <p><strong>🛏️ Capacity:</strong> ${room.capacity} beds | <strong>👥 Vacancies:</strong> ${room.vacancies}</p>
+                    <p><strong>🏠 Resident Type:</strong> ${room.resident_type}</p>
+                    <p><strong>👤 Gender:</strong> ${room.gender}</p>
+                    <div class="match-breakdown">
+                        <h4>📊 Why this room?</h4>
+                        ${room.reasons.map(reason => `<div class="match-item"><span>✓</span> <span>${reason}</span></div>`).join('')}
+                    </div>
+                    ${room.roommate_details && room.roommate_details.length > 0 ? `
+                        <details>
+                            <summary>👥 Current Residents (${room.roommate_details.length})</summary>
+                            ${room.roommate_details.map(rm => `
+                                <p><strong>${rm.id}</strong> ${rm.is_professional ? '👔' : '🎓'}<br>
+                                📚 ${rm.department}<br>
+                                💭 ${rm.personality}<br>
+                                🤝 Compatibility: ${(rm.similarity * 100).toFixed(0)}%</p>
+                                <hr>
+                            `).join('')}
+                        </details>
+                    ` : '<p>✨ Empty room - be the first!</p>'}
+                </div>
+            `).join('')}
+        </div>
+    `;
+}
+        
+        // Initialize on page load
+        async function init() {
+            await loadStudentList();
+            await loadStats();
+        }
+        
+        init();
+    </script>
+</body>
+</html>

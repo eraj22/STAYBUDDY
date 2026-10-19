@@ -1,0 +1,24 @@
+# Flutter-generated files
+.dart_tool/
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+
+# Platform-local files
+android/local.properties
+ios/Flutter/Generated.xcconfig
+ios/Flutter/flutter_export_environment.sh
+linux/flutter/ephemeral/
+macos/Flutter/ephemeral/
+windows/flutter/ephemeral/
+
+# Dependencies and secrets
+**/node_modules/
+STAYBUDDY-main/.env
+*.log
+# Python-generated files
+**/__pycache__/
+*.py[cod]
+
+# Retrainable legacy intent-classifier weight (268 MB; current chatbot uses Groq/Ollama)
+STAYBUDDY-main/ml-notebooks/intent_model/model.safetensors

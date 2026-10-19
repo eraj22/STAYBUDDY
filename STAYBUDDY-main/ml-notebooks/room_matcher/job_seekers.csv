@@ -1,0 +1,151 @@
+user_id,gender,age,occupation,workplace_name,workplace_lat,workplace_lon,budget_min,budget_max,price_sensitivity,max_distance_km,needs_transport,preferred_room_type,food_preference,work_env_preference,social_preference,comfort_preference,noise_tolerance,curfew_flexibility,must_have_amenities,priority_wifi,priority_parking,priority_laundry,priority_power_backup,priority_ac,priority_hot_water,priority_security,priority_prayer_room
+JOB-001,Male,22,Data Analyst,I-8 Markaz,33.664571,73.064784,16935,20359,0.61,1.2,0,Single,Both,0.72,0.44,0.73,0.38,0.59,"Common Room, Hot Water, WiFi, Parking, Generator, Security Guard",1,1,0,0,0,1,1,0
+JOB-002,Female,27,Civil Engineer,F-10 Markaz,33.698484,72.962847,13635,24302,0.76,6.1,1,Single,Non-Veg,0.36,0.28,0.68,0.45,0.55,"Transport Nearby, Power Backup, WiFi, Laundry",1,0,1,1,0,0,0,0
+JOB-003,Female,45,Graphic Designer,F-10 Markaz,33.703082,72.968555,13977,21306,0.46,2.5,1,Double,Both,0.75,0.47,0.4,0.39,0.41,"Hot Water, Prayer Room, Security Guard, Laundry, AC, Generator",0,0,1,0,1,1,1,1
+JOB-004,Male,28,Teacher,Centaurus Mall Area,33.713419,73.048059,17292,33650,0.7,2.5,1,Single,Both,0.62,0.26,0.45,0.32,0.48,"Common Room, Generator, AC, Laundry, Parking, Hot Water",0,1,1,0,1,1,0,0
+JOB-005,Female,25,Teacher,F-10 Markaz,33.699445,72.96386,14916,18997,0.47,5.2,1,Single,Non-Veg,0.98,0.62,0.31,0.39,0.78,"Prayer Room, AC, Power Backup, Hot Water, Generator",0,0,0,1,1,1,0,1
+JOB-006,Male,30,Data Analyst,F-11 Markaz,33.709691,72.960123,9743,32232,0.41,5.5,1,Double,Veg,0.56,0.2,0.87,0.47,0.94,"CCTV, WiFi, Power Backup, AC, Hot Water",1,0,0,1,1,1,0,0
+JOB-007,Male,23,Real Estate Agent,F-10 Markaz,33.69837,72.969076,9133,28588,0.74,1.9,1,Shared,Veg,0.49,0.62,0.55,0.18,0.68,"Transport Nearby, Hot Water, Generator, AC",0,0,0,0,1,1,0,0
+JOB-008,Female,40,Sales Representative,F-10 Markaz,33.700966,72.962324,8344,29621,0.59,5.1,1,Single,Both,0.74,0.24,0.84,0.44,0.35,"Hot Water, Prayer Room, CCTV, Laundry",0,0,1,0,0,1,0,1
+JOB-009,Male,35,Real Estate Agent,Bahria Town Phase 4,33.530563,72.926554,14669,22908,0.27,5.6,1,Single,Non-Veg,0.63,0.54,0.7,0.49,0.37,"Transport Nearby, AC, Power Backup, Laundry, Security Guard, Common Room",0,0,1,1,1,0,1,0
+JOB-010,Female,26,HR Manager,G-11 Markaz,33.670402,72.986092,9235,25755,0.77,7.0,1,Single,Both,1.0,0.6,0.88,0.47,0.89,"Generator, CCTV, Prayer Room, Laundry",0,0,1,0,0,0,0,1
+JOB-011,Female,40,HR Manager,Stock Exchange (ISE),33.702034,73.050247,15454,26801,0.5,7.7,1,Shared,Both,0.76,0.39,0.41,0.19,0.34,"Transport Nearby, AC, WiFi",1,0,0,0,1,0,0,0
+JOB-012,Male,32,Electrician,F-11 Markaz,33.700019,72.967372,9312,17401,0.25,1.5,0,Single,Both,0.47,0.46,0.67,0.27,0.71,"Hot Water, Laundry, AC, Prayer Room, Transport Nearby",0,0,1,0,1,1,0,1
+JOB-013,Female,26,Business Development,Islamabad Industrial Area (I-9),33.661059,73.05503,9188,11493,0.52,8.0,1,Shared,Veg,0.68,0.4,0.38,0.24,0.35,"AC, Hot Water, Parking, CCTV",0,1,0,0,1,1,0,0
+JOB-014,Female,33,Electrician,Blue Area,33.718186,73.061074,9697,16097,0.39,7.2,1,Double,Veg,0.49,0.46,0.73,0.18,0.74,"Security Guard, CCTV, Hot Water, WiFi, Power Backup",1,0,0,1,0,1,1,0
+JOB-015,Female,37,Teacher,Blue Area,33.712837,73.054293,12291,19585,0.72,4.9,1,Single,Veg,0.38,0.67,0.71,0.16,0.33,"Common Room, Security Guard, Parking, Generator, Transport Nearby",0,1,0,0,0,0,1,0
+JOB-016,Male,29,Teacher,Centaurus Mall Area,33.710361,73.050992,9684,23273,0.75,7.2,1,Single,Both,0.82,0.66,0.44,0.17,0.86,"Generator, WiFi, Parking, AC",1,1,0,0,1,0,0,0
+JOB-017,Female,36,Graphic Designer,G-11 Markaz,33.665547,72.98332,14267,17535,0.8,2.6,1,Single,Veg,0.46,0.5,0.54,0.21,0.35,"AC, Prayer Room, Security Guard, Generator, Transport Nearby",0,0,0,0,1,0,1,1
+JOB-018,Male,25,Data Analyst,G-8 Markaz,33.679289,73.049237,8626,14178,0.62,3.4,1,Double,Non-Veg,0.72,0.41,0.53,0.33,0.48,"WiFi, Security Guard, Prayer Room, Laundry, AC, Common Room",1,0,1,0,1,0,1,1
+JOB-019,Male,43,Civil Engineer,Bahria Town Phase 4,33.528023,72.927568,12920,31537,0.42,3.9,1,Single,Non-Veg,0.69,0.22,0.7,0.25,0.82,"Common Room, Transport Nearby, Hot Water, Generator",0,0,0,0,0,1,0,0
+JOB-020,Male,29,Doctor,Stock Exchange (ISE),33.714572,73.053707,13279,30515,0.51,5.7,1,Single,Both,0.42,0.15,0.61,0.35,0.53,"Prayer Room, Hot Water, Laundry, Common Room",0,0,1,0,0,1,0,1
+JOB-021,Male,22,Graphic Designer,Islamabad Industrial Area (I-9),33.66578,73.055296,15461,31041,0.82,5.0,1,Double,Non-Veg,0.65,0.25,0.69,0.1,0.83,"Generator, Laundry, Parking",0,1,1,0,0,0,0,0
+JOB-022,Female,23,Graphic Designer,F-10 Markaz,33.704303,72.974123,16702,34887,0.59,3.2,1,Double,Non-Veg,0.73,0.53,0.6,0.43,0.68,"Transport Nearby, CCTV, Prayer Room, Hot Water",0,0,0,0,0,1,0,1
+JOB-023,Male,37,Data Analyst,F-11 Markaz,33.705254,72.955828,15206,19744,0.7,2.6,1,Single,Both,0.36,0.19,0.53,0.16,0.45,"Generator, AC, Security Guard, CCTV, Transport Nearby, WiFi",1,0,0,0,1,0,1,0
+JOB-024,Male,37,Journalist,Bahria Town Phase 4,33.538137,72.914313,17432,25664,0.53,7.6,1,Single,Non-Veg,0.9,0.67,0.55,0.4,0.68,"CCTV, Laundry, Hot Water, Generator",0,0,1,0,0,1,0,0
+JOB-025,Female,22,Civil Engineer,Stock Exchange (ISE),33.713587,73.057448,10091,32481,0.57,7.3,1,Single,Both,0.32,0.49,0.38,0.28,0.34,"AC, Laundry, CCTV, Transport Nearby, Security Guard, Generator",0,0,1,0,1,0,1,0
+JOB-026,Female,28,NGO Worker,G-11 Markaz,33.676359,72.979625,16837,19690,0.9,3.4,1,Double,Both,0.33,0.12,0.45,0.44,0.73,"Parking, CCTV, Power Backup, Laundry",0,1,1,1,0,0,0,0
+JOB-027,Female,34,Architect,G-8 Markaz,33.679694,73.04892,9876,17242,0.88,1.8,0,Shared,Both,0.77,0.67,0.54,0.39,0.35,"Power Backup, Hot Water, Common Room, Transport Nearby",0,0,0,1,0,1,0,0
+JOB-028,Male,29,NGO Worker,Centaurus Mall Area,33.708103,73.057361,8207,23971,0.78,1.7,1,Double,Non-Veg,0.8,0.36,0.74,0.49,0.49,"CCTV, Generator, Common Room, Hot Water, AC, Prayer Room",0,0,0,0,1,1,0,1
+JOB-029,Male,37,Banker,G-11 Markaz,33.677106,72.976002,15613,30031,0.44,4.5,1,Single,Non-Veg,0.45,0.58,0.5,0.45,0.79,"Security Guard, WiFi, Transport Nearby, Laundry, Power Backup",1,0,1,1,0,0,1,0
+JOB-030,Male,35,Chef,F-11 Markaz,33.709631,72.96305,16041,32726,0.76,1.7,0,Single,Veg,0.51,0.45,0.58,0.31,0.6,"AC, CCTV, Hot Water, Common Room, Security Guard",0,0,0,0,1,1,1,0
+JOB-031,Male,26,Doctor,Centaurus Mall Area,33.708913,73.055574,11033,19309,0.35,4.4,1,Double,Both,0.72,0.69,0.8,0.22,0.55,"WiFi, Security Guard, Parking, Hot Water, Transport Nearby",1,1,0,0,0,1,1,0
+JOB-032,Male,32,Accountant,Islamabad Industrial Area (I-9),33.657641,73.043196,12658,30039,0.54,3.4,1,Shared,Non-Veg,0.96,0.39,0.79,0.26,0.35,"Parking, Transport Nearby, Common Room",0,1,0,0,0,0,0,0
+JOB-033,Female,24,Graphic Designer,F-10 Markaz,33.705929,72.967959,17766,32721,0.63,6.4,1,Single,Non-Veg,0.51,0.45,0.56,0.33,0.34,"Laundry, Prayer Room, Transport Nearby",0,0,1,0,0,0,0,1
+JOB-034,Female,34,HR Manager,I-8 Markaz,33.663781,73.054201,8043,23429,0.52,5.2,1,Single,Veg,0.5,0.27,0.82,0.13,0.46,"Prayer Room, Common Room, Laundry, Generator, Power Backup",0,0,1,1,0,0,0,1
+JOB-035,Male,33,Data Analyst,G-8 Markaz,33.671143,73.036155,13039,34537,0.72,5.0,1,Single,Veg,0.63,0.28,0.54,0.21,0.68,"Power Backup, Common Room, WiFi, Generator, AC, Hot Water",1,0,0,1,1,1,0,0
+JOB-036,Female,22,Graphic Designer,Bahria Town Phase 4,33.532394,72.914332,12415,33297,0.23,6.3,1,Single,Both,0.61,0.27,0.9,0.27,0.87,"CCTV, AC, Generator",0,0,0,0,1,0,0,0
+JOB-037,Female,29,Marketing Executive,G-8 Markaz,33.675277,73.044599,12722,27844,0.77,4.9,1,Single,Non-Veg,0.48,0.17,0.76,0.45,0.88,"Prayer Room, Security Guard, CCTV",0,0,0,0,0,0,1,1
+JOB-038,Female,23,Electrician,Centaurus Mall Area,33.716962,73.054976,15242,18933,0.34,4.8,1,Shared,Non-Veg,0.92,0.39,0.32,0.35,0.86,"Hot Water, Security Guard, WiFi, Prayer Room",1,0,0,0,0,1,1,1
+JOB-039,Female,25,Marketing Executive,Islamabad Industrial Area (I-9),33.671153,73.053363,10522,28852,0.85,3.0,1,Single,Non-Veg,0.99,0.25,0.63,0.25,0.95,"Power Backup, Hot Water, Generator, AC",0,0,0,1,1,1,0,0
+JOB-040,Female,36,Business Development,G-11 Markaz,33.6764,72.981379,16022,22891,0.51,4.4,1,Single,Both,0.56,0.66,0.82,0.49,0.47,"Laundry, Generator, WiFi, AC, CCTV, Security Guard",1,0,1,0,1,0,1,0
+JOB-041,Female,30,Accountant,Islamabad Industrial Area (I-9),33.671437,73.04502,17669,25108,0.81,7.1,1,Single,Both,0.94,0.11,0.39,0.45,0.98,"CCTV, Hot Water, AC",0,0,0,0,1,1,0,0
+JOB-042,Female,33,Civil Engineer,F-11 Markaz,33.70358,72.957067,15994,19170,0.63,2.6,1,Shared,Both,0.36,0.69,0.76,0.38,0.37,"Transport Nearby, Hot Water, WiFi, Common Room",1,0,0,0,0,1,0,0
+JOB-043,Female,36,Business Development,Centaurus Mall Area,33.712997,73.049329,16702,25453,0.6,6.5,1,Single,Veg,0.73,0.33,0.71,0.3,0.71,"CCTV, Prayer Room, Hot Water, Transport Nearby",0,0,0,0,0,1,0,1
+JOB-044,Female,34,Sales Representative,G-11 Markaz,33.673842,72.974628,15237,28560,0.89,3.1,1,Shared,Both,0.48,0.61,0.42,0.25,0.64,"Generator, Common Room, AC, Hot Water",0,0,0,0,1,1,0,0
+JOB-045,Female,22,Journalist,G-11 Markaz,33.66313,72.985941,8803,30673,0.72,6.8,1,Shared,Veg,0.72,0.31,0.68,0.35,0.77,"Prayer Room, Power Backup, WiFi, Hot Water",1,0,0,1,0,1,0,1
+JOB-046,Female,23,Architect,G-8 Markaz,33.671442,73.038222,14807,22562,0.34,6.5,1,Double,Non-Veg,0.67,0.65,0.8,0.2,0.88,"Hot Water, AC, Power Backup, CCTV, Common Room, Security Guard",0,0,0,1,1,1,1,0
+JOB-047,Male,38,Journalist,F-11 Markaz,33.703352,72.964651,8228,18893,0.58,4.2,1,Double,Both,0.48,0.33,0.68,0.25,0.77,"WiFi, Common Room, Security Guard, AC, Laundry, Prayer Room",1,0,1,0,1,0,1,1
+JOB-048,Male,33,Sales Representative,G-11 Markaz,33.673388,72.973967,8742,11961,0.41,4.4,1,Single,Both,0.39,0.37,0.7,0.4,0.96,"Common Room, Parking, Generator, Power Backup, CCTV, Hot Water",0,1,0,1,0,1,0,0
+JOB-049,Female,42,Data Analyst,Blue Area,33.718544,73.055676,15285,25021,0.8,1.7,1,Single,Both,0.55,0.34,0.41,0.15,0.89,"Power Backup, Prayer Room, Laundry, WiFi, Security Guard, Generator",1,0,1,1,0,0,1,1
+JOB-050,Female,28,Accountant,Bahria Town Phase 4,33.526283,72.927277,17080,22474,0.61,6.7,1,Single,Veg,0.85,0.46,0.47,0.49,0.99,"Parking, Power Backup, WiFi, Transport Nearby, Common Room",1,1,0,1,0,0,0,0
+JOB-051,Female,36,Graphic Designer,Bahria Town Phase 4,33.52818,72.916788,8858,15011,0.72,4.7,1,Double,Non-Veg,0.61,0.32,0.66,0.28,0.46,"Transport Nearby, Prayer Room, Security Guard",0,0,0,0,0,0,1,1
+JOB-052,Female,31,Software Engineer,Blue Area,33.723477,73.065757,14984,20521,0.54,7.4,1,Single,Veg,0.53,0.19,0.38,0.35,0.71,"Generator, Common Room, Security Guard, Hot Water, CCTV",0,0,0,0,0,1,1,0
+JOB-053,Female,25,Marketing Executive,F-11 Markaz,33.709033,72.95544,15398,24885,0.49,6.8,1,Single,Both,0.37,0.36,0.7,0.25,0.41,"Power Backup, Transport Nearby, Prayer Room, Common Room, Generator, WiFi",1,0,0,1,0,0,0,1
+JOB-054,Female,36,Mechanic,Blue Area,33.716883,73.061185,13400,19405,0.49,7.1,1,Shared,Non-Veg,0.91,0.53,0.88,0.34,0.55,"Parking, Prayer Room, CCTV, Laundry",0,1,1,0,0,0,0,1
+JOB-055,Male,29,Mechanic,Centaurus Mall Area,33.708838,73.051457,11705,27766,0.79,7.8,1,Double,Both,0.77,0.43,0.67,0.36,0.79,"Parking, Hot Water, Prayer Room",0,1,0,0,0,1,0,1
+JOB-056,Female,29,HR Manager,G-8 Markaz,33.679061,73.039913,10324,33071,0.88,1.6,0,Single,Non-Veg,0.54,0.32,0.73,0.41,0.7,"WiFi, Parking, Prayer Room",1,1,0,0,0,0,0,1
+JOB-057,Male,34,Data Analyst,Islamabad Industrial Area (I-9),33.666591,73.050771,15242,30813,0.39,6.3,1,Single,Non-Veg,0.38,0.51,0.66,0.31,0.52,"Generator, Common Room, WiFi, Prayer Room",1,0,0,0,0,0,0,1
+JOB-058,Male,29,Doctor,G-8 Markaz,33.682227,73.038131,9965,12218,0.55,4.0,1,Single,Both,0.79,0.4,0.8,0.42,0.35,"Generator, WiFi, CCTV",1,0,0,0,0,0,0,0
+JOB-059,Male,38,Real Estate Agent,Stock Exchange (ISE),33.711174,73.055352,14843,26329,0.28,1.1,1,Single,Both,0.62,0.51,0.52,0.27,0.37,"Common Room, Generator, Security Guard, Power Backup, Prayer Room, CCTV",0,0,0,1,0,0,1,1
+JOB-060,Female,35,Graphic Designer,Centaurus Mall Area,33.719466,73.048222,9868,29254,0.56,7.3,1,Single,Both,0.97,0.49,0.39,0.14,0.48,"Common Room, Parking, Power Backup, Prayer Room",0,1,0,1,0,0,0,1
+JOB-061,Female,31,Real Estate Agent,Bahria Town Phase 4,33.530182,72.928786,17248,29782,0.64,5.4,1,Double,Both,0.52,0.36,0.58,0.35,0.86,"AC, Security Guard, Power Backup",0,0,0,1,1,0,1,0
+JOB-062,Female,31,Teacher,Blue Area,33.7134,73.056793,9479,31631,0.62,3.7,1,Single,Both,0.93,0.37,0.79,0.36,0.53,"Security Guard, Parking, WiFi, CCTV, Power Backup, Generator",1,1,0,1,0,0,1,0
+JOB-063,Female,45,Banker,F-11 Markaz,33.707838,72.952626,15172,31570,0.57,5.3,1,Single,Non-Veg,0.57,0.56,0.71,0.12,0.74,"Power Backup, AC, Transport Nearby, Security Guard, Generator",0,0,0,1,1,0,1,0
+JOB-064,Female,28,Consultant,G-8 Markaz,33.675334,73.042824,10317,23779,0.42,5.6,1,Double,Veg,0.72,0.66,0.49,0.25,0.85,"Prayer Room, Transport Nearby, Security Guard, Power Backup",0,0,0,1,0,0,1,1
+JOB-065,Female,31,Software Engineer,Centaurus Mall Area,33.711942,73.062219,13598,31532,0.33,8.0,1,Single,Non-Veg,0.89,0.16,0.76,0.43,0.92,"Prayer Room, AC, Common Room",0,0,0,0,1,0,0,1
+JOB-066,Male,33,Accountant,G-8 Markaz,33.672894,73.044586,10712,27053,0.23,3.6,1,Double,Non-Veg,0.73,0.55,0.77,0.19,0.47,"Laundry, AC, Common Room, CCTV, Security Guard, Generator",0,0,1,0,1,0,1,0
+JOB-067,Female,36,Electrician,F-11 Markaz,33.704199,72.954593,11271,33084,0.3,2.8,1,Double,Both,0.95,0.53,0.61,0.15,0.36,"Hot Water, CCTV, Security Guard, Parking",0,1,0,0,0,1,1,0
+JOB-068,Female,25,Graphic Designer,Islamabad Industrial Area (I-9),33.670154,73.057888,14797,18542,0.48,3.6,1,Single,Veg,0.56,0.12,0.86,0.44,0.75,"Parking, WiFi, Hot Water, CCTV",1,1,0,0,0,1,0,0
+JOB-069,Male,35,Chef,Islamabad Industrial Area (I-9),33.665846,73.057494,8311,18697,0.35,2.0,1,Single,Non-Veg,0.47,0.17,0.44,0.36,0.74,"Power Backup, CCTV, Common Room",0,0,0,1,0,0,0,0
+JOB-070,Male,33,Real Estate Agent,I-8 Markaz,33.672497,73.05766,8025,30171,0.45,5.0,1,Single,Both,0.36,0.68,0.34,0.31,0.66,"Generator, CCTV, WiFi",1,0,0,0,0,0,0,0
+JOB-071,Female,45,Data Analyst,Blue Area,33.713214,73.053281,11950,34536,0.27,5.1,1,Double,Veg,0.33,0.43,0.79,0.17,0.85,"Transport Nearby, CCTV, Parking, Common Room, Power Backup, AC",0,1,0,1,1,0,0,0
+JOB-072,Female,23,Doctor,Blue Area,33.720158,73.066373,13170,25330,0.56,7.9,1,Single,Non-Veg,0.33,0.49,0.47,0.44,0.33,"Hot Water, Power Backup, AC, Generator, Security Guard",0,0,0,1,1,1,1,0
+JOB-073,Female,40,Journalist,Centaurus Mall Area,33.72258,73.054939,16151,30188,0.85,4.6,1,Double,Both,0.6,0.36,0.9,0.17,0.51,"Power Backup, AC, Hot Water",0,0,0,1,1,1,0,0
+JOB-074,Female,30,NGO Worker,G-8 Markaz,33.681036,73.039125,8693,34509,0.81,3.5,1,Shared,Non-Veg,0.75,0.57,0.33,0.37,0.58,"WiFi, Parking, Common Room, CCTV",1,1,0,0,0,0,0,0
+JOB-075,Male,26,Graphic Designer,Centaurus Mall Area,33.712794,73.062191,8530,30357,0.31,4.1,1,Single,Non-Veg,0.83,0.44,0.62,0.26,0.75,"Power Backup, WiFi, Parking, CCTV",1,1,0,1,0,0,0,0
+JOB-076,Female,41,Marketing Executive,G-11 Markaz,33.675399,72.983365,11515,33564,0.4,7.4,1,Single,Veg,0.4,0.14,0.4,0.39,1.0,"Prayer Room, AC, Power Backup, Security Guard, Hot Water",0,0,0,1,1,1,1,1
+JOB-077,Female,38,HR Manager,Centaurus Mall Area,33.71514,73.048942,11292,17842,0.37,4.5,1,Single,Both,0.56,0.58,0.63,0.34,0.36,"Generator, CCTV, Security Guard, Transport Nearby, Common Room",0,0,0,0,0,0,1,0
+JOB-078,Male,26,Civil Engineer,F-10 Markaz,33.7042,72.972182,13644,19849,0.81,6.5,1,Double,Veg,0.84,0.18,0.6,0.45,0.88,"Hot Water, Parking, Prayer Room, AC",0,1,0,0,1,1,0,1
+JOB-079,Male,29,Electrician,G-11 Markaz,33.676535,72.97611,17024,23520,0.29,3.1,1,Single,Both,0.75,0.46,0.65,0.17,0.74,"Common Room, WiFi, Prayer Room, Power Backup, Transport Nearby",1,0,0,1,0,0,0,1
+JOB-080,Female,34,Real Estate Agent,Stock Exchange (ISE),33.71189,73.044485,16938,23683,0.65,3.1,1,Single,Both,0.58,0.37,0.71,0.16,0.59,"Laundry, AC, Common Room, Parking, Prayer Room, Generator",0,1,1,0,1,0,0,1
+JOB-081,Female,35,Architect,Stock Exchange (ISE),33.704092,73.049929,17202,20941,0.42,4.3,1,Single,Veg,0.4,0.13,0.87,0.45,0.59,"AC, Common Room, Transport Nearby, Laundry",0,0,1,0,1,0,0,0
+JOB-082,Male,31,Electrician,Islamabad Industrial Area (I-9),33.66398,73.047937,8379,13329,0.86,4.5,1,Shared,Veg,0.71,0.13,0.47,0.34,0.89,"Hot Water, Security Guard, WiFi, Power Backup, Generator, Prayer Room",1,0,0,1,0,1,1,1
+JOB-083,Female,35,Journalist,Centaurus Mall Area,33.707724,73.047819,17204,22393,0.45,3.0,1,Single,Both,0.5,0.69,0.71,0.15,0.98,"AC, Transport Nearby, Security Guard, Prayer Room, Parking, Power Backup",0,1,0,1,1,0,1,1
+JOB-084,Female,31,Teacher,Blue Area,33.709693,73.057529,15761,34778,0.52,5.2,1,Single,Non-Veg,0.95,0.29,0.54,0.35,0.89,"Security Guard, Transport Nearby, Prayer Room, CCTV, Hot Water",0,0,0,0,0,1,1,1
+JOB-085,Female,36,Architect,Centaurus Mall Area,33.717781,73.062678,17563,24603,0.76,6.1,1,Double,Veg,0.72,0.26,0.69,0.49,0.7,"Transport Nearby, WiFi, Common Room, CCTV",1,0,0,0,0,0,0,0
+JOB-086,Male,31,Consultant,Stock Exchange (ISE),33.704364,73.054892,8517,29278,0.86,1.8,0,Single,Non-Veg,0.41,0.51,0.55,0.41,0.94,"Transport Nearby, Parking, Security Guard",0,1,0,0,0,0,1,0
+JOB-087,Male,32,Chef,F-11 Markaz,33.703529,72.967307,15531,35000,0.44,3.5,1,Double,Both,0.78,0.58,0.46,0.29,0.97,"Security Guard, Hot Water, Laundry, Prayer Room, Transport Nearby",0,0,1,0,0,1,1,1
+JOB-088,Male,34,Chef,Centaurus Mall Area,33.714677,73.055968,12480,23910,0.29,5.7,1,Single,Non-Veg,0.87,0.67,0.78,0.22,0.5,"AC, CCTV, Hot Water",0,0,0,0,1,1,0,0
+JOB-089,Female,27,Mechanic,G-11 Markaz,33.677928,72.983239,10249,15828,0.63,5.1,1,Single,Both,0.93,0.24,0.44,0.14,0.53,"Power Backup, Prayer Room, Parking, WiFi, Common Room, Laundry",1,1,1,1,0,0,0,1
+JOB-090,Female,31,Doctor,G-11 Markaz,33.668139,72.982434,9465,32839,0.6,4.7,1,Double,Veg,0.94,0.21,0.83,0.17,0.94,"CCTV, Parking, Hot Water, WiFi, Security Guard, Prayer Room",1,1,0,0,0,1,1,1
+JOB-091,Male,42,Civil Engineer,G-11 Markaz,33.67027,72.982361,16590,34774,0.82,1.9,1,Single,Veg,0.53,0.54,0.69,0.39,0.31,"Hot Water, Common Room, Laundry, Parking, Generator",0,1,1,0,0,1,0,0
+JOB-092,Female,31,Banker,Stock Exchange (ISE),33.712708,73.046956,10303,27948,0.43,2.7,1,Single,Non-Veg,0.83,0.67,0.48,0.39,0.31,"Transport Nearby, Laundry, WiFi, Power Backup, CCTV",1,0,1,1,0,0,0,0
+JOB-093,Female,27,Electrician,G-11 Markaz,33.674045,72.982319,12833,26876,0.63,2.5,0,Single,Non-Veg,0.82,0.46,0.55,0.32,0.63,"Laundry, Prayer Room, Common Room, Power Backup",0,0,1,1,0,0,0,1
+JOB-094,Female,31,Architect,F-10 Markaz,33.711676,72.963095,16972,33764,0.55,5.0,1,Single,Non-Veg,0.9,0.37,0.71,0.39,0.64,"WiFi, CCTV, Parking, Security Guard, Generator, Laundry",1,1,1,0,0,0,1,0
+JOB-095,Male,32,Business Development,Blue Area,33.713835,73.065263,11570,32520,0.25,4.0,1,Double,Both,1.0,0.66,0.34,0.47,0.32,"Parking, Transport Nearby, Generator, AC, Common Room, Laundry",0,1,1,0,1,0,0,0
+JOB-096,Female,29,Mechanic,G-8 Markaz,33.680457,73.039064,10924,30528,0.48,1.9,0,Double,Veg,0.98,0.38,0.73,0.27,0.57,"Laundry, CCTV, AC, Parking",0,1,1,0,1,0,0,0
+JOB-097,Female,27,Marketing Executive,Blue Area,33.720452,73.058908,8256,18142,0.34,1.7,0,Single,Both,0.79,0.13,0.74,0.26,0.46,"WiFi, Parking, Security Guard, Hot Water",1,1,0,0,0,1,1,0
+JOB-098,Male,36,Real Estate Agent,Centaurus Mall Area,33.71624,73.059361,13253,23015,0.41,2.0,0,Single,Non-Veg,0.34,0.67,0.83,0.46,0.74,"Security Guard, CCTV, WiFi, AC, Generator, Prayer Room",1,0,0,0,1,0,1,1
+JOB-099,Female,34,NGO Worker,G-8 Markaz,33.674798,73.036442,16813,26571,0.37,2.6,0,Double,Veg,0.69,0.68,0.63,0.15,0.47,"AC, Prayer Room, Power Backup, CCTV",0,0,0,1,1,0,0,1
+JOB-100,Female,25,Doctor,Blue Area,33.711795,73.062979,17878,20525,0.81,2.3,0,Single,Non-Veg,0.51,0.65,0.43,0.18,0.82,"Laundry, Common Room, Transport Nearby, Generator, Prayer Room, Hot Water",0,0,1,0,0,1,0,1
+JOB-101,Female,36,Journalist,Islamabad Industrial Area (I-9),33.664538,73.048748,12285,26069,0.56,4.5,1,Single,Both,0.63,0.6,0.85,0.25,0.59,"Transport Nearby, Parking, WiFi, Hot Water",1,1,0,0,0,1,0,0
+JOB-102,Female,28,Doctor,Centaurus Mall Area,33.71068,73.056117,12026,30387,0.59,7.6,1,Single,Non-Veg,0.98,0.49,0.59,0.17,0.86,"Parking, Security Guard, CCTV, Transport Nearby",0,1,0,0,0,0,1,0
+JOB-103,Male,31,Banker,Blue Area,33.719729,73.058798,11791,16018,0.7,1.1,1,Single,Both,0.75,0.66,0.85,0.36,0.31,"WiFi, Transport Nearby, Security Guard, Hot Water, Common Room, Prayer Room",1,0,0,0,0,1,1,1
+JOB-104,Female,36,HR Manager,F-10 Markaz,33.711689,72.96969,11948,20237,0.63,2.8,1,Single,Non-Veg,0.36,0.68,0.58,0.2,0.79,"Prayer Room, Power Backup, WiFi, Transport Nearby, Generator",1,0,0,1,0,0,0,1
+JOB-105,Female,29,Chef,Blue Area,33.717688,73.063446,9354,27733,0.79,5.5,1,Single,Veg,0.93,0.65,0.44,0.46,0.78,"Hot Water, WiFi, Power Backup, Transport Nearby, Prayer Room, Common Room",1,0,0,1,0,1,0,1
+JOB-106,Female,22,Doctor,Bahria Town Phase 4,33.525307,72.927131,14525,19046,0.41,4.9,1,Single,Non-Veg,0.77,0.42,0.53,0.4,0.85,"Security Guard, AC, WiFi",1,0,0,0,1,0,1,0
+JOB-107,Male,30,Banker,Centaurus Mall Area,33.716683,73.056822,17758,26257,0.88,3.3,1,Double,Non-Veg,0.64,0.31,0.86,0.27,0.78,"Power Backup, Common Room, Hot Water, Laundry, Transport Nearby, WiFi",1,0,1,1,0,1,0,0
+JOB-108,Female,27,Accountant,Stock Exchange (ISE),33.707067,73.045705,8085,20186,0.51,6.3,1,Single,Veg,0.43,0.37,0.63,0.26,0.32,"Security Guard, Power Backup, Common Room, AC, Generator",0,0,0,1,1,0,1,0
+JOB-109,Male,28,Journalist,F-10 Markaz,33.708598,72.970253,11977,32718,0.56,5.8,1,Single,Non-Veg,0.51,0.4,0.34,0.27,0.59,"Power Backup, AC, Hot Water, Laundry, CCTV, Common Room",0,0,1,1,1,1,0,0
+JOB-110,Male,31,Accountant,G-11 Markaz,33.663108,72.978431,14224,27022,0.51,4.0,1,Double,Both,0.98,0.18,0.49,0.48,0.44,"Parking, Generator, AC, Hot Water, CCTV",0,1,0,0,1,1,0,0
+JOB-111,Male,29,Data Analyst,Stock Exchange (ISE),33.70784,73.058913,11273,32679,0.9,2.3,0,Shared,Non-Veg,0.96,0.23,0.78,0.43,0.35,"Prayer Room, CCTV, Parking, Hot Water, Laundry, Common Room",0,1,1,0,0,1,0,1
+JOB-112,Male,35,Journalist,F-10 Markaz,33.704185,72.970867,17539,26105,0.57,7.5,1,Double,Non-Veg,0.68,0.57,0.52,0.46,0.68,"Power Backup, Laundry, AC",0,0,1,1,1,0,0,0
+JOB-113,Male,33,Teacher,Bahria Town Phase 4,33.538738,72.92484,14547,27412,0.88,4.0,1,Single,Non-Veg,0.46,0.55,0.63,0.38,0.45,"Generator, CCTV, Common Room, Security Guard, Parking",0,1,0,0,0,0,1,0
+JOB-114,Female,45,Chef,F-10 Markaz,33.701727,72.976029,9406,15209,0.78,6.1,1,Single,Non-Veg,0.62,0.22,0.59,0.29,0.61,"AC, Power Backup, Hot Water, WiFi, Prayer Room, Security Guard",1,0,0,1,1,1,1,1
+JOB-115,Female,33,HR Manager,I-8 Markaz,33.669256,73.061831,13422,33767,0.5,4.2,1,Double,Both,0.43,0.48,0.56,0.11,0.73,"CCTV, Common Room, Generator, Prayer Room",0,0,0,0,0,0,0,1
+JOB-116,Male,34,Doctor,G-11 Markaz,33.675037,72.98504,9025,29943,0.27,7.1,1,Single,Non-Veg,0.44,0.17,0.7,0.3,0.98,"Common Room, Generator, Transport Nearby, Prayer Room, Power Backup",0,0,0,1,0,0,0,1
+JOB-117,Female,29,Sales Representative,Bahria Town Phase 4,33.52576,72.924777,12873,34211,0.26,1.9,0,Single,Veg,0.43,0.52,0.61,0.27,0.4,"Generator, Parking, CCTV, Security Guard, Prayer Room, Hot Water",0,1,0,0,0,1,1,1
+JOB-118,Male,31,Accountant,G-8 Markaz,33.675033,73.040716,8878,22642,0.87,4.4,1,Single,Non-Veg,0.97,0.4,0.6,0.37,0.59,"CCTV, Parking, Power Backup, WiFi, Laundry, Prayer Room",1,1,1,1,0,0,0,1
+JOB-119,Male,28,Mechanic,G-11 Markaz,33.665691,72.979417,16115,34853,0.28,1.8,1,Single,Veg,0.83,0.36,0.43,0.27,0.82,"Hot Water, WiFi, CCTV, Transport Nearby",1,0,0,0,0,1,0,0
+JOB-120,Female,38,Banker,Islamabad Industrial Area (I-9),33.669845,73.044878,11882,20759,0.77,5.1,1,Single,Both,0.73,0.36,0.67,0.41,0.87,"Common Room, AC, Security Guard",0,0,0,0,1,0,1,0
+JOB-121,Female,33,HR Manager,Centaurus Mall Area,33.722664,73.051682,17383,23763,0.87,4.6,1,Shared,Veg,0.39,0.55,0.55,0.12,0.49,"Transport Nearby, Parking, Laundry, Prayer Room",0,1,1,0,0,0,0,1
+JOB-122,Female,37,Journalist,Islamabad Industrial Area (I-9),33.658275,73.053118,14786,29079,0.52,5.4,1,Double,Veg,0.58,0.55,0.72,0.45,0.62,"AC, Common Room, WiFi, Power Backup, CCTV, Transport Nearby",1,0,0,1,1,0,0,0
+JOB-123,Female,38,Mechanic,Stock Exchange (ISE),33.705485,73.050874,11470,29680,0.39,6.8,1,Single,Both,0.39,0.61,0.77,0.46,0.83,"Power Backup, Prayer Room, CCTV",0,0,0,1,0,0,0,1
+JOB-124,Male,26,HR Manager,Islamabad Industrial Area (I-9),33.663304,73.058869,15009,23638,0.9,7.4,1,Double,Non-Veg,0.41,0.66,0.46,0.36,0.48,"Prayer Room, Transport Nearby, Parking, WiFi, Generator",1,1,0,0,0,0,0,1
+JOB-125,Female,35,Graphic Designer,Stock Exchange (ISE),33.712488,73.055259,8017,17010,0.53,1.9,0,Single,Non-Veg,0.31,0.52,0.79,0.5,0.6,"CCTV, Power Backup, Laundry, Generator",0,0,1,1,0,0,0,0
+JOB-126,Male,35,Marketing Executive,F-10 Markaz,33.702014,72.975396,10246,24787,0.74,6.3,1,Single,Both,0.4,0.42,0.31,0.36,0.61,"Prayer Room, Parking, Generator, CCTV",0,1,0,0,0,0,0,1
+JOB-127,Male,24,Marketing Executive,G-8 Markaz,33.682039,73.042933,14291,27810,0.87,3.2,1,Single,Non-Veg,0.75,0.25,0.66,0.39,0.5,"Prayer Room, Hot Water, Laundry",0,0,1,0,0,1,0,1
+JOB-128,Male,35,Business Development,Blue Area,33.720041,73.0649,11921,30137,0.47,2.7,0,Single,Veg,0.99,0.66,0.38,0.44,0.7,"Security Guard, Prayer Room, Parking, CCTV, Power Backup",0,1,0,1,0,0,1,1
+JOB-129,Male,32,Software Engineer,G-11 Markaz,33.666452,72.986861,14520,33120,0.4,6.0,1,Double,Non-Veg,0.79,0.15,0.62,0.35,0.49,"Power Backup, Security Guard, Laundry, Parking, AC",0,1,1,1,1,0,1,0
+JOB-130,Female,32,Banker,G-11 Markaz,33.674179,72.983779,11909,15806,0.37,7.5,1,Single,Both,0.73,0.29,0.75,0.4,0.38,"Transport Nearby, WiFi, Parking, CCTV",1,1,0,0,0,0,0,0
+JOB-131,Female,31,Data Analyst,G-8 Markaz,33.67595,73.045496,12403,18271,0.74,1.2,1,Single,Veg,0.48,0.69,0.68,0.3,0.66,"CCTV, Common Room, Parking",0,1,0,0,0,0,0,0
+JOB-132,Female,27,Marketing Executive,Bahria Town Phase 4,33.533786,72.915845,16336,18420,0.23,7.0,1,Single,Non-Veg,0.55,0.65,0.41,0.48,0.32,"Laundry, AC, Transport Nearby, Generator, Prayer Room, Parking",0,1,1,0,1,0,0,1
+JOB-133,Male,32,Marketing Executive,F-11 Markaz,33.708273,72.952843,11656,30556,0.89,7.7,1,Single,Non-Veg,0.91,0.56,0.49,0.13,0.62,"Laundry, Hot Water, Common Room, Prayer Room, Transport Nearby",0,0,1,0,0,1,0,1
+JOB-134,Female,29,Chef,I-8 Markaz,33.672719,73.061745,12016,18949,0.2,3.9,1,Single,Non-Veg,0.75,0.52,0.31,0.23,0.83,"Transport Nearby, Hot Water, Power Backup, Laundry, Security Guard, CCTV",0,0,1,1,0,1,1,0
+JOB-135,Female,44,Accountant,G-11 Markaz,33.664488,72.98684,16515,32050,0.69,3.6,1,Shared,Veg,0.71,0.4,0.68,0.26,0.71,"Generator, Prayer Room, Parking",0,1,0,0,0,0,0,1
+JOB-136,Male,28,Civil Engineer,Stock Exchange (ISE),33.713212,73.055766,13211,30046,0.39,1.5,0,Single,Both,0.38,0.16,0.57,0.23,0.38,"Laundry, CCTV, Hot Water, Prayer Room, Common Room",0,0,1,0,0,1,0,1
+JOB-137,Male,25,Business Development,Bahria Town Phase 4,33.523645,72.927375,13370,20230,0.26,2.7,1,Single,Veg,0.77,0.26,0.89,0.11,0.58,"Security Guard, Transport Nearby, Laundry, Power Backup, CCTV, WiFi",1,0,1,1,0,0,1,0
+JOB-138,Male,26,Teacher,I-8 Markaz,33.663091,73.066179,14098,18851,0.61,2.8,0,Single,Veg,0.44,0.49,0.79,0.14,0.89,"Power Backup, WiFi, CCTV, Prayer Room, Parking",1,1,0,1,0,0,0,1
+JOB-139,Female,36,Journalist,Islamabad Industrial Area (I-9),33.656472,73.053931,10831,24429,0.35,2.3,1,Single,Veg,0.32,0.47,0.45,0.22,0.59,"WiFi, Power Backup, Hot Water, Generator, Parking, Laundry",1,1,1,1,0,1,0,0
+JOB-140,Male,33,Electrician,I-8 Markaz,33.671092,73.065835,8319,22852,0.75,3.5,1,Single,Non-Veg,0.54,0.44,0.49,0.21,0.32,"WiFi, Hot Water, Transport Nearby, CCTV",1,0,0,0,0,1,0,0
+JOB-141,Female,35,Graphic Designer,G-8 Markaz,33.671602,73.04401,12366,31853,0.77,7.4,1,Single,Veg,0.7,0.69,0.53,0.47,0.99,"Parking, Laundry, Common Room, AC",0,1,1,0,1,0,0,0
+JOB-142,Female,41,Software Engineer,Centaurus Mall Area,33.722161,73.056018,17225,34763,0.33,7.9,1,Double,Non-Veg,0.68,0.21,0.32,0.12,0.72,"Security Guard, CCTV, WiFi",1,0,0,0,0,0,1,0
+JOB-143,Female,41,Doctor,G-8 Markaz,33.675452,73.036339,13301,17252,0.22,5.1,1,Shared,Veg,0.89,0.62,0.88,0.25,0.96,"Common Room, Power Backup, AC, Hot Water, Transport Nearby, Prayer Room",0,0,0,1,1,1,0,1
+JOB-144,Male,35,NGO Worker,Islamabad Industrial Area (I-9),33.666387,73.045787,17207,30570,0.82,5.3,1,Single,Both,0.71,0.21,0.48,0.38,0.39,"Transport Nearby, Common Room, Generator",0,0,0,0,0,0,0,0
+JOB-145,Male,27,Civil Engineer,Bahria Town Phase 4,33.526534,72.923049,16129,22737,0.43,1.5,1,Shared,Veg,0.75,0.68,0.79,0.37,0.81,"CCTV, WiFi, Hot Water, Laundry, Security Guard",1,0,1,0,0,1,1,0
+JOB-146,Male,29,Marketing Executive,Blue Area,33.70827,73.059212,14875,22325,0.82,4.5,1,Single,Both,0.56,0.6,0.77,0.33,0.83,"Parking, CCTV, Power Backup, WiFi",1,1,0,1,0,0,0,0
+JOB-147,Female,22,Data Analyst,F-10 Markaz,33.698187,72.964022,14151,21423,0.71,4.8,1,Double,Veg,0.54,0.69,0.84,0.38,0.6,"Common Room, Generator, Parking, WiFi",1,1,0,0,0,0,0,0
+JOB-148,Male,29,Doctor,Stock Exchange (ISE),33.713155,73.055553,16849,23195,0.66,3.1,1,Single,Non-Veg,0.7,0.6,0.39,0.24,0.6,"Prayer Room, Transport Nearby, Common Room, CCTV, Laundry",0,0,1,0,0,0,0,1
+JOB-149,Male,22,HR Manager,G-11 Markaz,33.678633,72.979677,9892,21996,0.75,4.3,1,Double,Non-Veg,0.36,0.43,0.41,0.45,0.56,"WiFi, Hot Water, CCTV, Common Room, Prayer Room, Power Backup",1,0,0,1,0,1,0,1
+JOB-150,Female,32,Accountant,F-10 Markaz,33.698371,72.966801,16871,25653,0.88,5.1,1,Single,Non-Veg,0.87,0.35,0.62,0.45,0.63,"CCTV, Hot Water, Power Backup, Generator",0,0,0,1,0,1,0,0

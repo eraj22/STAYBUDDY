@@ -1,0 +1,1001 @@
+complaint_id,student_id,hostel_id,complaint_text,category,subcategory,priority,ai_suggestion,status
+CMP-2026-2424,STU-100,HST-056,"Mosquitoes everywhere, no nets provided.",Cleanliness,Room Cleaning,Low,Schedule housekeeping to clean the area immediately.,Acknowledged
+CMP-2024-9928,STU-172,HST-071,Warden is very rude when approached.,Staff Behavior,Warden,Medium,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2025-6574,STU-041,HST-064,Warden threatened to fine for a minor rule.,Staff Behavior,Cook,Low,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2025-5333,STU-087,HST-022,Security guard often missing after 10 PM.,Safety/Security,Unauthorized Entry,High,Investigate immediately; if serious call police.,Submitted
+CMP-2026-6925,STU-074,HST-026,"Fan regulator broken, fan running at full speed.",Maintenance,Other Maintenance,High,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2024-2654,STU-047,HST-030,My roommate plays loud music after 11 PM.,Noise/Disturbance,External Noise,Low,Warn the noisy party and enforce quiet hours.,Resolved
+CMP-2026-2169,STU-092,HST-027,Warden threatened to fine for a minor rule.,Staff Behavior,Cleaner,Medium,Counsel the staff member; involve owner if repeated.,Acknowledged
+CMP-2026-4598,STU-091,HST-071,Bread/chapati are undercooked.,Food Quality,Taste,Low,Inspect kitchen and food storage; check hygiene.,Acknowledged
+CMP-2026-6155,STU-057,HST-020,Roommate smokes in the room.,Roommate Issue,Cleanliness,Medium,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2026-9830,STU-111,HST-046,People running and stomping upstairs.,Noise/Disturbance,External Noise,Medium,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2024-2796,STU-065,HST-053,My phone went missing from study room.,Safety/Security,Security Guard,High,Investigate immediately; if serious call police.,Submitted
+CMP-2026-5119,STU-159,HST-001,Hair found in food twice this week.,Food Quality,Taste,Medium,Inspect kitchen and food storage; check hygiene.,Resolved
+CMP-2025-1053,STU-151,HST-003,I want to change my room.,Other,General,Medium,Review student request and respond within 48 hours.,Submitted
+CMP-2024-9837,STU-142,HST-034,Outsider came inside without permission.,Safety/Security,Unauthorized Entry,Medium,Investigate immediately; if serious call police.,Submitted
+CMP-2025-4923,STU-129,HST-073,My mattress is too old and uncomfortable.,Other,General,Low,Review student request and respond within 48 hours.,In Progress
+CMP-2026-3060,STU-173,HST-051,Water leakage from ceiling during rain.,Maintenance,Electrical,Low,Assign technician to fix the issue within 24 hours.,Resolved
+CMP-2024-9835,STU-163,HST-068,Fruit provided is rotten.,Food Quality,Portion Size,Low,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2024-5061,STU-081,HST-044,"Party in neighboring room, can't sleep.",Noise/Disturbance,External Noise,Medium,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2024-1964,STU-030,HST-021,Door banging repeatedly.,Noise/Disturbance,Night Noise,Medium,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2024-9834,STU-158,HST-041,Students shouting late at night in common room.,Noise/Disturbance,Night Noise,Medium,Warn the noisy party and enforce quiet hours.,Acknowledged
+CMP-2025-7939,STU-032,HST-053,Very little chicken/vegetables served.,Food Quality,Portion Size,High,Inspect kitchen and food storage; check hygiene.,Acknowledged
+CMP-2024-5073,STU-002,HST-072,Warden is very rude when approached.,Staff Behavior,Security,Low,Counsel the staff member; involve owner if repeated.,In Progress
+CMP-2024-8260,STU-086,HST-060,People running and stomping upstairs.,Noise/Disturbance,Night Noise,Medium,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2024-7658,STU-168,HST-009,Curfew time is too early for exam preparation.,Other,General,Low,Review student request and respond within 48 hours.,In Progress
+CMP-2025-8454,STU-175,HST-061,Food bill is higher than agreed.,Billing/Payment Dispute,Deposit Refund,Medium,Review charges with account; provide receipt.,Resolved
+CMP-2026-9883,STU-131,HST-031,Emergency exit blocked with boxes.,Safety/Security,Security Guard,High,Investigate immediately; if serious call police.,Submitted
+CMP-2026-3579,STU-147,HST-060,Tiles cracked in common washroom.,Maintenance,Other Maintenance,Medium,Assign technician to fix the issue within 24 hours.,Resolved
+CMP-2025-2964,STU-184,HST-043,AC not cooling properly in Room 196.,Maintenance,Door/Window,High,Assign technician to fix the issue within 24 hours.,In Progress
+CMP-2025-4346,STU-091,HST-056,Students shouting late at night in common room.,Noise/Disturbance,External Noise,Medium,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2024-1152,STU-186,HST-039,Roommate brings food and leaves plates for days.,Roommate Issue,Noise,Medium,Mediate between roommates; offer room change if needed.,Resolved
+CMP-2025-2127,STU-030,HST-030,Security deposit not refunded after leaving.,Billing/Payment Dispute,Unexpected Fee,Medium,Review charges with account; provide receipt.,Submitted
+CMP-2026-9666,STU-150,HST-027,"Party in neighboring room, can't sleep.",Noise/Disturbance,Roommate Noise,Low,Warn the noisy party and enforce quiet hours.,Acknowledged
+CMP-2024-2753,STU-008,HST-048,Cupboard door off its hinges.,Maintenance,Other Maintenance,Low,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2026-5325,STU-058,HST-015,Request for a separate study table.,Other,Suggestion,Low,Review student request and respond within 48 hours.,Submitted
+CMP-2025-3143,STU-006,HST-066,Request for a separate study table.,Other,Curfew,Low,Review student request and respond within 48 hours.,Submitted
+CMP-2026-3442,STU-074,HST-002,Emergency exit blocked with boxes.,Safety/Security,Unauthorized Entry,High,Investigate immediately; if serious call police.,Submitted
+CMP-2025-1653,STU-124,HST-009,My mattress is too old and uncomfortable.,Other,General,Medium,Review student request and respond within 48 hours.,Submitted
+CMP-2026-3532,STU-162,HST-041,Roommate smokes in the room.,Roommate Issue,Noise,Low,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2025-5065,STU-041,HST-041,Construction noise from next building all day.,Noise/Disturbance,Night Noise,Low,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2025-6728,STU-195,HST-043,Outsider came inside without permission.,Safety/Security,Unauthorized Entry,High,Investigate immediately; if serious call police.,In Progress
+CMP-2024-5573,STU-001,HST-018,Security guard often missing after 10 PM.,Safety/Security,Unauthorized Entry,High,Investigate immediately; if serious call police.,Submitted
+CMP-2025-1626,STU-054,HST-004,Constant arguments with roommate.,Roommate Issue,Personal Space,Medium,Mediate between roommates; offer room change if needed.,Resolved
+CMP-2026-4114,STU-095,HST-021,Bathroom mirror and sink are never cleaned.,Cleanliness,Pest Control,Low,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2026-4228,STU-067,HST-010,My phone went missing from study room.,Safety/Security,Theft,Medium,Investigate immediately; if serious call police.,Resolved
+CMP-2025-9308,STU-032,HST-065,Roommate has guests late at night.,Roommate Issue,Personal Space,Low,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2026-7211,STU-142,HST-037,Feeling unsafe due to unverified visitors.,Safety/Security,Security Guard,High,Investigate immediately; if serious call police.,Submitted
+CMP-2026-6279,STU-013,HST-066,Hair found in food twice this week.,Food Quality,Hygiene,High,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2026-3780,STU-082,HST-026,Warden asking for extra money for repairs.,Billing/Payment Dispute,Deposit Refund,Low,Review charges with account; provide receipt.,Resolved
+CMP-2024-3414,STU-018,HST-038,Rats in the kitchen area.,Cleanliness,Common Area,Medium,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2026-4185,STU-098,HST-023,"Window latch broken, cannot close properly.",Maintenance,Plumbing,Medium,Assign technician to fix the issue within 24 hours.,In Progress
+CMP-2024-7965,STU-092,HST-012,Canteen staff not serving on time.,Staff Behavior,Security,Low,Counsel the staff member; involve owner if repeated.,In Progress
+CMP-2024-8612,STU-096,HST-005,People running and stomping upstairs.,Noise/Disturbance,Night Noise,Low,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2025-8373,STU-161,HST-029,Need a warmer blanket for winter.,Other,Room Change,Medium,Review student request and respond within 48 hours.,Submitted
+CMP-2025-4841,STU-055,HST-056,Gate left unlocked at night.,Safety/Security,Unauthorized Entry,High,Investigate immediately; if serious call police.,Submitted
+CMP-2024-4505,STU-196,HST-023,Feeling unsafe due to unverified visitors.,Safety/Security,CCTV Issue,High,Investigate immediately; if serious call police.,Submitted
+CMP-2025-7381,STU-132,HST-017,"Floor has sticky stains, not mopped properly.",Cleanliness,Pest Control,Medium,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2025-9818,STU-069,HST-067,"Geyser not working, no hot water.",Maintenance,Door/Window,High,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2026-7624,STU-127,HST-072,Need a warmer blanket for winter.,Other,Suggestion,Low,Review student request and respond within 48 hours.,Submitted
+CMP-2024-8022,STU-014,HST-062,Bread/chapati are undercooked.,Food Quality,Portion Size,Medium,Inspect kitchen and food storage; check hygiene.,Acknowledged
+CMP-2025-7211,STU-052,HST-047,Bread/chapati are undercooked.,Food Quality,Portion Size,Medium,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2025-4673,STU-086,HST-048,Gate left unlocked at night.,Safety/Security,Security Guard,Medium,Investigate immediately; if serious call police.,Submitted
+CMP-2025-2874,STU-021,HST-065,Room not cleaned for 1 days.,Cleanliness,Room Cleaning,Medium,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2024-3683,STU-175,HST-069,"Party in neighboring room, can't sleep.",Noise/Disturbance,Roommate Noise,Low,Warn the noisy party and enforce quiet hours.,In Progress
+CMP-2024-4978,STU-037,HST-046,My laptop was stolen from room.,Safety/Security,Theft,High,Investigate immediately; if serious call police.,In Progress
+CMP-2025-2129,STU-043,HST-069,Trash piled up near the entrance.,Cleanliness,Common Area,Medium,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2025-3506,STU-138,HST-016,Curfew time is too early for exam preparation.,Other,Room Change,Medium,Review student request and respond within 48 hours.,Submitted
+CMP-2025-6280,STU-075,HST-064,Warden doesn't listen to complaints.,Staff Behavior,Cook,Medium,Counsel the staff member; involve owner if repeated.,In Progress
+CMP-2025-1470,STU-059,HST-031,"Party in neighboring room, can't sleep.",Noise/Disturbance,Night Noise,Medium,Warn the noisy party and enforce quiet hours.,Acknowledged
+CMP-2026-5526,STU-079,HST-008,Unexplained deduction from rent.,Billing/Payment Dispute,Deposit Refund,Low,Review charges with account; provide receipt.,Submitted
+CMP-2026-8800,STU-063,HST-042,Internet quota exhausted too quickly.,Other,General,Low,Review student request and respond within 48 hours.,In Progress
+CMP-2026-7046,STU-082,HST-027,Charged for electricity even though it's included.,Billing/Payment Dispute,Deposit Refund,Medium,Review charges with account; provide receipt.,Submitted
+CMP-2025-6023,STU-032,HST-043,Double charged for this month's rent.,Billing/Payment Dispute,Unexpected Fee,Medium,Review charges with account; provide receipt.,In Progress
+CMP-2026-4033,STU-146,HST-013,Outsider came inside without permission.,Safety/Security,Unauthorized Entry,Medium,Investigate immediately; if serious call police.,Resolved
+CMP-2025-2647,STU-131,HST-008,People running and stomping upstairs.,Noise/Disturbance,Night Noise,Low,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2025-1745,STU-132,HST-024,Talking loudly in corridor after quiet hours.,Noise/Disturbance,Roommate Noise,High,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2025-8690,STU-163,HST-042,"Bed frame creaking loudly, needs oiling.",Maintenance,Door/Window,High,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2024-7565,STU-011,HST-058,Double charged for this month's rent.,Billing/Payment Dispute,Deposit Refund,Low,Review charges with account; provide receipt.,Submitted
+CMP-2024-2940,STU-170,HST-016,Charged for electricity even though it's included.,Billing/Payment Dispute,Overcharging,Low,Review charges with account; provide receipt.,Submitted
+CMP-2026-8025,STU-150,HST-015,Internet quota exhausted too quickly.,Other,Curfew,Low,Review student request and respond within 48 hours.,Submitted
+CMP-2024-3847,STU-069,HST-058,Outsider came inside without permission.,Safety/Security,Theft,High,Investigate immediately; if serious call police.,Submitted
+CMP-2024-4792,STU-012,HST-008,Need permission to keep a bicycle inside.,Other,General,Low,Review student request and respond within 48 hours.,Submitted
+CMP-2026-4241,STU-131,HST-026,Emergency exit blocked with boxes.,Safety/Security,CCTV Issue,Low,Investigate immediately; if serious call police.,In Progress
+CMP-2025-5728,STU-186,HST-041,Security guard uses offensive language.,Staff Behavior,Warden,High,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2025-8172,STU-149,HST-074,Warden asking for extra money for repairs.,Billing/Payment Dispute,Overcharging,Low,Review charges with account; provide receipt.,Submitted
+CMP-2026-1339,STU-179,HST-005,"Floor has sticky stains, not mopped properly.",Cleanliness,Room Cleaning,High,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2026-8141,STU-191,HST-059,CCTV camera not working near entrance.,Safety/Security,Theft,Low,Investigate immediately; if serious call police.,Submitted
+CMP-2024-6403,STU-091,HST-043,Warden asking for extra money for repairs.,Billing/Payment Dispute,Overcharging,Medium,Review charges with account; provide receipt.,Submitted
+CMP-2025-2899,STU-177,HST-023,Warden doesn't listen to complaints.,Staff Behavior,Security,Medium,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2025-8242,STU-195,HST-064,Warden threatened to fine for a minor rule.,Staff Behavior,Warden,Medium,Counsel the staff member; involve owner if repeated.,Acknowledged
+CMP-2024-1472,STU-033,HST-029,"Bed frame creaking loudly, needs oiling.",Maintenance,Electrical,Medium,Assign technician to fix the issue within 24 hours.,Acknowledged
+CMP-2024-8560,STU-113,HST-006,Construction noise from next building all day.,Noise/Disturbance,External Noise,Medium,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2025-4993,STU-148,HST-047,Bedsheets not changed for two weeks.,Cleanliness,Bathroom,Medium,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2024-5526,STU-146,HST-033,Unexplained deduction from rent.,Billing/Payment Dispute,Unexpected Fee,Medium,Review charges with account; provide receipt.,In Progress
+CMP-2026-9022,STU-030,HST-007,Warden doesn't listen to complaints.,Staff Behavior,Cleaner,Low,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2025-6272,STU-011,HST-043,Fruit provided is rotten.,Food Quality,Portion Size,Medium,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2025-8749,STU-037,HST-072,Talking loudly in corridor after quiet hours.,Noise/Disturbance,External Noise,Low,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2024-8213,STU-001,HST-037,Cleaner shouted at me for no reason.,Staff Behavior,Security,Medium,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2025-6546,STU-039,HST-051,Room not cleaned for 2 days.,Cleanliness,Pest Control,High,Schedule housekeeping to clean the area immediately.,In Progress
+CMP-2025-9864,STU-043,HST-069,Staff enters room without knocking.,Staff Behavior,Warden,Medium,Counsel the staff member; involve owner if repeated.,In Progress
+CMP-2025-2612,STU-180,HST-073,AC not cooling properly in Room 221.,Maintenance,Door/Window,Low,Assign technician to fix the issue within 24 hours.,In Progress
+CMP-2025-7141,STU-131,HST-037,Common washroom is very dirty and smelly.,Cleanliness,Pest Control,Medium,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2024-2293,STU-055,HST-055,Security guard uses offensive language.,Staff Behavior,Cook,Medium,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2025-1153,STU-129,HST-047,Warden threatened to fine for a minor rule.,Staff Behavior,Cook,Medium,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2025-5097,STU-016,HST-030,Unexplained deduction from rent.,Billing/Payment Dispute,Deposit Refund,Low,Review charges with account; provide receipt.,Submitted
+CMP-2026-5847,STU-117,HST-010,Food bill is higher than agreed.,Billing/Payment Dispute,Deposit Refund,High,Review charges with account; provide receipt.,Submitted
+CMP-2024-9138,STU-012,HST-031,My phone went missing from study room.,Safety/Security,Theft,Medium,Investigate immediately; if serious call police.,In Progress
+CMP-2026-3240,STU-159,HST-032,Feeling unsafe due to unverified visitors.,Safety/Security,Unauthorized Entry,Medium,Investigate immediately; if serious call police.,Acknowledged
+CMP-2025-6352,STU-184,HST-052,"Mosquitoes everywhere, no nets provided.",Cleanliness,Room Cleaning,Medium,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2024-5210,STU-079,HST-011,Security guard uses offensive language.,Staff Behavior,Cook,Medium,Counsel the staff member; involve owner if repeated.,Resolved
+CMP-2026-7511,STU-059,HST-013,Double charged for this month's rent.,Billing/Payment Dispute,Deposit Refund,High,Review charges with account; provide receipt.,Resolved
+CMP-2026-5295,STU-119,HST-037,I want to change my room.,Other,Room Change,Low,Review student request and respond within 48 hours.,Submitted
+CMP-2025-4626,STU-093,HST-041,Cook refuses to serve extra roti.,Staff Behavior,Cleaner,Medium,Counsel the staff member; involve owner if repeated.,Resolved
+CMP-2025-2902,STU-190,HST-045,"Mosquitoes everywhere, no nets provided.",Cleanliness,Pest Control,High,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2026-9850,STU-173,HST-055,Rats in the kitchen area.,Cleanliness,Bathroom,Medium,Schedule housekeeping to clean the area immediately.,Resolved
+CMP-2024-7070,STU-156,HST-018,Canteen staff not serving on time.,Staff Behavior,Cook,Medium,Counsel the staff member; involve owner if repeated.,Resolved
+CMP-2026-6876,STU-027,HST-066,People running and stomping upstairs.,Noise/Disturbance,Roommate Noise,Low,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2026-1349,STU-158,HST-065,"Bed frame creaking loudly, needs oiling.",Maintenance,Furniture,High,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2024-4538,STU-032,HST-073,"Window latch broken, cannot close properly.",Maintenance,AC,High,Assign technician to fix the issue within 24 hours.,In Progress
+CMP-2024-9850,STU-082,HST-017,Construction noise from next building all day.,Noise/Disturbance,Roommate Noise,Low,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2026-6304,STU-124,HST-027,Outsider came inside without permission.,Safety/Security,Unauthorized Entry,High,Investigate immediately; if serious call police.,In Progress
+CMP-2025-8344,STU-103,HST-030,"Bed frame creaking loudly, needs oiling.",Maintenance,Electrical,Medium,Assign technician to fix the issue within 24 hours.,In Progress
+CMP-2026-9543,STU-163,HST-058,Roommate's friends hang out in our room all the time.,Roommate Issue,Cleanliness,High,Mediate between roommates; offer room change if needed.,In Progress
+CMP-2026-8267,STU-141,HST-061,My laptop was stolen from room.,Safety/Security,Security Guard,High,Investigate immediately; if serious call police.,Submitted
+CMP-2026-6327,STU-110,HST-074,Bathroom mirror and sink are never cleaned.,Cleanliness,Room Cleaning,Medium,Schedule housekeeping to clean the area immediately.,Acknowledged
+CMP-2026-4522,STU-129,HST-047,Warden threatened to fine for a minor rule.,Staff Behavior,Cleaner,High,Counsel the staff member; involve owner if repeated.,In Progress
+CMP-2025-7992,STU-076,HST-016,Security guard uses offensive language.,Staff Behavior,Security,Medium,Counsel the staff member; involve owner if repeated.,In Progress
+CMP-2024-8075,STU-099,HST-058,Constant arguments with roommate.,Roommate Issue,Guests,High,Mediate between roommates; offer room change if needed.,In Progress
+CMP-2026-3002,STU-105,HST-072,Common washroom is very dirty and smelly.,Cleanliness,Common Area,Low,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2026-4485,STU-154,HST-019,Canteen staff not serving on time.,Staff Behavior,Cleaner,Medium,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2026-4705,STU-067,HST-004,Very little chicken/vegetables served.,Food Quality,Portion Size,Medium,Inspect kitchen and food storage; check hygiene.,In Progress
+CMP-2025-6751,STU-002,HST-063,Warden doesn't listen to complaints.,Staff Behavior,Warden,Low,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2024-2503,STU-189,HST-019,Light bulb fused in corridor near Room 390.,Maintenance,Electrical,High,Assign technician to fix the issue within 24 hours.,In Progress
+CMP-2025-2391,STU-046,HST-050,No place to dry clothes inside.,Other,Suggestion,Medium,Review student request and respond within 48 hours.,Submitted
+CMP-2025-8242,STU-144,HST-054,Light bulb fused in corridor near Room 126.,Maintenance,Electrical,High,Assign technician to fix the issue within 24 hours.,Acknowledged
+CMP-2026-8972,STU-006,HST-055,Security guard uses offensive language.,Staff Behavior,Cleaner,Medium,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2024-3248,STU-014,HST-045,Curfew time is too early for exam preparation.,Other,Room Change,Medium,Review student request and respond within 48 hours.,Submitted
+CMP-2025-9725,STU-097,HST-036,Feeling unsafe due to unverified visitors.,Safety/Security,CCTV Issue,Medium,Investigate immediately; if serious call police.,Submitted
+CMP-2024-6129,STU-154,HST-020,Door banging repeatedly.,Noise/Disturbance,External Noise,Medium,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2026-8538,STU-034,HST-047,Canteen staff not serving on time.,Staff Behavior,Security,High,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2025-6083,STU-139,HST-024,Roommate uses my phone charger without permission.,Roommate Issue,Cleanliness,Medium,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2024-6724,STU-172,HST-063,Constant arguments with roommate.,Roommate Issue,Noise,Low,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2026-2234,STU-144,HST-052,Roommate smokes in the room.,Roommate Issue,Noise,Medium,Mediate between roommates; offer room change if needed.,Acknowledged
+CMP-2026-6295,STU-186,HST-050,Canteen staff not wearing gloves.,Food Quality,Portion Size,Low,Inspect kitchen and food storage; check hygiene.,In Progress
+CMP-2026-1920,STU-156,HST-029,Roommate's friends hang out in our room all the time.,Roommate Issue,Noise,Low,Mediate between roommates; offer room change if needed.,In Progress
+CMP-2024-2479,STU-147,HST-046,Roommate brings food and leaves plates for days.,Roommate Issue,Cleanliness,High,Mediate between roommates; offer room change if needed.,In Progress
+CMP-2026-4084,STU-115,HST-058,Need a warmer blanket for winter.,Other,Curfew,Medium,Review student request and respond within 48 hours.,In Progress
+CMP-2026-2381,STU-131,HST-038,My stuff used without asking.,Roommate Issue,Personal Space,Low,Mediate between roommates; offer room change if needed.,In Progress
+CMP-2026-3600,STU-188,HST-011,Curfew time is too early for exam preparation.,Other,Suggestion,Low,Review student request and respond within 48 hours.,Submitted
+CMP-2026-6482,STU-087,HST-005,Roommate brings food and leaves plates for days.,Roommate Issue,Guests,Low,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2026-3463,STU-050,HST-001,Dustbins overflowing near corridor.,Cleanliness,Common Area,Medium,Schedule housekeeping to clean the area immediately.,In Progress
+CMP-2024-6072,STU-069,HST-070,My stuff used without asking.,Roommate Issue,Cleanliness,Medium,Mediate between roommates; offer room change if needed.,In Progress
+CMP-2026-6928,STU-038,HST-041,My mattress is too old and uncomfortable.,Other,Curfew,Medium,Review student request and respond within 48 hours.,Acknowledged
+CMP-2024-3253,STU-055,HST-072,"Bed frame creaking loudly, needs oiling.",Maintenance,AC,Low,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2024-6517,STU-120,HST-035,Food is cold when served.,Food Quality,Spoilage/Poisoning,Low,Inspect kitchen and food storage; check hygiene.,In Progress
+CMP-2025-1715,STU-174,HST-057,Bread/chapati are undercooked.,Food Quality,Portion Size,Low,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2024-9749,STU-050,HST-027,Security guard uses offensive language.,Staff Behavior,Cleaner,Low,Counsel the staff member; involve owner if repeated.,In Progress
+CMP-2025-7256,STU-101,HST-043,People running and stomping upstairs.,Noise/Disturbance,Roommate Noise,Low,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2025-7081,STU-042,HST-014,Need permission to keep a bicycle inside.,Other,Curfew,Low,Review student request and respond within 48 hours.,Submitted
+CMP-2024-8167,STU-186,HST-070,I want to change my room.,Other,General,Medium,Review student request and respond within 48 hours.,Resolved
+CMP-2024-7326,STU-048,HST-046,Bedsheets not changed for two weeks.,Cleanliness,Bathroom,High,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2024-3254,STU-059,HST-037,Cockroaches in Room 115.,Cleanliness,Common Area,Low,Schedule housekeeping to clean the area immediately.,Acknowledged
+CMP-2024-1311,STU-174,HST-069,"Fan regulator broken, fan running at full speed.",Maintenance,AC,Medium,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2025-4893,STU-163,HST-064,CCTV camera not working near entrance.,Safety/Security,Unauthorized Entry,High,Investigate immediately; if serious call police.,Submitted
+CMP-2025-9782,STU-129,HST-044,My laptop was stolen from room.,Safety/Security,Theft,High,Investigate immediately; if serious call police.,Submitted
+CMP-2025-4941,STU-143,HST-017,Cupboard door off its hinges.,Maintenance,Other Maintenance,High,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2026-1333,STU-052,HST-050,Cook refuses to serve extra roti.,Staff Behavior,Cook,Low,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2024-6649,STU-181,HST-055,Warden is very rude when approached.,Staff Behavior,Security,Low,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2025-3868,STU-161,HST-011,My roommate plays loud music after 11 PM.,Noise/Disturbance,External Noise,Medium,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2024-5807,STU-169,HST-057,Warden asking for extra money for repairs.,Billing/Payment Dispute,Unexpected Fee,Low,Review charges with account; provide receipt.,Resolved
+CMP-2026-8756,STU-050,HST-018,Talking loudly in corridor after quiet hours.,Noise/Disturbance,Night Noise,Medium,Warn the noisy party and enforce quiet hours.,Resolved
+CMP-2024-7029,STU-069,HST-057,Security guard often missing after 10 PM.,Safety/Security,Theft,Medium,Investigate immediately; if serious call police.,Submitted
+CMP-2026-5369,STU-106,HST-038,Warden threatened to fine for a minor rule.,Staff Behavior,Security,Medium,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2024-6372,STU-023,HST-027,Dustbins overflowing near corridor.,Cleanliness,Pest Control,Medium,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2025-1693,STU-090,HST-036,Emergency exit blocked with boxes.,Safety/Security,CCTV Issue,High,Investigate immediately; if serious call police.,Submitted
+CMP-2026-3621,STU-118,HST-024,Roommate brings food and leaves plates for days.,Roommate Issue,Personal Space,Medium,Mediate between roommates; offer room change if needed.,In Progress
+CMP-2025-6933,STU-172,HST-050,Water leakage from ceiling during rain.,Maintenance,Electrical,High,Assign technician to fix the issue within 24 hours.,In Progress
+CMP-2024-9674,STU-125,HST-016,Cleaner shouted at me for no reason.,Staff Behavior,Warden,Medium,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2026-7340,STU-195,HST-053,Constant arguments with roommate.,Roommate Issue,Personal Space,High,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2026-9047,STU-114,HST-043,Request for a separate study table.,Other,General,Medium,Review student request and respond within 48 hours.,Acknowledged
+CMP-2024-6236,STU-059,HST-013,Construction noise from next building all day.,Noise/Disturbance,Night Noise,Low,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2024-4292,STU-105,HST-043,Roommate brings food and leaves plates for days.,Roommate Issue,Cleanliness,Low,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2026-3126,STU-167,HST-070,Canteen staff not wearing gloves.,Food Quality,Taste,Medium,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2026-2208,STU-060,HST-059,"Mosquitoes everywhere, no nets provided.",Cleanliness,Room Cleaning,Medium,Schedule housekeeping to clean the area immediately.,In Progress
+CMP-2026-3981,STU-017,HST-050,"Dal has a weird smell, looks old.",Food Quality,Hygiene,Medium,Inspect kitchen and food storage; check hygiene.,In Progress
+CMP-2025-4694,STU-061,HST-050,Fruit provided is rotten.,Food Quality,Portion Size,High,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2026-9740,STU-197,HST-035,Roommate has guests late at night.,Roommate Issue,Guests,Medium,Mediate between roommates; offer room change if needed.,Acknowledged
+CMP-2026-6531,STU-112,HST-016,Trash piled up near the entrance.,Cleanliness,Bathroom,Medium,Schedule housekeeping to clean the area immediately.,In Progress
+CMP-2026-7825,STU-107,HST-021,AC not cooling properly in Room 124.,Maintenance,Plumbing,High,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2026-7653,STU-114,HST-067,Cupboard door off its hinges.,Maintenance,Furniture,Medium,Assign technician to fix the issue within 24 hours.,In Progress
+CMP-2025-3353,STU-121,HST-037,Outsider came inside without permission.,Safety/Security,Security Guard,High,Investigate immediately; if serious call police.,Submitted
+CMP-2024-8642,STU-196,HST-015,Constant arguments with roommate.,Roommate Issue,Guests,Medium,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2026-7850,STU-061,HST-051,Bedsheets not changed for two weeks.,Cleanliness,Common Area,High,Schedule housekeeping to clean the area immediately.,Resolved
+CMP-2026-8648,STU-164,HST-019,Door banging repeatedly.,Noise/Disturbance,Night Noise,Medium,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2024-6781,STU-175,HST-061,Warden asking for extra money for repairs.,Billing/Payment Dispute,Deposit Refund,Medium,Review charges with account; provide receipt.,Resolved
+CMP-2024-8060,STU-175,HST-071,"Bed frame creaking loudly, needs oiling.",Maintenance,Plumbing,High,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2024-6939,STU-045,HST-061,"Repeatedly same menu, no variety.",Food Quality,Hygiene,Medium,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2026-2946,STU-123,HST-042,I want to change my room.,Other,Room Change,Low,Review student request and respond within 48 hours.,Submitted
+CMP-2024-9341,STU-072,HST-008,Hair found in food twice this week.,Food Quality,Spoilage/Poisoning,Low,Inspect kitchen and food storage; check hygiene.,In Progress
+CMP-2024-9446,STU-010,HST-025,Warden is very rude when approached.,Staff Behavior,Warden,Low,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2025-6511,STU-048,HST-064,Oil used in cooking seems reused.,Food Quality,Hygiene,Low,Inspect kitchen and food storage; check hygiene.,In Progress
+CMP-2025-6040,STU-186,HST-041,Request for a separate study table.,Other,Curfew,Medium,Review student request and respond within 48 hours.,Submitted
+CMP-2026-8871,STU-121,HST-013,"Fan regulator broken, fan running at full speed.",Maintenance,Door/Window,Medium,Assign technician to fix the issue within 24 hours.,In Progress
+CMP-2024-8225,STU-140,HST-045,Bread/chapati are undercooked.,Food Quality,Portion Size,Low,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2025-2020,STU-041,HST-069,My stuff used without asking.,Roommate Issue,Personal Space,Medium,Mediate between roommates; offer room change if needed.,In Progress
+CMP-2024-8531,STU-123,HST-060,Fruit provided is rotten.,Food Quality,Taste,Medium,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2026-5890,STU-148,HST-040,My mattress is too old and uncomfortable.,Other,Room Change,Medium,Review student request and respond within 48 hours.,Submitted
+CMP-2026-5480,STU-188,HST-030,"Party in neighboring room, can't sleep.",Noise/Disturbance,Roommate Noise,Medium,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2026-2294,STU-046,HST-039,My phone went missing from study room.,Safety/Security,Theft,High,Investigate immediately; if serious call police.,Submitted
+CMP-2026-5450,STU-165,HST-044,Roommate brings food and leaves plates for days.,Roommate Issue,Personal Space,Low,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2024-4814,STU-067,HST-032,Oil used in cooking seems reused.,Food Quality,Spoilage/Poisoning,High,Inspect kitchen and food storage; check hygiene.,Resolved
+CMP-2024-3587,STU-043,HST-071,"Geyser not working, no hot water.",Maintenance,Plumbing,High,Assign technician to fix the issue within 24 hours.,In Progress
+CMP-2024-4804,STU-059,HST-011,Warden threatened to fine for a minor rule.,Staff Behavior,Security,Medium,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2025-4052,STU-199,HST-072,Need permission to keep a bicycle inside.,Other,General,Low,Review student request and respond within 48 hours.,Submitted
+CMP-2025-8444,STU-163,HST-068,My laptop was stolen from room.,Safety/Security,Theft,High,Investigate immediately; if serious call police.,Resolved
+CMP-2024-8518,STU-071,HST-022,Need permission to keep a bicycle inside.,Other,Curfew,Medium,Review student request and respond within 48 hours.,Submitted
+CMP-2026-7643,STU-194,HST-029,My laptop was stolen from room.,Safety/Security,Unauthorized Entry,Medium,Investigate immediately; if serious call police.,Submitted
+CMP-2025-5064,STU-025,HST-028,Cook refuses to serve extra roti.,Staff Behavior,Cleaner,High,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2026-1187,STU-151,HST-037,"Geyser not working, no hot water.",Maintenance,AC,Low,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2026-9233,STU-090,HST-013,Security guard often missing after 10 PM.,Safety/Security,CCTV Issue,High,Investigate immediately; if serious call police.,Submitted
+CMP-2024-8454,STU-016,HST-029,Gate left unlocked at night.,Safety/Security,Theft,High,Investigate immediately; if serious call police.,Submitted
+CMP-2026-2341,STU-175,HST-052,Roommate's friends hang out in our room all the time.,Roommate Issue,Personal Space,Low,Mediate between roommates; offer room change if needed.,Acknowledged
+CMP-2026-4312,STU-141,HST-055,My mattress is too old and uncomfortable.,Other,Curfew,Medium,Review student request and respond within 48 hours.,Submitted
+CMP-2026-9008,STU-006,HST-053,Need permission to keep a bicycle inside.,Other,Suggestion,Medium,Review student request and respond within 48 hours.,Submitted
+CMP-2026-8575,STU-030,HST-004,Room not cleaned for 5 days.,Cleanliness,Pest Control,Medium,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2025-2044,STU-058,HST-010,My phone went missing from study room.,Safety/Security,Theft,High,Investigate immediately; if serious call police.,Submitted
+CMP-2026-7887,STU-017,HST-072,I want to change my room.,Other,General,Medium,Review student request and respond within 48 hours.,In Progress
+CMP-2026-3178,STU-180,HST-049,Roommate's friends hang out in our room all the time.,Roommate Issue,Personal Space,Low,Mediate between roommates; offer room change if needed.,Acknowledged
+CMP-2024-1372,STU-118,HST-005,My stuff used without asking.,Roommate Issue,Cleanliness,Medium,Mediate between roommates; offer room change if needed.,Resolved
+CMP-2025-4088,STU-194,HST-009,My phone went missing from study room.,Safety/Security,Security Guard,High,Investigate immediately; if serious call police.,Submitted
+CMP-2025-1797,STU-019,HST-014,"Floor has sticky stains, not mopped properly.",Cleanliness,Room Cleaning,High,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2024-3295,STU-147,HST-041,Students shouting late at night in common room.,Noise/Disturbance,External Noise,Medium,Warn the noisy party and enforce quiet hours.,In Progress
+CMP-2025-4881,STU-013,HST-046,Internet quota exhausted too quickly.,Other,Room Change,Low,Review student request and respond within 48 hours.,Acknowledged
+CMP-2026-3869,STU-113,HST-011,Security guard often missing after 10 PM.,Safety/Security,Unauthorized Entry,High,Investigate immediately; if serious call police.,Resolved
+CMP-2025-7688,STU-185,HST-002,Warden is very rude when approached.,Staff Behavior,Security,Low,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2026-3365,STU-165,HST-066,Hair found in food twice this week.,Food Quality,Hygiene,High,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2024-6411,STU-195,HST-061,Amount taken but no receipt provided.,Billing/Payment Dispute,Overcharging,High,Review charges with account; provide receipt.,Submitted
+CMP-2026-1647,STU-085,HST-037,Bathroom mirror and sink are never cleaned.,Cleanliness,Pest Control,High,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2025-1251,STU-071,HST-029,Trash piled up near the entrance.,Cleanliness,Bathroom,Medium,Schedule housekeeping to clean the area immediately.,Resolved
+CMP-2024-6269,STU-134,HST-021,My roommate plays loud music after 11 PM.,Noise/Disturbance,Night Noise,Low,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2025-8635,STU-126,HST-055,Emergency exit blocked with boxes.,Safety/Security,Security Guard,High,Investigate immediately; if serious call police.,Submitted
+CMP-2024-3390,STU-042,HST-026,Bathroom mirror and sink are never cleaned.,Cleanliness,Pest Control,Medium,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2024-7223,STU-163,HST-048,Cupboard door off its hinges.,Maintenance,AC,High,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2025-3773,STU-043,HST-040,Door banging repeatedly.,Noise/Disturbance,Roommate Noise,Medium,Warn the noisy party and enforce quiet hours.,In Progress
+CMP-2024-1794,STU-023,HST-001,Bread/chapati are undercooked.,Food Quality,Portion Size,Medium,Inspect kitchen and food storage; check hygiene.,In Progress
+CMP-2025-1990,STU-184,HST-073,Light bulb fused in corridor near Room 219.,Maintenance,Furniture,High,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2026-5501,STU-012,HST-035,Warden asking for extra money for repairs.,Billing/Payment Dispute,Unexpected Fee,Medium,Review charges with account; provide receipt.,Submitted
+CMP-2024-2578,STU-149,HST-067,Curfew time is too early for exam preparation.,Other,Room Change,Low,Review student request and respond within 48 hours.,Resolved
+CMP-2025-2294,STU-183,HST-029,Internet quota exhausted too quickly.,Other,Suggestion,Medium,Review student request and respond within 48 hours.,Submitted
+CMP-2024-1519,STU-011,HST-067,Roommate's friends hang out in our room all the time.,Roommate Issue,Personal Space,Medium,Mediate between roommates; offer room change if needed.,In Progress
+CMP-2024-2354,STU-200,HST-003,"Floor has sticky stains, not mopped properly.",Cleanliness,Pest Control,High,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2026-8790,STU-145,HST-022,Double charged for this month's rent.,Billing/Payment Dispute,Deposit Refund,Low,Review charges with account; provide receipt.,Submitted
+CMP-2025-1256,STU-128,HST-043,Outsider came inside without permission.,Safety/Security,Theft,Medium,Investigate immediately; if serious call police.,Submitted
+CMP-2025-9856,STU-050,HST-034,Construction noise from next building all day.,Noise/Disturbance,External Noise,Medium,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2024-6580,STU-198,HST-067,My stuff used without asking.,Roommate Issue,Personal Space,High,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2025-8075,STU-044,HST-055,Warden is very rude when approached.,Staff Behavior,Cleaner,Medium,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2026-3527,STU-124,HST-025,"Dal has a weird smell, looks old.",Food Quality,Portion Size,High,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2025-2674,STU-105,HST-054,Staff enters room without knocking.,Staff Behavior,Cleaner,Low,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2024-2468,STU-020,HST-012,Bread/chapati are undercooked.,Food Quality,Spoilage/Poisoning,Medium,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2026-4977,STU-150,HST-019,Constant arguments with roommate.,Roommate Issue,Cleanliness,Medium,Mediate between roommates; offer room change if needed.,In Progress
+CMP-2024-3739,STU-085,HST-010,No place to dry clothes inside.,Other,Suggestion,Medium,Review student request and respond within 48 hours.,Submitted
+CMP-2026-9123,STU-072,HST-010,Canteen staff not serving on time.,Staff Behavior,Cleaner,Medium,Counsel the staff member; involve owner if repeated.,Resolved
+CMP-2026-7224,STU-122,HST-033,My roommate plays loud music after 11 PM.,Noise/Disturbance,Roommate Noise,Low,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2026-4290,STU-063,HST-072,Constant arguments with roommate.,Roommate Issue,Personal Space,Medium,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2026-4971,STU-155,HST-015,Unexplained deduction from rent.,Billing/Payment Dispute,Deposit Refund,Low,Review charges with account; provide receipt.,Acknowledged
+CMP-2026-3947,STU-158,HST-047,Roommate brings food and leaves plates for days.,Roommate Issue,Personal Space,Low,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2025-9180,STU-120,HST-014,Need a warmer blanket for winter.,Other,General,Low,Review student request and respond within 48 hours.,Submitted
+CMP-2024-8357,STU-047,HST-017,Very little chicken/vegetables served.,Food Quality,Hygiene,Low,Inspect kitchen and food storage; check hygiene.,In Progress
+CMP-2025-9796,STU-105,HST-039,Amount taken but no receipt provided.,Billing/Payment Dispute,Unexpected Fee,Medium,Review charges with account; provide receipt.,In Progress
+CMP-2026-7547,STU-177,HST-028,Cockroaches in Room 282.,Cleanliness,Room Cleaning,High,Schedule housekeeping to clean the area immediately.,Resolved
+CMP-2026-4621,STU-094,HST-007,Roommate has guests late at night.,Roommate Issue,Personal Space,Medium,Mediate between roommates; offer room change if needed.,In Progress
+CMP-2024-8909,STU-160,HST-037,Amount taken but no receipt provided.,Billing/Payment Dispute,Deposit Refund,Medium,Review charges with account; provide receipt.,Submitted
+CMP-2024-9537,STU-200,HST-001,"Floor has sticky stains, not mopped properly.",Cleanliness,Common Area,Medium,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2026-2885,STU-102,HST-011,Warden asking for extra money for repairs.,Billing/Payment Dispute,Deposit Refund,Medium,Review charges with account; provide receipt.,Submitted
+CMP-2025-7985,STU-177,HST-020,AC not cooling properly in Room 185.,Maintenance,AC,Medium,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2024-8365,STU-182,HST-039,Amount taken but no receipt provided.,Billing/Payment Dispute,Overcharging,Medium,Review charges with account; provide receipt.,In Progress
+CMP-2024-2667,STU-015,HST-046,Warden is very rude when approached.,Staff Behavior,Security,Low,Counsel the staff member; involve owner if repeated.,In Progress
+CMP-2025-9646,STU-025,HST-031,My mattress is too old and uncomfortable.,Other,Suggestion,Medium,Review student request and respond within 48 hours.,Acknowledged
+CMP-2024-5873,STU-089,HST-067,Roommate uses my phone charger without permission.,Roommate Issue,Personal Space,Medium,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2024-9369,STU-080,HST-006,Bathroom mirror and sink are never cleaned.,Cleanliness,Bathroom,Medium,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2026-3838,STU-092,HST-031,Cleaner shouted at me for no reason.,Staff Behavior,Security,High,Counsel the staff member; involve owner if repeated.,Acknowledged
+CMP-2024-6882,STU-178,HST-049,Need a warmer blanket for winter.,Other,Suggestion,Medium,Review student request and respond within 48 hours.,Submitted
+CMP-2026-9056,STU-093,HST-075,Light bulb fused in corridor near Room 200.,Maintenance,Furniture,Medium,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2025-1535,STU-190,HST-067,Warden threatened to fine for a minor rule.,Staff Behavior,Security,High,Counsel the staff member; involve owner if repeated.,In Progress
+CMP-2026-9369,STU-081,HST-045,Gate left unlocked at night.,Safety/Security,Unauthorized Entry,Medium,Investigate immediately; if serious call police.,In Progress
+CMP-2026-8231,STU-156,HST-027,"Mosquitoes everywhere, no nets provided.",Cleanliness,Room Cleaning,Low,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2025-5305,STU-065,HST-067,No place to dry clothes inside.,Other,Suggestion,Medium,Review student request and respond within 48 hours.,Resolved
+CMP-2025-8015,STU-010,HST-026,Roommate's friends hang out in our room all the time.,Roommate Issue,Cleanliness,Low,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2026-3758,STU-065,HST-061,Very little chicken/vegetables served.,Food Quality,Taste,Medium,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2024-3221,STU-150,HST-010,Roommate brings food and leaves plates for days.,Roommate Issue,Guests,Low,Mediate between roommates; offer room change if needed.,Acknowledged
+CMP-2024-7434,STU-160,HST-011,Warden doesn't listen to complaints.,Staff Behavior,Warden,Medium,Counsel the staff member; involve owner if repeated.,In Progress
+CMP-2024-7600,STU-134,HST-031,Admin added maintenance fee without notice.,Billing/Payment Dispute,Overcharging,High,Review charges with account; provide receipt.,In Progress
+CMP-2026-2526,STU-147,HST-052,My mattress is too old and uncomfortable.,Other,Room Change,Low,Review student request and respond within 48 hours.,In Progress
+CMP-2024-9105,STU-013,HST-050,Double charged for this month's rent.,Billing/Payment Dispute,Unexpected Fee,High,Review charges with account; provide receipt.,Submitted
+CMP-2025-1793,STU-095,HST-034,Gate left unlocked at night.,Safety/Security,CCTV Issue,High,Investigate immediately; if serious call police.,In Progress
+CMP-2025-4314,STU-141,HST-048,"Fan regulator broken, fan running at full speed.",Maintenance,Plumbing,Medium,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2026-3711,STU-055,HST-070,Bread/chapati are undercooked.,Food Quality,Hygiene,High,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2025-2276,STU-057,HST-030,"Bed frame creaking loudly, needs oiling.",Maintenance,Furniture,Low,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2025-3165,STU-162,HST-070,Fruit provided is rotten.,Food Quality,Taste,Low,Inspect kitchen and food storage; check hygiene.,In Progress
+CMP-2025-3246,STU-111,HST-065,Food bill is higher than agreed.,Billing/Payment Dispute,Overcharging,High,Review charges with account; provide receipt.,Submitted
+CMP-2025-6753,STU-106,HST-029,Cleaner shouted at me for no reason.,Staff Behavior,Cook,High,Counsel the staff member; involve owner if repeated.,Acknowledged
+CMP-2024-3293,STU-044,HST-072,Construction noise from next building all day.,Noise/Disturbance,External Noise,Low,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2024-5668,STU-189,HST-029,Bathroom mirror and sink are never cleaned.,Cleanliness,Pest Control,Medium,Schedule housekeeping to clean the area immediately.,Acknowledged
+CMP-2025-1894,STU-136,HST-072,"Bed frame creaking loudly, needs oiling.",Maintenance,Other Maintenance,Medium,Assign technician to fix the issue within 24 hours.,In Progress
+CMP-2024-6916,STU-090,HST-028,TV volume too high in lounge.,Noise/Disturbance,Roommate Noise,Low,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2025-2195,STU-182,HST-049,Roommate uses my phone charger without permission.,Roommate Issue,Noise,Medium,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2025-9300,STU-159,HST-017,AC not cooling properly in Room 108.,Maintenance,Door/Window,High,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2024-6077,STU-187,HST-065,My phone went missing from study room.,Safety/Security,Security Guard,High,Investigate immediately; if serious call police.,Submitted
+CMP-2026-2083,STU-081,HST-047,Common washroom is very dirty and smelly.,Cleanliness,Bathroom,Medium,Schedule housekeeping to clean the area immediately.,In Progress
+CMP-2026-1901,STU-054,HST-032,Security guard often missing after 10 PM.,Safety/Security,Security Guard,Low,Investigate immediately; if serious call police.,Submitted
+CMP-2025-9568,STU-138,HST-007,Outsider came inside without permission.,Safety/Security,Unauthorized Entry,Medium,Investigate immediately; if serious call police.,Submitted
+CMP-2024-6488,STU-140,HST-051,Need permission to keep a bicycle inside.,Other,Room Change,Low,Review student request and respond within 48 hours.,Submitted
+CMP-2026-6900,STU-040,HST-071,Cook refuses to serve extra roti.,Staff Behavior,Cleaner,Medium,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2026-2889,STU-179,HST-030,Water leakage from ceiling during rain.,Maintenance,Furniture,High,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2024-3932,STU-194,HST-017,Students shouting late at night in common room.,Noise/Disturbance,External Noise,High,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2025-2276,STU-137,HST-032,"Geyser not working, no hot water.",Maintenance,Door/Window,Medium,Assign technician to fix the issue within 24 hours.,In Progress
+CMP-2024-8620,STU-120,HST-004,My roommate never cleans his side.,Roommate Issue,Cleanliness,Low,Mediate between roommates; offer room change if needed.,Resolved
+CMP-2026-5979,STU-005,HST-038,Feeling unsafe due to unverified visitors.,Safety/Security,CCTV Issue,High,Investigate immediately; if serious call police.,Submitted
+CMP-2024-3466,STU-183,HST-036,Door banging repeatedly.,Noise/Disturbance,Roommate Noise,Low,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2024-6488,STU-056,HST-060,Water not coming in bathroom since since yesterday.,Maintenance,Furniture,Medium,Assign technician to fix the issue within 24 hours.,Acknowledged
+CMP-2025-1981,STU-169,HST-062,"Geyser not working, no hot water.",Maintenance,Other Maintenance,Medium,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2025-2391,STU-124,HST-037,"Dal has a weird smell, looks old.",Food Quality,Hygiene,Medium,Inspect kitchen and food storage; check hygiene.,In Progress
+CMP-2024-4879,STU-124,HST-018,"Floor has sticky stains, not mopped properly.",Cleanliness,Bathroom,High,Schedule housekeeping to clean the area immediately.,Acknowledged
+CMP-2024-4321,STU-096,HST-022,Feeling unsafe due to unverified visitors.,Safety/Security,CCTV Issue,High,Investigate immediately; if serious call police.,Submitted
+CMP-2026-6870,STU-190,HST-040,Bread/chapati are undercooked.,Food Quality,Spoilage/Poisoning,Medium,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2025-1660,STU-057,HST-013,"Party in neighboring room, can't sleep.",Noise/Disturbance,Roommate Noise,High,Warn the noisy party and enforce quiet hours.,In Progress
+CMP-2024-5896,STU-087,HST-021,Construction noise from next building all day.,Noise/Disturbance,Roommate Noise,Low,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2025-2669,STU-066,HST-018,My laptop was stolen from room.,Safety/Security,Unauthorized Entry,Medium,Investigate immediately; if serious call police.,Submitted
+CMP-2026-2376,STU-124,HST-004,Lunch rice was spoiled yesterday.,Food Quality,Spoilage/Poisoning,High,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2025-3007,STU-001,HST-022,My laptop was stolen from room.,Safety/Security,Theft,Medium,Investigate immediately; if serious call police.,Submitted
+CMP-2024-7270,STU-002,HST-059,Water not coming in bathroom since since yesterday.,Maintenance,Furniture,Low,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2024-5026,STU-073,HST-042,Staff enters room without knocking.,Staff Behavior,Cook,Medium,Counsel the staff member; involve owner if repeated.,In Progress
+CMP-2025-4267,STU-147,HST-064,My phone went missing from study room.,Safety/Security,Security Guard,High,Investigate immediately; if serious call police.,Submitted
+CMP-2025-9231,STU-161,HST-023,Curfew time is too early for exam preparation.,Other,Suggestion,Low,Review student request and respond within 48 hours.,In Progress
+CMP-2025-1959,STU-174,HST-042,Roommate brings food and leaves plates for days.,Roommate Issue,Personal Space,Medium,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2025-9743,STU-001,HST-021,Double charged for this month's rent.,Billing/Payment Dispute,Unexpected Fee,High,Review charges with account; provide receipt.,Acknowledged
+CMP-2026-6878,STU-091,HST-058,Water leakage from ceiling during rain.,Maintenance,Electrical,High,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2025-9882,STU-004,HST-061,Tiles cracked in common washroom.,Maintenance,Other Maintenance,Medium,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2026-8831,STU-014,HST-042,Emergency exit blocked with boxes.,Safety/Security,Unauthorized Entry,High,Investigate immediately; if serious call police.,Submitted
+CMP-2025-1975,STU-136,HST-056,Water leakage from ceiling during rain.,Maintenance,AC,Low,Assign technician to fix the issue within 24 hours.,Resolved
+CMP-2025-7481,STU-132,HST-021,Water leakage from ceiling during rain.,Maintenance,Electrical,Low,Assign technician to fix the issue within 24 hours.,Resolved
+CMP-2026-8982,STU-043,HST-059,"Mosquitoes everywhere, no nets provided.",Cleanliness,Common Area,Low,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2026-5825,STU-114,HST-040,Constant arguments with roommate.,Roommate Issue,Noise,Low,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2026-4619,STU-127,HST-046,Lunch rice was spoiled yesterday.,Food Quality,Taste,High,Inspect kitchen and food storage; check hygiene.,Acknowledged
+CMP-2024-2453,STU-014,HST-074,Common washroom is very dirty and smelly.,Cleanliness,Pest Control,Medium,Schedule housekeeping to clean the area immediately.,Resolved
+CMP-2024-1020,STU-132,HST-031,My roommate never cleans his side.,Roommate Issue,Personal Space,Low,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2026-7149,STU-159,HST-024,"Fan regulator broken, fan running at full speed.",Maintenance,Furniture,Medium,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2025-1328,STU-149,HST-055,Trash piled up near the entrance.,Cleanliness,Pest Control,High,Schedule housekeeping to clean the area immediately.,In Progress
+CMP-2024-9962,STU-012,HST-036,Roommate has guests late at night.,Roommate Issue,Guests,Low,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2026-8113,STU-099,HST-061,Trash piled up near the entrance.,Cleanliness,Common Area,Medium,Schedule housekeeping to clean the area immediately.,Acknowledged
+CMP-2026-9849,STU-162,HST-049,"Dal has a weird smell, looks old.",Food Quality,Spoilage/Poisoning,Medium,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2025-3516,STU-034,HST-047,Gate left unlocked at night.,Safety/Security,CCTV Issue,High,Investigate immediately; if serious call police.,Submitted
+CMP-2025-4271,STU-200,HST-025,Water not coming in bathroom since yesterday.,Maintenance,AC,Low,Assign technician to fix the issue within 24 hours.,Acknowledged
+CMP-2024-6052,STU-052,HST-047,Cockroaches in Room 188.,Cleanliness,Room Cleaning,Low,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2025-7052,STU-197,HST-034,Warden threatened to fine for a minor rule.,Staff Behavior,Security,Medium,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2026-2009,STU-136,HST-073,Lunch rice was spoiled yesterday.,Food Quality,Portion Size,High,Inspect kitchen and food storage; check hygiene.,In Progress
+CMP-2026-1999,STU-056,HST-049,"Dal has a weird smell, looks old.",Food Quality,Spoilage/Poisoning,Low,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2026-1568,STU-163,HST-040,Warden threatened to fine for a minor rule.,Staff Behavior,Security,Medium,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2024-1699,STU-038,HST-067,I want to change my room.,Other,Suggestion,Low,Review student request and respond within 48 hours.,In Progress
+CMP-2026-2097,STU-116,HST-066,Canteen staff not serving on time.,Staff Behavior,Warden,Low,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2024-9561,STU-148,HST-073,Rats in the kitchen area.,Cleanliness,Pest Control,Low,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2024-2730,STU-172,HST-072,Canteen staff not serving on time.,Staff Behavior,Warden,Medium,Counsel the staff member; involve owner if repeated.,In Progress
+CMP-2026-8750,STU-062,HST-039,Rats in the kitchen area.,Cleanliness,Common Area,Medium,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2024-7484,STU-071,HST-009,"Bed frame creaking loudly, needs oiling.",Maintenance,Electrical,Medium,Assign technician to fix the issue within 24 hours.,Acknowledged
+CMP-2025-6094,STU-086,HST-049,My roommate never cleans his side.,Roommate Issue,Noise,High,Mediate between roommates; offer room change if needed.,In Progress
+CMP-2025-5414,STU-058,HST-035,Outsider came inside without permission.,Safety/Security,Security Guard,Low,Investigate immediately; if serious call police.,Submitted
+CMP-2025-1920,STU-128,HST-066,Security guard uses offensive language.,Staff Behavior,Warden,Low,Counsel the staff member; involve owner if repeated.,In Progress
+CMP-2026-1474,STU-156,HST-012,I want to change my room.,Other,Suggestion,Medium,Review student request and respond within 48 hours.,In Progress
+CMP-2026-4262,STU-066,HST-003,Very little chicken/vegetables served.,Food Quality,Taste,Medium,Inspect kitchen and food storage; check hygiene.,Resolved
+CMP-2025-8308,STU-108,HST-063,Emergency exit blocked with boxes.,Safety/Security,CCTV Issue,Medium,Investigate immediately; if serious call police.,Submitted
+CMP-2026-2480,STU-011,HST-056,Oil used in cooking seems reused.,Food Quality,Portion Size,High,Inspect kitchen and food storage; check hygiene.,In Progress
+CMP-2024-4688,STU-192,HST-075,My phone went missing from study room.,Safety/Security,Theft,Medium,Investigate immediately; if serious call police.,Submitted
+CMP-2024-1138,STU-108,HST-040,TV volume too high in lounge.,Noise/Disturbance,Roommate Noise,Medium,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2024-8646,STU-084,HST-011,"Party in neighboring room, can't sleep.",Noise/Disturbance,Roommate Noise,Low,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2025-5890,STU-175,HST-071,Outsider came inside without permission.,Safety/Security,Security Guard,High,Investigate immediately; if serious call police.,Submitted
+CMP-2026-5895,STU-142,HST-025,Dustbins overflowing near corridor.,Cleanliness,Pest Control,Low,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2026-1417,STU-005,HST-006,Talking loudly in corridor after quiet hours.,Noise/Disturbance,Night Noise,Low,Warn the noisy party and enforce quiet hours.,Acknowledged
+CMP-2026-4111,STU-190,HST-051,Admin added maintenance fee without notice.,Billing/Payment Dispute,Deposit Refund,Low,Review charges with account; provide receipt.,Submitted
+CMP-2026-3967,STU-149,HST-054,Roommate's friends hang out in our room all the time.,Roommate Issue,Noise,Low,Mediate between roommates; offer room change if needed.,In Progress
+CMP-2024-6499,STU-080,HST-035,Emergency exit blocked with boxes.,Safety/Security,Theft,Medium,Investigate immediately; if serious call police.,Submitted
+CMP-2025-5269,STU-158,HST-062,Bathroom mirror and sink are never cleaned.,Cleanliness,Bathroom,Medium,Schedule housekeeping to clean the area immediately.,In Progress
+CMP-2025-4187,STU-147,HST-050,Outsider came inside without permission.,Safety/Security,Security Guard,High,Investigate immediately; if serious call police.,Acknowledged
+CMP-2024-4281,STU-120,HST-026,No place to dry clothes inside.,Other,General,Medium,Review student request and respond within 48 hours.,In Progress
+CMP-2026-3897,STU-065,HST-067,Roommate's friends hang out in our room all the time.,Roommate Issue,Personal Space,Low,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2024-9021,STU-109,HST-025,My roommate never cleans his side.,Roommate Issue,Cleanliness,Low,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2025-1076,STU-188,HST-011,Trash piled up near the entrance.,Cleanliness,Bathroom,Medium,Schedule housekeeping to clean the area immediately.,Resolved
+CMP-2024-1067,STU-003,HST-038,"Window latch broken, cannot close properly.",Maintenance,Door/Window,Low,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2024-2069,STU-166,HST-019,Door banging repeatedly.,Noise/Disturbance,Night Noise,Medium,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2026-3192,STU-003,HST-014,"Bed frame creaking loudly, needs oiling.",Maintenance,AC,Medium,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2024-4460,STU-025,HST-010,Constant arguments with roommate.,Roommate Issue,Personal Space,High,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2025-5190,STU-010,HST-015,Cupboard door off its hinges.,Maintenance,Door/Window,Low,Assign technician to fix the issue within 24 hours.,In Progress
+CMP-2025-7230,STU-148,HST-055,Curfew time is too early for exam preparation.,Other,General,High,Review student request and respond within 48 hours.,Submitted
+CMP-2026-9524,STU-199,HST-044,Bedsheets not changed for two weeks.,Cleanliness,Common Area,Medium,Schedule housekeeping to clean the area immediately.,Acknowledged
+CMP-2024-9154,STU-082,HST-037,My phone went missing from study room.,Safety/Security,Unauthorized Entry,High,Investigate immediately; if serious call police.,Submitted
+CMP-2024-1645,STU-176,HST-051,Talking loudly in corridor after quiet hours.,Noise/Disturbance,External Noise,Medium,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2024-9095,STU-185,HST-013,Internet quota exhausted too quickly.,Other,Curfew,High,Review student request and respond within 48 hours.,Acknowledged
+CMP-2025-5850,STU-077,HST-075,Fruit provided is rotten.,Food Quality,Spoilage/Poisoning,Low,Inspect kitchen and food storage; check hygiene.,Acknowledged
+CMP-2026-6123,STU-162,HST-066,My laptop was stolen from room.,Safety/Security,Security Guard,Medium,Investigate immediately; if serious call police.,Submitted
+CMP-2025-8171,STU-133,HST-010,Cook refuses to serve extra roti.,Staff Behavior,Warden,Medium,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2025-7319,STU-148,HST-062,Feeling unsafe due to unverified visitors.,Safety/Security,Theft,High,Investigate immediately; if serious call police.,Resolved
+CMP-2024-7816,STU-154,HST-015,Unexplained deduction from rent.,Billing/Payment Dispute,Deposit Refund,Low,Review charges with account; provide receipt.,In Progress
+CMP-2026-3140,STU-020,HST-016,Warden asking for extra money for repairs.,Billing/Payment Dispute,Unexpected Fee,Low,Review charges with account; provide receipt.,Acknowledged
+CMP-2024-9598,STU-073,HST-047,Security deposit not refunded after leaving.,Billing/Payment Dispute,Deposit Refund,High,Review charges with account; provide receipt.,Acknowledged
+CMP-2024-8895,STU-154,HST-013,Door banging repeatedly.,Noise/Disturbance,External Noise,High,Warn the noisy party and enforce quiet hours.,Acknowledged
+CMP-2026-8688,STU-117,HST-030,My stuff used without asking.,Roommate Issue,Personal Space,High,Mediate between roommates; offer room change if needed.,Resolved
+CMP-2026-4648,STU-079,HST-011,Security deposit not refunded after leaving.,Billing/Payment Dispute,Overcharging,Medium,Review charges with account; provide receipt.,Submitted
+CMP-2024-9166,STU-143,HST-009,No place to dry clothes inside.,Other,Curfew,Medium,Review student request and respond within 48 hours.,Submitted
+CMP-2026-9996,STU-142,HST-019,Security deposit not refunded after leaving.,Billing/Payment Dispute,Deposit Refund,High,Review charges with account; provide receipt.,Submitted
+CMP-2025-6953,STU-112,HST-011,Water leakage from ceiling during rain.,Maintenance,Plumbing,High,Assign technician to fix the issue within 24 hours.,Acknowledged
+CMP-2025-8414,STU-156,HST-029,"Fan regulator broken, fan running at full speed.",Maintenance,Electrical,Medium,Assign technician to fix the issue within 24 hours.,In Progress
+CMP-2025-9973,STU-134,HST-015,Cockroaches in Room 102.,Cleanliness,Room Cleaning,Low,Schedule housekeeping to clean the area immediately.,Resolved
+CMP-2026-7704,STU-013,HST-071,I want to change my room.,Other,Room Change,Medium,Review student request and respond within 48 hours.,In Progress
+CMP-2025-4122,STU-144,HST-052,Trash piled up near the entrance.,Cleanliness,Common Area,Low,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2025-9260,STU-112,HST-006,Roommate uses my phone charger without permission.,Roommate Issue,Cleanliness,Medium,Mediate between roommates; offer room change if needed.,In Progress
+CMP-2026-8912,STU-089,HST-069,Lunch rice was spoiled yesterday.,Food Quality,Portion Size,Medium,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2025-9259,STU-103,HST-013,Need permission to keep a bicycle inside.,Other,Suggestion,Low,Review student request and respond within 48 hours.,Acknowledged
+CMP-2024-3263,STU-065,HST-073,Security guard uses offensive language.,Staff Behavior,Security,Low,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2025-6657,STU-161,HST-037,Staff enters room without knocking.,Staff Behavior,Cleaner,Medium,Counsel the staff member; involve owner if repeated.,Acknowledged
+CMP-2026-8870,STU-060,HST-073,Fruit provided is rotten.,Food Quality,Taste,Low,Inspect kitchen and food storage; check hygiene.,In Progress
+CMP-2026-1927,STU-013,HST-041,Canteen staff not serving on time.,Staff Behavior,Cleaner,High,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2025-4342,STU-020,HST-007,Construction noise from next building all day.,Noise/Disturbance,Roommate Noise,Medium,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2024-7371,STU-071,HST-008,My mattress is too old and uncomfortable.,Other,General,Low,Review student request and respond within 48 hours.,In Progress
+CMP-2026-6122,STU-200,HST-001,"Party in neighboring room, can't sleep.",Noise/Disturbance,External Noise,Medium,Warn the noisy party and enforce quiet hours.,In Progress
+CMP-2025-4695,STU-006,HST-066,Curfew time is too early for exam preparation.,Other,General,Low,Review student request and respond within 48 hours.,In Progress
+CMP-2024-9418,STU-137,HST-006,Roommate smokes in the room.,Roommate Issue,Noise,Low,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2025-1092,STU-126,HST-045,Room not cleaned for 5 days.,Cleanliness,Pest Control,Medium,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2026-5934,STU-178,HST-055,My stuff used without asking.,Roommate Issue,Personal Space,Medium,Mediate between roommates; offer room change if needed.,In Progress
+CMP-2026-2117,STU-001,HST-018,Double charged for this month's rent.,Billing/Payment Dispute,Unexpected Fee,Medium,Review charges with account; provide receipt.,Resolved
+CMP-2024-6437,STU-038,HST-059,No place to dry clothes inside.,Other,Suggestion,Medium,Review student request and respond within 48 hours.,Submitted
+CMP-2026-1144,STU-017,HST-048,Roommate brings food and leaves plates for days.,Roommate Issue,Guests,Medium,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2024-6258,STU-048,HST-050,Bedsheets not changed for two weeks.,Cleanliness,Common Area,Low,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2025-9426,STU-150,HST-018,Canteen staff not serving on time.,Staff Behavior,Warden,High,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2024-3742,STU-124,HST-016,Need a warmer blanket for winter.,Other,Curfew,Medium,Review student request and respond within 48 hours.,Submitted
+CMP-2024-4368,STU-179,HST-011,I want to change my room.,Other,General,Low,Review student request and respond within 48 hours.,Submitted
+CMP-2024-1889,STU-172,HST-046,I want to change my room.,Other,Curfew,Low,Review student request and respond within 48 hours.,Submitted
+CMP-2025-7626,STU-044,HST-062,Fruit provided is rotten.,Food Quality,Hygiene,Low,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2026-2036,STU-035,HST-074,Warden is very rude when approached.,Staff Behavior,Cleaner,Medium,Counsel the staff member; involve owner if repeated.,Acknowledged
+CMP-2026-2417,STU-190,HST-071,AC not cooling properly in Room 284.,Maintenance,Other Maintenance,High,Assign technician to fix the issue within 24 hours.,Acknowledged
+CMP-2024-7406,STU-158,HST-054,My phone went missing from study room.,Safety/Security,Security Guard,High,Investigate immediately; if serious call police.,Submitted
+CMP-2026-3316,STU-172,HST-072,Need permission to keep a bicycle inside.,Other,Room Change,Low,Review student request and respond within 48 hours.,Submitted
+CMP-2025-4441,STU-177,HST-026,Room not cleaned for 4 days.,Cleanliness,Room Cleaning,Medium,Schedule housekeeping to clean the area immediately.,Resolved
+CMP-2025-4183,STU-194,HST-035,Roommate uses my phone charger without permission.,Roommate Issue,Noise,Medium,Mediate between roommates; offer room change if needed.,Acknowledged
+CMP-2026-2103,STU-149,HST-041,Trash piled up near the entrance.,Cleanliness,Bathroom,Medium,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2024-2639,STU-049,HST-045,Security guard often missing after 10 PM.,Safety/Security,Theft,High,Investigate immediately; if serious call police.,Acknowledged
+CMP-2026-3496,STU-138,HST-026,Security guard often missing after 10 PM.,Safety/Security,Theft,High,Investigate immediately; if serious call police.,Acknowledged
+CMP-2026-8145,STU-104,HST-055,Roommate uses my phone charger without permission.,Roommate Issue,Guests,Medium,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2025-2783,STU-091,HST-045,CCTV camera not working near entrance.,Safety/Security,CCTV Issue,High,Investigate immediately; if serious call police.,In Progress
+CMP-2024-2235,STU-158,HST-058,Food is cold when served.,Food Quality,Spoilage/Poisoning,High,Inspect kitchen and food storage; check hygiene.,In Progress
+CMP-2024-5269,STU-021,HST-073,Water not coming in bathroom since since yesterday.,Maintenance,Door/Window,Low,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2025-3193,STU-109,HST-019,Need permission to keep a bicycle inside.,Other,Curfew,Low,Review student request and respond within 48 hours.,Submitted
+CMP-2026-3717,STU-096,HST-005,Security deposit not refunded after leaving.,Billing/Payment Dispute,Unexpected Fee,High,Review charges with account; provide receipt.,Submitted
+CMP-2024-8921,STU-036,HST-070,Need a warmer blanket for winter.,Other,Suggestion,Low,Review student request and respond within 48 hours.,Acknowledged
+CMP-2026-4387,STU-158,HST-071,Roommate smokes in the room.,Roommate Issue,Cleanliness,Medium,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2024-9542,STU-102,HST-018,No place to dry clothes inside.,Other,Room Change,High,Review student request and respond within 48 hours.,Acknowledged
+CMP-2024-9465,STU-036,HST-046,CCTV camera not working near entrance.,Safety/Security,CCTV Issue,High,Investigate immediately; if serious call police.,Acknowledged
+CMP-2025-1108,STU-149,HST-064,Security guard often missing after 10 PM.,Safety/Security,Security Guard,Medium,Investigate immediately; if serious call police.,Submitted
+CMP-2024-4062,STU-195,HST-046,Need a warmer blanket for winter.,Other,Suggestion,Low,Review student request and respond within 48 hours.,Submitted
+CMP-2024-8889,STU-105,HST-039,Oil used in cooking seems reused.,Food Quality,Hygiene,Medium,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2026-3639,STU-058,HST-018,Food bill is higher than agreed.,Billing/Payment Dispute,Deposit Refund,High,Review charges with account; provide receipt.,Submitted
+CMP-2025-1305,STU-163,HST-072,Oil used in cooking seems reused.,Food Quality,Spoilage/Poisoning,High,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2025-3338,STU-124,HST-008,Security guard often missing after 10 PM.,Safety/Security,Theft,Medium,Investigate immediately; if serious call police.,Submitted
+CMP-2025-3166,STU-022,HST-049,Bread/chapati are undercooked.,Food Quality,Hygiene,Medium,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2024-8796,STU-085,HST-031,Cockroaches in Room 368.,Cleanliness,Room Cleaning,Low,Schedule housekeeping to clean the area immediately.,Acknowledged
+CMP-2026-1019,STU-060,HST-052,Cupboard door off its hinges.,Maintenance,Door/Window,Medium,Assign technician to fix the issue within 24 hours.,Resolved
+CMP-2025-7246,STU-153,HST-009,Staff enters room without knocking.,Staff Behavior,Security,Medium,Counsel the staff member; involve owner if repeated.,Resolved
+CMP-2024-5641,STU-071,HST-030,Roommate uses my phone charger without permission.,Roommate Issue,Cleanliness,Low,Mediate between roommates; offer room change if needed.,Resolved
+CMP-2024-7144,STU-110,HST-060,Request for a separate study table.,Other,Curfew,Low,Review student request and respond within 48 hours.,Submitted
+CMP-2025-5281,STU-050,HST-027,Door banging repeatedly.,Noise/Disturbance,External Noise,Medium,Warn the noisy party and enforce quiet hours.,Acknowledged
+CMP-2026-8904,STU-184,HST-060,My mattress is too old and uncomfortable.,Other,Curfew,Low,Review student request and respond within 48 hours.,Submitted
+CMP-2026-7522,STU-025,HST-038,Fruit provided is rotten.,Food Quality,Hygiene,Low,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2025-1852,STU-175,HST-052,Very little chicken/vegetables served.,Food Quality,Spoilage/Poisoning,High,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2024-5310,STU-091,HST-050,Lunch rice was spoiled yesterday.,Food Quality,Portion Size,Low,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2026-9536,STU-010,HST-033,My roommate plays loud music after 11 PM.,Noise/Disturbance,Roommate Noise,Low,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2026-5685,STU-156,HST-009,CCTV camera not working near entrance.,Safety/Security,Theft,High,Investigate immediately; if serious call police.,Acknowledged
+CMP-2024-2422,STU-068,HST-024,Talking loudly in corridor after quiet hours.,Noise/Disturbance,Night Noise,Medium,Warn the noisy party and enforce quiet hours.,Acknowledged
+CMP-2026-2124,STU-157,HST-010,Feeling unsafe due to unverified visitors.,Safety/Security,Security Guard,High,Investigate immediately; if serious call police.,Submitted
+CMP-2026-4187,STU-186,HST-058,Rats in the kitchen area.,Cleanliness,Common Area,Low,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2026-5821,STU-054,HST-029,Charged for electricity even though it's included.,Billing/Payment Dispute,Deposit Refund,Medium,Review charges with account; provide receipt.,Submitted
+CMP-2026-8923,STU-101,HST-072,Roommate brings food and leaves plates for days.,Roommate Issue,Cleanliness,Low,Mediate between roommates; offer room change if needed.,Resolved
+CMP-2025-4610,STU-026,HST-049,People running and stomping upstairs.,Noise/Disturbance,Roommate Noise,Medium,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2024-5706,STU-099,HST-043,TV volume too high in lounge.,Noise/Disturbance,Roommate Noise,High,Warn the noisy party and enforce quiet hours.,In Progress
+CMP-2026-5408,STU-104,HST-050,Bathroom mirror and sink are never cleaned.,Cleanliness,Pest Control,Medium,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2024-5091,STU-183,HST-025,Canteen staff not wearing gloves.,Food Quality,Taste,Low,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2026-1692,STU-113,HST-008,Roommate has guests late at night.,Roommate Issue,Noise,Low,Mediate between roommates; offer room change if needed.,In Progress
+CMP-2026-5591,STU-049,HST-064,Double charged for this month's rent.,Billing/Payment Dispute,Deposit Refund,Medium,Review charges with account; provide receipt.,Resolved
+CMP-2026-6689,STU-008,HST-039,Cleaner shouted at me for no reason.,Staff Behavior,Cook,Medium,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2024-4452,STU-003,HST-008,Warden threatened to fine for a minor rule.,Staff Behavior,Cook,Medium,Counsel the staff member; involve owner if repeated.,Acknowledged
+CMP-2025-8722,STU-141,HST-056,Staff enters room without knocking.,Staff Behavior,Warden,High,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2025-7563,STU-093,HST-041,My stuff used without asking.,Roommate Issue,Guests,Medium,Mediate between roommates; offer room change if needed.,In Progress
+CMP-2026-5422,STU-041,HST-048,CCTV camera not working near entrance.,Safety/Security,Security Guard,Medium,Investigate immediately; if serious call police.,In Progress
+CMP-2025-1159,STU-046,HST-069,TV volume too high in lounge.,Noise/Disturbance,External Noise,Low,Warn the noisy party and enforce quiet hours.,In Progress
+CMP-2025-5915,STU-163,HST-053,Canteen staff not wearing gloves.,Food Quality,Portion Size,Medium,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2025-2577,STU-200,HST-003,My phone went missing from study room.,Safety/Security,Theft,High,Investigate immediately; if serious call police.,In Progress
+CMP-2025-6638,STU-097,HST-022,Double charged for this month's rent.,Billing/Payment Dispute,Unexpected Fee,Medium,Review charges with account; provide receipt.,Resolved
+CMP-2026-9821,STU-063,HST-058,AC not cooling properly in Room 280.,Maintenance,Furniture,High,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2024-7243,STU-015,HST-068,"Repeatedly same menu, no variety.",Food Quality,Hygiene,Medium,Inspect kitchen and food storage; check hygiene.,In Progress
+CMP-2025-2168,STU-082,HST-029,CCTV camera not working near entrance.,Safety/Security,Security Guard,High,Investigate immediately; if serious call police.,Acknowledged
+CMP-2026-7479,STU-187,HST-068,Bathroom mirror and sink are never cleaned.,Cleanliness,Bathroom,Medium,Schedule housekeeping to clean the area immediately.,In Progress
+CMP-2024-3048,STU-012,HST-009,Feeling unsafe due to unverified visitors.,Safety/Security,Security Guard,High,Investigate immediately; if serious call police.,Submitted
+CMP-2025-9985,STU-036,HST-068,"Party in neighboring room, can't sleep.",Noise/Disturbance,External Noise,Medium,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2026-7387,STU-127,HST-042,"Geyser not working, no hot water.",Maintenance,Plumbing,High,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2024-1575,STU-066,HST-010,Security guard often missing after 10 PM.,Safety/Security,Unauthorized Entry,High,Investigate immediately; if serious call police.,In Progress
+CMP-2026-9835,STU-056,HST-052,Roommate's friends hang out in our room all the time.,Roommate Issue,Guests,Medium,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2026-4721,STU-128,HST-067,Oil used in cooking seems reused.,Food Quality,Portion Size,Medium,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2026-3233,STU-173,HST-072,"Mosquitoes everywhere, no nets provided.",Cleanliness,Pest Control,Medium,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2024-8052,STU-038,HST-070,Roommate's friends hang out in our room all the time.,Roommate Issue,Guests,Low,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2025-5094,STU-008,HST-057,My laptop was stolen from room.,Safety/Security,Unauthorized Entry,High,Investigate immediately; if serious call police.,Submitted
+CMP-2026-5454,STU-078,HST-064,Hair found in food twice this week.,Food Quality,Portion Size,Medium,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2025-8418,STU-107,HST-024,My phone went missing from study room.,Safety/Security,CCTV Issue,High,Investigate immediately; if serious call police.,Submitted
+CMP-2024-2675,STU-084,HST-010,Security guard often missing after 10 PM.,Safety/Security,Security Guard,High,Investigate immediately; if serious call police.,Submitted
+CMP-2025-4558,STU-061,HST-044,CCTV camera not working near entrance.,Safety/Security,CCTV Issue,High,Investigate immediately; if serious call police.,Submitted
+CMP-2024-3393,STU-109,HST-018,Roommate brings food and leaves plates for days.,Roommate Issue,Personal Space,Low,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2025-7251,STU-002,HST-039,"Geyser not working, no hot water.",Maintenance,AC,High,Assign technician to fix the issue within 24 hours.,In Progress
+CMP-2025-2539,STU-183,HST-025,"Window latch broken, cannot close properly.",Maintenance,Plumbing,Low,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2026-1691,STU-025,HST-016,Need a warmer blanket for winter.,Other,Suggestion,Low,Review student request and respond within 48 hours.,Submitted
+CMP-2026-4568,STU-101,HST-065,Request for a separate study table.,Other,General,Medium,Review student request and respond within 48 hours.,In Progress
+CMP-2025-4982,STU-024,HST-051,"Floor has sticky stains, not mopped properly.",Cleanliness,Bathroom,Low,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2024-3583,STU-155,HST-003,Water leakage from ceiling during rain.,Maintenance,Plumbing,High,Assign technician to fix the issue within 24 hours.,In Progress
+CMP-2024-3061,STU-014,HST-044,Double charged for this month's rent.,Billing/Payment Dispute,Overcharging,Medium,Review charges with account; provide receipt.,In Progress
+CMP-2024-1349,STU-192,HST-067,Double charged for this month's rent.,Billing/Payment Dispute,Overcharging,Low,Review charges with account; provide receipt.,Submitted
+CMP-2026-9029,STU-122,HST-009,Cleaner shouted at me for no reason.,Staff Behavior,Cleaner,Low,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2026-3627,STU-131,HST-004,Construction noise from next building all day.,Noise/Disturbance,External Noise,Low,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2026-9289,STU-067,HST-031,Bedsheets not changed for two weeks.,Cleanliness,Bathroom,Medium,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2026-7348,STU-147,HST-053,Warden is very rude when approached.,Staff Behavior,Cook,Medium,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2025-2809,STU-158,HST-039,People running and stomping upstairs.,Noise/Disturbance,External Noise,Medium,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2024-1521,STU-181,HST-049,Room not cleaned for 1 days.,Cleanliness,Room Cleaning,Medium,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2024-9051,STU-164,HST-013,Warden doesn't listen to complaints.,Staff Behavior,Security,Medium,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2024-5355,STU-068,HST-022,Room not cleaned for 4 days.,Cleanliness,Pest Control,Low,Schedule housekeeping to clean the area immediately.,In Progress
+CMP-2026-4784,STU-160,HST-016,I want to change my room.,Other,General,Low,Review student request and respond within 48 hours.,Submitted
+CMP-2026-7802,STU-190,HST-041,Internet quota exhausted too quickly.,Other,Curfew,Low,Review student request and respond within 48 hours.,Resolved
+CMP-2026-6529,STU-100,HST-059,Bedsheets not changed for two weeks.,Cleanliness,Common Area,Low,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2026-8054,STU-082,HST-015,"Repeatedly same menu, no variety.",Food Quality,Portion Size,Low,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2025-1003,STU-163,HST-062,Roommate smokes in the room.,Roommate Issue,Noise,Medium,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2025-4635,STU-169,HST-069,Water leakage from ceiling during rain.,Maintenance,AC,Low,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2024-2544,STU-048,HST-040,Students shouting late at night in common room.,Noise/Disturbance,Roommate Noise,Medium,Warn the noisy party and enforce quiet hours.,Resolved
+CMP-2024-5198,STU-098,HST-030,Tiles cracked in common washroom.,Maintenance,Furniture,Medium,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2024-8999,STU-058,HST-009,My phone went missing from study room.,Safety/Security,Theft,Medium,Investigate immediately; if serious call police.,In Progress
+CMP-2025-6700,STU-188,HST-027,Room not cleaned for 1 days.,Cleanliness,Common Area,Low,Schedule housekeeping to clean the area immediately.,Resolved
+CMP-2026-7266,STU-171,HST-052,Cook refuses to serve extra roti.,Staff Behavior,Security,Low,Counsel the staff member; involve owner if repeated.,Acknowledged
+CMP-2026-4617,STU-010,HST-036,Cupboard door off its hinges.,Maintenance,AC,Medium,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2025-7460,STU-077,HST-055,Hair found in food twice this week.,Food Quality,Spoilage/Poisoning,Medium,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2025-2393,STU-199,HST-042,"Repeatedly same menu, no variety.",Food Quality,Taste,Low,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2026-4212,STU-081,HST-053,Cleaner shouted at me for no reason.,Staff Behavior,Security,High,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2024-2843,STU-196,HST-020,Internet quota exhausted too quickly.,Other,Suggestion,Medium,Review student request and respond within 48 hours.,Resolved
+CMP-2025-3773,STU-146,HST-033,Staff enters room without knocking.,Staff Behavior,Security,Medium,Counsel the staff member; involve owner if repeated.,Acknowledged
+CMP-2026-2405,STU-121,HST-014,My stuff used without asking.,Roommate Issue,Personal Space,Medium,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2025-8373,STU-166,HST-017,Cockroaches in Room 176.,Cleanliness,Room Cleaning,Medium,Schedule housekeeping to clean the area immediately.,In Progress
+CMP-2025-9991,STU-036,HST-060,Double charged for this month's rent.,Billing/Payment Dispute,Overcharging,High,Review charges with account; provide receipt.,Submitted
+CMP-2025-3790,STU-145,HST-019,Unexplained deduction from rent.,Billing/Payment Dispute,Unexpected Fee,Low,Review charges with account; provide receipt.,Submitted
+CMP-2025-5445,STU-076,HST-009,"Window latch broken, cannot close properly.",Maintenance,AC,Medium,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2026-2631,STU-055,HST-061,My roommate never cleans his side.,Roommate Issue,Cleanliness,Medium,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2026-1352,STU-021,HST-063,Roommate has guests late at night.,Roommate Issue,Personal Space,Low,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2025-6765,STU-133,HST-034,Cupboard door off its hinges.,Maintenance,Electrical,Medium,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2024-5590,STU-044,HST-050,Roommate smokes in the room.,Roommate Issue,Guests,Low,Mediate between roommates; offer room change if needed.,In Progress
+CMP-2026-4726,STU-133,HST-034,Door banging repeatedly.,Noise/Disturbance,Night Noise,High,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2024-3270,STU-171,HST-065,Cleaner shouted at me for no reason.,Staff Behavior,Cook,Medium,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2024-3589,STU-200,HST-036,Need permission to keep a bicycle inside.,Other,Suggestion,Low,Review student request and respond within 48 hours.,Submitted
+CMP-2025-7737,STU-012,HST-025,Roommate has guests late at night.,Roommate Issue,Cleanliness,Low,Mediate between roommates; offer room change if needed.,In Progress
+CMP-2026-5372,STU-028,HST-019,Gate left unlocked at night.,Safety/Security,Security Guard,High,Investigate immediately; if serious call police.,Submitted
+CMP-2025-3196,STU-141,HST-040,Talking loudly in corridor after quiet hours.,Noise/Disturbance,External Noise,Medium,Warn the noisy party and enforce quiet hours.,Acknowledged
+CMP-2024-1528,STU-141,HST-049,My mattress is too old and uncomfortable.,Other,Curfew,Low,Review student request and respond within 48 hours.,Submitted
+CMP-2025-9027,STU-179,HST-029,Warden doesn't listen to complaints.,Staff Behavior,Warden,Low,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2026-6126,STU-114,HST-060,Roommate smokes in the room.,Roommate Issue,Personal Space,Low,Mediate between roommates; offer room change if needed.,In Progress
+CMP-2026-7481,STU-081,HST-064,Cook refuses to serve extra roti.,Staff Behavior,Warden,Low,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2025-5684,STU-114,HST-060,"Geyser not working, no hot water.",Maintenance,Door/Window,High,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2025-8400,STU-198,HST-039,Amount taken but no receipt provided.,Billing/Payment Dispute,Overcharging,Medium,Review charges with account; provide receipt.,Resolved
+CMP-2025-1408,STU-113,HST-036,Common washroom is very dirty and smelly.,Cleanliness,Room Cleaning,Medium,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2026-3686,STU-081,HST-054,Oil used in cooking seems reused.,Food Quality,Portion Size,High,Inspect kitchen and food storage; check hygiene.,Acknowledged
+CMP-2026-9383,STU-053,HST-009,Dustbins overflowing near corridor.,Cleanliness,Room Cleaning,High,Schedule housekeeping to clean the area immediately.,In Progress
+CMP-2026-3459,STU-004,HST-044,Fruit provided is rotten.,Food Quality,Portion Size,Low,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2025-5731,STU-078,HST-052,Bread/chapati are undercooked.,Food Quality,Taste,Medium,Inspect kitchen and food storage; check hygiene.,In Progress
+CMP-2025-9169,STU-057,HST-018,Bread/chapati are undercooked.,Food Quality,Spoilage/Poisoning,Low,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2025-2300,STU-018,HST-021,Need a warmer blanket for winter.,Other,General,Low,Review student request and respond within 48 hours.,Submitted
+CMP-2024-3429,STU-136,HST-057,Cupboard door off its hinges.,Maintenance,Electrical,Low,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2025-6424,STU-191,HST-048,Tiles cracked in common washroom.,Maintenance,Other Maintenance,Medium,Assign technician to fix the issue within 24 hours.,In Progress
+CMP-2026-3906,STU-115,HST-064,Dustbins overflowing near corridor.,Cleanliness,Room Cleaning,Medium,Schedule housekeeping to clean the area immediately.,Acknowledged
+CMP-2024-8001,STU-113,HST-026,Double charged for this month's rent.,Billing/Payment Dispute,Unexpected Fee,Medium,Review charges with account; provide receipt.,In Progress
+CMP-2026-7779,STU-113,HST-019,Request for a separate study table.,Other,General,Low,Review student request and respond within 48 hours.,Submitted
+CMP-2024-8924,STU-112,HST-038,Internet quota exhausted too quickly.,Other,Suggestion,Low,Review student request and respond within 48 hours.,Acknowledged
+CMP-2024-9132,STU-083,HST-064,Feeling unsafe due to unverified visitors.,Safety/Security,Security Guard,Low,Investigate immediately; if serious call police.,Submitted
+CMP-2024-2936,STU-022,HST-051,Need a warmer blanket for winter.,Other,Curfew,Low,Review student request and respond within 48 hours.,Resolved
+CMP-2026-4478,STU-199,HST-042,AC not cooling properly in Room 207.,Maintenance,Furniture,Medium,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2025-1100,STU-003,HST-010,"Window latch broken, cannot close properly.",Maintenance,Other Maintenance,Medium,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2024-4178,STU-131,HST-030,Bathroom mirror and sink are never cleaned.,Cleanliness,Common Area,Medium,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2026-6490,STU-194,HST-035,Roommate's friends hang out in our room all the time.,Roommate Issue,Guests,Medium,Mediate between roommates; offer room change if needed.,Acknowledged
+CMP-2026-1306,STU-183,HST-001,Charged for electricity even though it's included.,Billing/Payment Dispute,Deposit Refund,Low,Review charges with account; provide receipt.,Submitted
+CMP-2025-9753,STU-153,HST-030,Door banging repeatedly.,Noise/Disturbance,External Noise,Medium,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2024-5448,STU-076,HST-038,Bread/chapati are undercooked.,Food Quality,Portion Size,Low,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2026-5953,STU-128,HST-065,Warden threatened to fine for a minor rule.,Staff Behavior,Warden,Low,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2025-9192,STU-044,HST-073,"Repeatedly same menu, no variety.",Food Quality,Spoilage/Poisoning,Medium,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2024-9456,STU-041,HST-075,"Repeatedly same menu, no variety.",Food Quality,Taste,Medium,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2024-2426,STU-121,HST-015,Lunch rice was spoiled yesterday.,Food Quality,Taste,High,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2026-4438,STU-010,HST-038,My roommate never cleans his side.,Roommate Issue,Personal Space,High,Mediate between roommates; offer room change if needed.,In Progress
+CMP-2024-5467,STU-086,HST-055,Roommate smokes in the room.,Roommate Issue,Noise,Medium,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2026-6739,STU-042,HST-004,Food is cold when served.,Food Quality,Taste,Medium,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2025-6549,STU-127,HST-058,Request for a separate study table.,Other,Room Change,Low,Review student request and respond within 48 hours.,Submitted
+CMP-2025-1881,STU-115,HST-042,Curfew time is too early for exam preparation.,Other,Curfew,Low,Review student request and respond within 48 hours.,Submitted
+CMP-2026-8304,STU-188,HST-016,"Floor has sticky stains, not mopped properly.",Cleanliness,Pest Control,Low,Schedule housekeeping to clean the area immediately.,Acknowledged
+CMP-2025-3159,STU-084,HST-020,Constant arguments with roommate.,Roommate Issue,Guests,High,Mediate between roommates; offer room change if needed.,Resolved
+CMP-2024-5227,STU-153,HST-033,Dustbins overflowing near corridor.,Cleanliness,Pest Control,Medium,Schedule housekeeping to clean the area immediately.,Resolved
+CMP-2024-6758,STU-050,HST-015,My stuff used without asking.,Roommate Issue,Personal Space,Medium,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2025-2752,STU-169,HST-060,Unexplained deduction from rent.,Billing/Payment Dispute,Deposit Refund,Medium,Review charges with account; provide receipt.,Submitted
+CMP-2024-9977,STU-025,HST-029,Roommate brings food and leaves plates for days.,Roommate Issue,Cleanliness,Medium,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2025-6606,STU-131,HST-031,Hair found in food twice this week.,Food Quality,Portion Size,Low,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2026-8584,STU-032,HST-066,Need permission to keep a bicycle inside.,Other,Suggestion,Low,Review student request and respond within 48 hours.,Submitted
+CMP-2026-7208,STU-015,HST-050,Roommate's friends hang out in our room all the time.,Roommate Issue,Cleanliness,High,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2026-1003,STU-180,HST-072,My roommate never cleans his side.,Roommate Issue,Personal Space,Low,Mediate between roommates; offer room change if needed.,Resolved
+CMP-2024-6187,STU-073,HST-039,Canteen staff not wearing gloves.,Food Quality,Taste,Low,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2025-3089,STU-091,HST-058,My phone went missing from study room.,Safety/Security,CCTV Issue,High,Investigate immediately; if serious call police.,Resolved
+CMP-2025-2797,STU-155,HST-008,Feeling unsafe due to unverified visitors.,Safety/Security,Theft,Medium,Investigate immediately; if serious call police.,In Progress
+CMP-2025-7652,STU-084,HST-036,Security guard often missing after 10 PM.,Safety/Security,Theft,High,Investigate immediately; if serious call police.,Submitted
+CMP-2025-7835,STU-174,HST-075,Security guard uses offensive language.,Staff Behavior,Security,High,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2025-8155,STU-093,HST-052,Bread/chapati are undercooked.,Food Quality,Hygiene,Low,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2025-9346,STU-168,HST-037,Bread/chapati are undercooked.,Food Quality,Spoilage/Poisoning,Low,Inspect kitchen and food storage; check hygiene.,Acknowledged
+CMP-2025-4878,STU-190,HST-043,Canteen staff not serving on time.,Staff Behavior,Security,Medium,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2025-7038,STU-089,HST-040,No place to dry clothes inside.,Other,Room Change,High,Review student request and respond within 48 hours.,Submitted
+CMP-2025-8617,STU-058,HST-028,Dustbins overflowing near corridor.,Cleanliness,Pest Control,Low,Schedule housekeeping to clean the area immediately.,Resolved
+CMP-2026-6119,STU-148,HST-051,I want to change my room.,Other,General,Low,Review student request and respond within 48 hours.,Submitted
+CMP-2026-6431,STU-168,HST-009,Cupboard door off its hinges.,Maintenance,AC,Medium,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2025-5267,STU-148,HST-064,Warden doesn't listen to complaints.,Staff Behavior,Cleaner,Medium,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2026-1447,STU-045,HST-061,"Fan regulator broken, fan running at full speed.",Maintenance,Other Maintenance,High,Assign technician to fix the issue within 24 hours.,Resolved
+CMP-2024-5603,STU-085,HST-030,Outsider came inside without permission.,Safety/Security,Security Guard,Medium,Investigate immediately; if serious call police.,Submitted
+CMP-2026-8317,STU-076,HST-034,My laptop was stolen from room.,Safety/Security,CCTV Issue,Low,Investigate immediately; if serious call police.,In Progress
+CMP-2025-2382,STU-020,HST-023,Roommate brings food and leaves plates for days.,Roommate Issue,Noise,Low,Mediate between roommates; offer room change if needed.,In Progress
+CMP-2024-4454,STU-006,HST-053,Canteen staff not wearing gloves.,Food Quality,Taste,Low,Inspect kitchen and food storage; check hygiene.,In Progress
+CMP-2025-9724,STU-176,HST-041,Roommate brings food and leaves plates for days.,Roommate Issue,Cleanliness,Medium,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2025-8353,STU-028,HST-038,TV volume too high in lounge.,Noise/Disturbance,Roommate Noise,Medium,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2026-5466,STU-110,HST-048,Warden is very rude when approached.,Staff Behavior,Cleaner,Low,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2026-4961,STU-185,HST-022,Roommate brings food and leaves plates for days.,Roommate Issue,Guests,Medium,Mediate between roommates; offer room change if needed.,In Progress
+CMP-2024-1195,STU-015,HST-071,Door banging repeatedly.,Noise/Disturbance,External Noise,High,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2024-1388,STU-141,HST-039,Cook refuses to serve extra roti.,Staff Behavior,Warden,Low,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2026-3128,STU-062,HST-052,Trash piled up near the entrance.,Cleanliness,Room Cleaning,Low,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2026-8429,STU-198,HST-045,Cook refuses to serve extra roti.,Staff Behavior,Cook,Medium,Counsel the staff member; involve owner if repeated.,Resolved
+CMP-2025-6450,STU-049,HST-045,Feeling unsafe due to unverified visitors.,Safety/Security,Security Guard,High,Investigate immediately; if serious call police.,Submitted
+CMP-2026-7432,STU-006,HST-074,"Bed frame creaking loudly, needs oiling.",Maintenance,AC,Medium,Assign technician to fix the issue within 24 hours.,Resolved
+CMP-2025-5243,STU-018,HST-005,"Dal has a weird smell, looks old.",Food Quality,Portion Size,High,Inspect kitchen and food storage; check hygiene.,Acknowledged
+CMP-2025-3438,STU-097,HST-027,Dustbins overflowing near corridor.,Cleanliness,Room Cleaning,Low,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2026-9039,STU-091,HST-060,"Geyser not working, no hot water.",Maintenance,Plumbing,Low,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2025-2985,STU-189,HST-036,Amount taken but no receipt provided.,Billing/Payment Dispute,Deposit Refund,High,Review charges with account; provide receipt.,Resolved
+CMP-2024-6985,STU-125,HST-031,My mattress is too old and uncomfortable.,Other,Room Change,Low,Review student request and respond within 48 hours.,Resolved
+CMP-2025-4129,STU-103,HST-016,I want to change my room.,Other,Room Change,Medium,Review student request and respond within 48 hours.,Submitted
+CMP-2024-3292,STU-083,HST-039,Outsider came inside without permission.,Safety/Security,Security Guard,Medium,Investigate immediately; if serious call police.,Submitted
+CMP-2026-6041,STU-066,HST-023,Water not coming in bathroom since 2 days ago.,Maintenance,Electrical,Medium,Assign technician to fix the issue within 24 hours.,In Progress
+CMP-2024-7643,STU-062,HST-042,Warden asking for extra money for repairs.,Billing/Payment Dispute,Unexpected Fee,High,Review charges with account; provide receipt.,In Progress
+CMP-2024-1604,STU-091,HST-070,Rats in the kitchen area.,Cleanliness,Bathroom,Medium,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2024-3822,STU-048,HST-044,Lunch rice was spoiled yesterday.,Food Quality,Portion Size,High,Inspect kitchen and food storage; check hygiene.,Acknowledged
+CMP-2024-2870,STU-151,HST-012,AC not cooling properly in Room 334.,Maintenance,AC,Low,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2026-7586,STU-130,HST-039,Food bill is higher than agreed.,Billing/Payment Dispute,Unexpected Fee,Medium,Review charges with account; provide receipt.,In Progress
+CMP-2024-5487,STU-082,HST-030,My stuff used without asking.,Roommate Issue,Cleanliness,Medium,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2024-3185,STU-188,HST-015,Bread/chapati are undercooked.,Food Quality,Portion Size,Medium,Inspect kitchen and food storage; check hygiene.,Resolved
+CMP-2024-5648,STU-130,HST-045,Common washroom is very dirty and smelly.,Cleanliness,Pest Control,High,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2024-1616,STU-068,HST-019,Cleaner shouted at me for no reason.,Staff Behavior,Security,Medium,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2024-4144,STU-035,HST-075,Oil used in cooking seems reused.,Food Quality,Portion Size,Medium,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2026-4409,STU-107,HST-006,Trash piled up near the entrance.,Cleanliness,Room Cleaning,Medium,Schedule housekeeping to clean the area immediately.,In Progress
+CMP-2024-1885,STU-092,HST-009,Security guard often missing after 10 PM.,Safety/Security,Theft,High,Investigate immediately; if serious call police.,Submitted
+CMP-2025-1709,STU-111,HST-051,Roommate smokes in the room.,Roommate Issue,Guests,Low,Mediate between roommates; offer room change if needed.,In Progress
+CMP-2024-8287,STU-114,HST-070,Rats in the kitchen area.,Cleanliness,Room Cleaning,Medium,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2026-7759,STU-089,HST-045,Roommate smokes in the room.,Roommate Issue,Personal Space,Medium,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2024-4541,STU-115,HST-058,Talking loudly in corridor after quiet hours.,Noise/Disturbance,Roommate Noise,Medium,Warn the noisy party and enforce quiet hours.,In Progress
+CMP-2025-4313,STU-120,HST-024,Amount taken but no receipt provided.,Billing/Payment Dispute,Overcharging,Low,Review charges with account; provide receipt.,Acknowledged
+CMP-2025-7852,STU-148,HST-054,My roommate never cleans his side.,Roommate Issue,Noise,Medium,Mediate between roommates; offer room change if needed.,In Progress
+CMP-2026-3784,STU-051,HST-029,Very little chicken/vegetables served.,Food Quality,Hygiene,Low,Inspect kitchen and food storage; check hygiene.,Acknowledged
+CMP-2025-8581,STU-069,HST-050,I want to change my room.,Other,Suggestion,Low,Review student request and respond within 48 hours.,Submitted
+CMP-2026-3440,STU-077,HST-047,My phone went missing from study room.,Safety/Security,Theft,High,Investigate immediately; if serious call police.,Submitted
+CMP-2025-2605,STU-050,HST-038,Water not coming in bathroom since this morning.,Maintenance,Furniture,High,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2024-3174,STU-151,HST-021,Food bill is higher than agreed.,Billing/Payment Dispute,Deposit Refund,Medium,Review charges with account; provide receipt.,Submitted
+CMP-2025-1399,STU-070,HST-067,Roommate smokes in the room.,Roommate Issue,Guests,Low,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2024-2158,STU-035,HST-062,Unexplained deduction from rent.,Billing/Payment Dispute,Deposit Refund,Medium,Review charges with account; provide receipt.,In Progress
+CMP-2026-4393,STU-146,HST-035,Warden is very rude when approached.,Staff Behavior,Cleaner,Medium,Counsel the staff member; involve owner if repeated.,Acknowledged
+CMP-2025-8624,STU-004,HST-047,Room not cleaned for 3 days.,Cleanliness,Common Area,Low,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2024-3267,STU-140,HST-039,Tiles cracked in common washroom.,Maintenance,AC,Low,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2026-4693,STU-140,HST-049,Roommate has guests late at night.,Roommate Issue,Noise,Low,Mediate between roommates; offer room change if needed.,In Progress
+CMP-2025-8412,STU-055,HST-056,Roommate brings food and leaves plates for days.,Roommate Issue,Guests,Medium,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2025-8405,STU-171,HST-060,Security deposit not refunded after leaving.,Billing/Payment Dispute,Unexpected Fee,Medium,Review charges with account; provide receipt.,Submitted
+CMP-2024-2791,STU-156,HST-013,Roommate smokes in the room.,Roommate Issue,Cleanliness,Medium,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2026-1371,STU-139,HST-011,"Dal has a weird smell, looks old.",Food Quality,Hygiene,Low,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2025-4097,STU-053,HST-002,CCTV camera not working near entrance.,Safety/Security,Security Guard,High,Investigate immediately; if serious call police.,Acknowledged
+CMP-2026-6346,STU-065,HST-063,Cockroaches in Room 367.,Cleanliness,Room Cleaning,Medium,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2024-5259,STU-157,HST-026,Warden asking for extra money for repairs.,Billing/Payment Dispute,Unexpected Fee,High,Review charges with account; provide receipt.,In Progress
+CMP-2024-3634,STU-199,HST-046,Door banging repeatedly.,Noise/Disturbance,Roommate Noise,Medium,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2025-3072,STU-022,HST-040,Need permission to keep a bicycle inside.,Other,Room Change,Medium,Review student request and respond within 48 hours.,Submitted
+CMP-2025-3423,STU-023,HST-007,Double charged for this month's rent.,Billing/Payment Dispute,Deposit Refund,Low,Review charges with account; provide receipt.,Acknowledged
+CMP-2025-3381,STU-031,HST-061,My stuff used without asking.,Roommate Issue,Personal Space,Low,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2026-5842,STU-044,HST-063,Unexplained deduction from rent.,Billing/Payment Dispute,Deposit Refund,Low,Review charges with account; provide receipt.,Submitted
+CMP-2025-1656,STU-188,HST-034,Unexplained deduction from rent.,Billing/Payment Dispute,Deposit Refund,Medium,Review charges with account; provide receipt.,Submitted
+CMP-2024-6347,STU-127,HST-071,Food is cold when served.,Food Quality,Spoilage/Poisoning,Low,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2024-1369,STU-183,HST-013,"Window latch broken, cannot close properly.",Maintenance,Door/Window,Low,Assign technician to fix the issue within 24 hours.,In Progress
+CMP-2026-1918,STU-043,HST-073,Dustbins overflowing near corridor.,Cleanliness,Pest Control,Medium,Schedule housekeeping to clean the area immediately.,Acknowledged
+CMP-2025-6047,STU-092,HST-007,My stuff used without asking.,Roommate Issue,Personal Space,Medium,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2025-5728,STU-196,HST-013,Security deposit not refunded after leaving.,Billing/Payment Dispute,Unexpected Fee,Low,Review charges with account; provide receipt.,Submitted
+CMP-2025-9606,STU-050,HST-006,Hair found in food twice this week.,Food Quality,Portion Size,High,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2024-8571,STU-173,HST-046,Roommate uses my phone charger without permission.,Roommate Issue,Cleanliness,Low,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2025-5979,STU-034,HST-042,Bread/chapati are undercooked.,Food Quality,Taste,Medium,Inspect kitchen and food storage; check hygiene.,In Progress
+CMP-2026-8742,STU-145,HST-017,Warden asking for extra money for repairs.,Billing/Payment Dispute,Unexpected Fee,High,Review charges with account; provide receipt.,Submitted
+CMP-2025-2093,STU-081,HST-060,"Floor has sticky stains, not mopped properly.",Cleanliness,Common Area,High,Schedule housekeeping to clean the area immediately.,In Progress
+CMP-2025-9397,STU-060,HST-068,Roommate uses my phone charger without permission.,Roommate Issue,Personal Space,Low,Mediate between roommates; offer room change if needed.,In Progress
+CMP-2024-6855,STU-118,HST-016,Light bulb fused in corridor near Room 398.,Maintenance,AC,Medium,Assign technician to fix the issue within 24 hours.,In Progress
+CMP-2026-2258,STU-131,HST-010,Food is cold when served.,Food Quality,Spoilage/Poisoning,High,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2026-5932,STU-097,HST-033,Need permission to keep a bicycle inside.,Other,Suggestion,Low,Review student request and respond within 48 hours.,In Progress
+CMP-2026-5610,STU-169,HST-063,Outsider came inside without permission.,Safety/Security,CCTV Issue,Medium,Investigate immediately; if serious call police.,Submitted
+CMP-2024-9612,STU-130,HST-074,Roommate uses my phone charger without permission.,Roommate Issue,Personal Space,Medium,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2025-6705,STU-094,HST-030,No place to dry clothes inside.,Other,General,Low,Review student request and respond within 48 hours.,Resolved
+CMP-2026-5991,STU-199,HST-044,CCTV camera not working near entrance.,Safety/Security,CCTV Issue,Medium,Investigate immediately; if serious call police.,Submitted
+CMP-2024-3133,STU-044,HST-069,AC not cooling properly in Room 214.,Maintenance,Other Maintenance,Medium,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2024-1537,STU-046,HST-039,Dustbins overflowing near corridor.,Cleanliness,Pest Control,Low,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2024-3028,STU-083,HST-061,Need a warmer blanket for winter.,Other,General,Medium,Review student request and respond within 48 hours.,Acknowledged
+CMP-2026-5544,STU-178,HST-070,Talking loudly in corridor after quiet hours.,Noise/Disturbance,External Noise,High,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2024-1229,STU-085,HST-022,My stuff used without asking.,Roommate Issue,Guests,Medium,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2024-9260,STU-069,HST-069,Internet quota exhausted too quickly.,Other,Suggestion,High,Review student request and respond within 48 hours.,In Progress
+CMP-2025-7948,STU-128,HST-040,Unexplained deduction from rent.,Billing/Payment Dispute,Deposit Refund,High,Review charges with account; provide receipt.,Submitted
+CMP-2024-9123,STU-121,HST-008,Talking loudly in corridor after quiet hours.,Noise/Disturbance,External Noise,Medium,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2026-6111,STU-120,HST-028,My roommate never cleans his side.,Roommate Issue,Guests,Medium,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2025-7020,STU-142,HST-007,Amount taken but no receipt provided.,Billing/Payment Dispute,Overcharging,Low,Review charges with account; provide receipt.,In Progress
+CMP-2024-3348,STU-084,HST-008,Canteen staff not wearing gloves.,Food Quality,Spoilage/Poisoning,Medium,Inspect kitchen and food storage; check hygiene.,Acknowledged
+CMP-2026-7623,STU-134,HST-003,Cook refuses to serve extra roti.,Staff Behavior,Security,Low,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2026-7557,STU-098,HST-013,"Floor has sticky stains, not mopped properly.",Cleanliness,Bathroom,Medium,Schedule housekeeping to clean the area immediately.,In Progress
+CMP-2024-5107,STU-075,HST-058,Roommate uses my phone charger without permission.,Roommate Issue,Personal Space,Medium,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2025-1438,STU-170,HST-001,Food bill is higher than agreed.,Billing/Payment Dispute,Deposit Refund,Low,Review charges with account; provide receipt.,In Progress
+CMP-2024-9518,STU-028,HST-015,Oil used in cooking seems reused.,Food Quality,Portion Size,Low,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2025-9856,STU-173,HST-058,Food bill is higher than agreed.,Billing/Payment Dispute,Deposit Refund,Medium,Review charges with account; provide receipt.,Submitted
+CMP-2025-8531,STU-073,HST-073,Curfew time is too early for exam preparation.,Other,General,Low,Review student request and respond within 48 hours.,In Progress
+CMP-2025-3203,STU-179,HST-022,Light bulb fused in corridor near Room 386.,Maintenance,Plumbing,Low,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2026-8697,STU-088,HST-061,Emergency exit blocked with boxes.,Safety/Security,Security Guard,Medium,Investigate immediately; if serious call police.,Acknowledged
+CMP-2025-6779,STU-056,HST-071,Unexplained deduction from rent.,Billing/Payment Dispute,Unexpected Fee,High,Review charges with account; provide receipt.,Submitted
+CMP-2026-1440,STU-191,HST-054,My laptop was stolen from room.,Safety/Security,CCTV Issue,High,Investigate immediately; if serious call police.,Submitted
+CMP-2024-5056,STU-142,HST-023,Roommate has guests late at night.,Roommate Issue,Personal Space,Medium,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2024-1322,STU-083,HST-046,"Party in neighboring room, can't sleep.",Noise/Disturbance,External Noise,Low,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2025-1334,STU-001,HST-038,Curfew time is too early for exam preparation.,Other,Room Change,Low,Review student request and respond within 48 hours.,Resolved
+CMP-2025-2639,STU-169,HST-056,Charged for electricity even though it's included.,Billing/Payment Dispute,Unexpected Fee,Medium,Review charges with account; provide receipt.,Submitted
+CMP-2025-4305,STU-047,HST-001,People running and stomping upstairs.,Noise/Disturbance,Roommate Noise,Medium,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2026-7586,STU-064,HST-053,Security deposit not refunded after leaving.,Billing/Payment Dispute,Unexpected Fee,High,Review charges with account; provide receipt.,Submitted
+CMP-2026-8786,STU-164,HST-009,My roommate plays loud music after 11 PM.,Noise/Disturbance,External Noise,Medium,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2026-9846,STU-017,HST-055,Staff enters room without knocking.,Staff Behavior,Cook,Medium,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2026-3958,STU-060,HST-055,Roommate uses my phone charger without permission.,Roommate Issue,Noise,Medium,Mediate between roommates; offer room change if needed.,Acknowledged
+CMP-2026-8656,STU-040,HST-061,Cupboard door off its hinges.,Maintenance,Other Maintenance,High,Assign technician to fix the issue within 24 hours.,Resolved
+CMP-2026-5919,STU-035,HST-055,My laptop was stolen from room.,Safety/Security,Security Guard,High,Investigate immediately; if serious call police.,Submitted
+CMP-2025-3631,STU-189,HST-001,Staff enters room without knocking.,Staff Behavior,Security,Low,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2025-8604,STU-048,HST-051,My phone went missing from study room.,Safety/Security,Unauthorized Entry,High,Investigate immediately; if serious call police.,Submitted
+CMP-2024-5233,STU-001,HST-024,Amount taken but no receipt provided.,Billing/Payment Dispute,Unexpected Fee,High,Review charges with account; provide receipt.,Submitted
+CMP-2026-5882,STU-116,HST-059,My laptop was stolen from room.,Safety/Security,Unauthorized Entry,Medium,Investigate immediately; if serious call police.,Submitted
+CMP-2026-2976,STU-089,HST-046,Bathroom mirror and sink are never cleaned.,Cleanliness,Pest Control,Medium,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2025-7388,STU-022,HST-040,Need a warmer blanket for winter.,Other,Room Change,Medium,Review student request and respond within 48 hours.,In Progress
+CMP-2025-5166,STU-025,HST-029,Talking loudly in corridor after quiet hours.,Noise/Disturbance,Roommate Noise,Medium,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2026-5036,STU-053,HST-023,Cupboard door off its hinges.,Maintenance,Furniture,Medium,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2026-1570,STU-039,HST-044,Feeling unsafe due to unverified visitors.,Safety/Security,Unauthorized Entry,Medium,Investigate immediately; if serious call police.,Submitted
+CMP-2025-2999,STU-058,HST-029,"Window latch broken, cannot close properly.",Maintenance,Other Maintenance,Medium,Assign technician to fix the issue within 24 hours.,Resolved
+CMP-2025-2478,STU-114,HST-062,Need a warmer blanket for winter.,Other,Suggestion,Low,Review student request and respond within 48 hours.,Resolved
+CMP-2025-1555,STU-172,HST-048,Talking loudly in corridor after quiet hours.,Noise/Disturbance,Roommate Noise,Low,Warn the noisy party and enforce quiet hours.,In Progress
+CMP-2025-2644,STU-067,HST-035,Emergency exit blocked with boxes.,Safety/Security,Theft,Low,Investigate immediately; if serious call police.,Submitted
+CMP-2026-6353,STU-095,HST-007,Fruit provided is rotten.,Food Quality,Hygiene,Low,Inspect kitchen and food storage; check hygiene.,In Progress
+CMP-2024-1050,STU-180,HST-063,Charged for electricity even though it's included.,Billing/Payment Dispute,Unexpected Fee,Medium,Review charges with account; provide receipt.,In Progress
+CMP-2026-3131,STU-071,HST-011,Warden doesn't listen to complaints.,Staff Behavior,Cook,High,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2025-5616,STU-014,HST-071,Warden threatened to fine for a minor rule.,Staff Behavior,Cleaner,Medium,Counsel the staff member; involve owner if repeated.,Acknowledged
+CMP-2026-4677,STU-132,HST-026,TV volume too high in lounge.,Noise/Disturbance,Night Noise,Low,Warn the noisy party and enforce quiet hours.,Resolved
+CMP-2024-1815,STU-112,HST-038,Cupboard door off its hinges.,Maintenance,Plumbing,High,Assign technician to fix the issue within 24 hours.,In Progress
+CMP-2024-9615,STU-195,HST-062,Warden doesn't listen to complaints.,Staff Behavior,Security,High,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2025-5717,STU-013,HST-046,Warden threatened to fine for a minor rule.,Staff Behavior,Security,High,Counsel the staff member; involve owner if repeated.,In Progress
+CMP-2026-4102,STU-055,HST-056,Unexplained deduction from rent.,Billing/Payment Dispute,Deposit Refund,High,Review charges with account; provide receipt.,In Progress
+CMP-2025-5068,STU-005,HST-028,Canteen staff not serving on time.,Staff Behavior,Cook,Low,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2025-4476,STU-110,HST-050,Roommate has guests late at night.,Roommate Issue,Personal Space,Low,Mediate between roommates; offer room change if needed.,Resolved
+CMP-2024-8715,STU-047,HST-001,Warden doesn't listen to complaints.,Staff Behavior,Security,High,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2026-7076,STU-007,HST-048,My roommate never cleans his side.,Roommate Issue,Cleanliness,Medium,Mediate between roommates; offer room change if needed.,Resolved
+CMP-2025-3161,STU-159,HST-034,Oil used in cooking seems reused.,Food Quality,Spoilage/Poisoning,Medium,Inspect kitchen and food storage; check hygiene.,Resolved
+CMP-2024-9179,STU-002,HST-069,Rats in the kitchen area.,Cleanliness,Common Area,Medium,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2026-6128,STU-110,HST-055,My phone went missing from study room.,Safety/Security,CCTV Issue,Medium,Investigate immediately; if serious call police.,Resolved
+CMP-2025-1871,STU-115,HST-044,Staff enters room without knocking.,Staff Behavior,Cook,Low,Counsel the staff member; involve owner if repeated.,Acknowledged
+CMP-2025-8150,STU-103,HST-037,Students shouting late at night in common room.,Noise/Disturbance,Night Noise,Medium,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2026-3425,STU-100,HST-059,Room not cleaned for 5 days.,Cleanliness,Pest Control,Medium,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2025-4479,STU-127,HST-066,Dustbins overflowing near corridor.,Cleanliness,Common Area,Low,Schedule housekeeping to clean the area immediately.,In Progress
+CMP-2024-6384,STU-068,HST-034,Water leakage from ceiling during rain.,Maintenance,Door/Window,High,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2025-3519,STU-048,HST-045,AC not cooling properly in Room 302.,Maintenance,AC,Low,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2024-8423,STU-057,HST-016,"Fan regulator broken, fan running at full speed.",Maintenance,Plumbing,Medium,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2024-9964,STU-181,HST-047,Roommate smokes in the room.,Roommate Issue,Noise,Medium,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2024-1336,STU-109,HST-021,Canteen staff not serving on time.,Staff Behavior,Warden,Low,Counsel the staff member; involve owner if repeated.,In Progress
+CMP-2025-6080,STU-041,HST-051,TV volume too high in lounge.,Noise/Disturbance,Night Noise,Medium,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2025-5398,STU-007,HST-071,"Dal has a weird smell, looks old.",Food Quality,Hygiene,Medium,Inspect kitchen and food storage; check hygiene.,In Progress
+CMP-2024-9410,STU-016,HST-021,Canteen staff not serving on time.,Staff Behavior,Warden,Medium,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2025-8671,STU-098,HST-022,Roommate smokes in the room.,Roommate Issue,Personal Space,Low,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2024-9570,STU-076,HST-012,Warden threatened to fine for a minor rule.,Staff Behavior,Warden,Medium,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2025-2548,STU-033,HST-010,Warden is very rude when approached.,Staff Behavior,Cleaner,Medium,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2024-8583,STU-152,HST-059,Admin added maintenance fee without notice.,Billing/Payment Dispute,Unexpected Fee,High,Review charges with account; provide receipt.,Submitted
+CMP-2026-8454,STU-148,HST-066,Hair found in food twice this week.,Food Quality,Taste,Low,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2026-5248,STU-118,HST-026,Admin added maintenance fee without notice.,Billing/Payment Dispute,Unexpected Fee,High,Review charges with account; provide receipt.,In Progress
+CMP-2025-8539,STU-106,HST-023,Rats in the kitchen area.,Cleanliness,Pest Control,Medium,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2024-1227,STU-162,HST-058,Warden doesn't listen to complaints.,Staff Behavior,Security,Low,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2024-8139,STU-140,HST-043,Students shouting late at night in common room.,Noise/Disturbance,Night Noise,Medium,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2024-3497,STU-154,HST-004,I want to change my room.,Other,Suggestion,Low,Review student request and respond within 48 hours.,Submitted
+CMP-2025-1834,STU-135,HST-015,Warden asking for extra money for repairs.,Billing/Payment Dispute,Deposit Refund,High,Review charges with account; provide receipt.,Submitted
+CMP-2026-5764,STU-101,HST-055,Roommate has guests late at night.,Roommate Issue,Cleanliness,Low,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2025-4799,STU-168,HST-031,"Geyser not working, no hot water.",Maintenance,Furniture,Low,Assign technician to fix the issue within 24 hours.,Resolved
+CMP-2026-7834,STU-006,HST-071,Water not coming in bathroom since since yesterday.,Maintenance,Door/Window,Medium,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2024-8688,STU-191,HST-039,Warden asking for extra money for repairs.,Billing/Payment Dispute,Overcharging,High,Review charges with account; provide receipt.,Submitted
+CMP-2026-8675,STU-101,HST-040,Roommate smokes in the room.,Roommate Issue,Personal Space,Low,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2024-4394,STU-122,HST-023,Hair found in food twice this week.,Food Quality,Hygiene,Low,Inspect kitchen and food storage; check hygiene.,In Progress
+CMP-2025-9089,STU-062,HST-049,Emergency exit blocked with boxes.,Safety/Security,Theft,High,Investigate immediately; if serious call police.,Submitted
+CMP-2026-3598,STU-024,HST-054,Security guard often missing after 10 PM.,Safety/Security,Unauthorized Entry,High,Investigate immediately; if serious call police.,Submitted
+CMP-2024-8968,STU-184,HST-051,"Dal has a weird smell, looks old.",Food Quality,Spoilage/Poisoning,Low,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2026-2706,STU-114,HST-043,Feeling unsafe due to unverified visitors.,Safety/Security,CCTV Issue,Medium,Investigate immediately; if serious call police.,In Progress
+CMP-2024-1687,STU-095,HST-030,"Fan regulator broken, fan running at full speed.",Maintenance,Furniture,Medium,Assign technician to fix the issue within 24 hours.,In Progress
+CMP-2025-9288,STU-035,HST-050,Need permission to keep a bicycle inside.,Other,General,Medium,Review student request and respond within 48 hours.,Submitted
+CMP-2024-8194,STU-182,HST-068,Security deposit not refunded after leaving.,Billing/Payment Dispute,Unexpected Fee,Medium,Review charges with account; provide receipt.,Submitted
+CMP-2025-7799,STU-157,HST-013,Security guard uses offensive language.,Staff Behavior,Warden,Medium,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2025-8516,STU-049,HST-046,My stuff used without asking.,Roommate Issue,Noise,Medium,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2024-2389,STU-163,HST-064,Curfew time is too early for exam preparation.,Other,Room Change,Low,Review student request and respond within 48 hours.,Submitted
+CMP-2026-3473,STU-104,HST-068,Roommate uses my phone charger without permission.,Roommate Issue,Guests,Medium,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2025-6139,STU-197,HST-005,Cupboard door off its hinges.,Maintenance,Other Maintenance,Low,Assign technician to fix the issue within 24 hours.,In Progress
+CMP-2024-9919,STU-188,HST-027,Roommate brings food and leaves plates for days.,Roommate Issue,Cleanliness,Low,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2025-3064,STU-075,HST-070,Double charged for this month's rent.,Billing/Payment Dispute,Unexpected Fee,High,Review charges with account; provide receipt.,Submitted
+CMP-2026-3621,STU-037,HST-066,Internet quota exhausted too quickly.,Other,Room Change,Medium,Review student request and respond within 48 hours.,Submitted
+CMP-2025-9278,STU-019,HST-030,Cupboard door off its hinges.,Maintenance,Plumbing,Low,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2026-3043,STU-019,HST-014,Bathroom mirror and sink are never cleaned.,Cleanliness,Room Cleaning,Medium,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2026-9737,STU-093,HST-063,Charged for electricity even though it's included.,Billing/Payment Dispute,Deposit Refund,Low,Review charges with account; provide receipt.,Resolved
+CMP-2026-5057,STU-134,HST-001,"Party in neighboring room, can't sleep.",Noise/Disturbance,Roommate Noise,Low,Warn the noisy party and enforce quiet hours.,In Progress
+CMP-2025-7751,STU-181,HST-039,Rats in the kitchen area.,Cleanliness,Common Area,Medium,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2026-9622,STU-119,HST-024,Room not cleaned for 4 days.,Cleanliness,Room Cleaning,Medium,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2025-7830,STU-070,HST-066,Warden doesn't listen to complaints.,Staff Behavior,Security,Low,Counsel the staff member; involve owner if repeated.,Acknowledged
+CMP-2026-2934,STU-050,HST-012,Fruit provided is rotten.,Food Quality,Taste,High,Inspect kitchen and food storage; check hygiene.,In Progress
+CMP-2024-7694,STU-158,HST-051,People running and stomping upstairs.,Noise/Disturbance,Roommate Noise,Low,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2025-7135,STU-056,HST-063,Bathroom mirror and sink are never cleaned.,Cleanliness,Room Cleaning,Medium,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2025-5644,STU-192,HST-039,Emergency exit blocked with boxes.,Safety/Security,CCTV Issue,Medium,Investigate immediately; if serious call police.,Submitted
+CMP-2025-8883,STU-172,HST-058,People running and stomping upstairs.,Noise/Disturbance,Night Noise,Medium,Warn the noisy party and enforce quiet hours.,In Progress
+CMP-2026-8551,STU-105,HST-047,Feeling unsafe due to unverified visitors.,Safety/Security,Security Guard,High,Investigate immediately; if serious call police.,Submitted
+CMP-2026-7711,STU-129,HST-070,Warden asking for extra money for repairs.,Billing/Payment Dispute,Unexpected Fee,High,Review charges with account; provide receipt.,Acknowledged
+CMP-2026-5544,STU-111,HST-043,Canteen staff not serving on time.,Staff Behavior,Cook,Low,Counsel the staff member; involve owner if repeated.,In Progress
+CMP-2026-2395,STU-042,HST-020,Room not cleaned for 3 days.,Cleanliness,Bathroom,Medium,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2024-2970,STU-153,HST-025,Students shouting late at night in common room.,Noise/Disturbance,External Noise,Low,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2026-8278,STU-004,HST-074,Curfew time is too early for exam preparation.,Other,Suggestion,Low,Review student request and respond within 48 hours.,In Progress
+CMP-2025-3957,STU-194,HST-015,"Floor has sticky stains, not mopped properly.",Cleanliness,Common Area,Low,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2024-5675,STU-196,HST-029,Staff enters room without knocking.,Staff Behavior,Warden,High,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2024-6329,STU-002,HST-047,Food is cold when served.,Food Quality,Taste,Low,Inspect kitchen and food storage; check hygiene.,Acknowledged
+CMP-2025-5225,STU-055,HST-053,Lunch rice was spoiled yesterday.,Food Quality,Spoilage/Poisoning,Medium,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2026-7308,STU-144,HST-062,Warden is very rude when approached.,Staff Behavior,Warden,Medium,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2025-4829,STU-036,HST-041,Room not cleaned for 5 days.,Cleanliness,Common Area,Medium,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2024-5990,STU-181,HST-067,Cupboard door off its hinges.,Maintenance,AC,High,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2024-9806,STU-130,HST-063,Cook refuses to serve extra roti.,Staff Behavior,Security,Medium,Counsel the staff member; involve owner if repeated.,Resolved
+CMP-2024-1985,STU-022,HST-059,Warden is very rude when approached.,Staff Behavior,Security,Medium,Counsel the staff member; involve owner if repeated.,Resolved
+CMP-2024-3644,STU-128,HST-048,Admin added maintenance fee without notice.,Billing/Payment Dispute,Deposit Refund,Medium,Review charges with account; provide receipt.,Submitted
+CMP-2025-8077,STU-003,HST-007,Request for a separate study table.,Other,General,Low,Review student request and respond within 48 hours.,In Progress
+CMP-2025-5029,STU-101,HST-053,Door banging repeatedly.,Noise/Disturbance,External Noise,Low,Warn the noisy party and enforce quiet hours.,In Progress
+CMP-2026-1033,STU-019,HST-037,Roommate smokes in the room.,Roommate Issue,Guests,High,Mediate between roommates; offer room change if needed.,Acknowledged
+CMP-2025-9816,STU-185,HST-014,Charged for electricity even though it's included.,Billing/Payment Dispute,Overcharging,Low,Review charges with account; provide receipt.,In Progress
+CMP-2025-6864,STU-070,HST-048,Rats in the kitchen area.,Cleanliness,Room Cleaning,Medium,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2024-1324,STU-180,HST-068,Warden is very rude when approached.,Staff Behavior,Cook,Low,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2025-6947,STU-108,HST-073,Security guard often missing after 10 PM.,Safety/Security,CCTV Issue,Medium,Investigate immediately; if serious call police.,Submitted
+CMP-2024-5544,STU-144,HST-050,"Fan regulator broken, fan running at full speed.",Maintenance,AC,Low,Assign technician to fix the issue within 24 hours.,Acknowledged
+CMP-2024-2070,STU-094,HST-002,Need permission to keep a bicycle inside.,Other,Curfew,Low,Review student request and respond within 48 hours.,Acknowledged
+CMP-2025-4143,STU-180,HST-051,Bread/chapati are undercooked.,Food Quality,Spoilage/Poisoning,Low,Inspect kitchen and food storage; check hygiene.,In Progress
+CMP-2025-1849,STU-056,HST-050,Cupboard door off its hinges.,Maintenance,Other Maintenance,Low,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2024-4678,STU-032,HST-059,Roommate uses my phone charger without permission.,Roommate Issue,Personal Space,Medium,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2024-1415,STU-050,HST-012,"Geyser not working, no hot water.",Maintenance,AC,High,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2026-2584,STU-152,HST-075,TV volume too high in lounge.,Noise/Disturbance,External Noise,Medium,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2025-4905,STU-105,HST-057,"Geyser not working, no hot water.",Maintenance,Furniture,Low,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2024-8314,STU-072,HST-015,Constant arguments with roommate.,Roommate Issue,Cleanliness,Low,Mediate between roommates; offer room change if needed.,Acknowledged
+CMP-2024-2015,STU-184,HST-066,Room not cleaned for 3 days.,Cleanliness,Room Cleaning,Low,Schedule housekeeping to clean the area immediately.,Acknowledged
+CMP-2025-7249,STU-177,HST-036,Admin added maintenance fee without notice.,Billing/Payment Dispute,Overcharging,Medium,Review charges with account; provide receipt.,Submitted
+CMP-2025-2659,STU-097,HST-013,Canteen staff not serving on time.,Staff Behavior,Warden,High,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2026-2106,STU-058,HST-018,Roommate's friends hang out in our room all the time.,Roommate Issue,Cleanliness,Medium,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2025-4046,STU-081,HST-039,Construction noise from next building all day.,Noise/Disturbance,External Noise,Medium,Warn the noisy party and enforce quiet hours.,In Progress
+CMP-2026-6861,STU-078,HST-072,Students shouting late at night in common room.,Noise/Disturbance,Night Noise,Medium,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2024-9481,STU-111,HST-060,CCTV camera not working near entrance.,Safety/Security,Unauthorized Entry,High,Investigate immediately; if serious call police.,Submitted
+CMP-2024-4297,STU-107,HST-016,Very little chicken/vegetables served.,Food Quality,Spoilage/Poisoning,Medium,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2026-6499,STU-078,HST-065,Cockroaches in Room 344.,Cleanliness,Common Area,Medium,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2025-4594,STU-086,HST-072,Feeling unsafe due to unverified visitors.,Safety/Security,Security Guard,Medium,Investigate immediately; if serious call police.,Resolved
+CMP-2025-7158,STU-075,HST-069,"Window latch broken, cannot close properly.",Maintenance,Other Maintenance,High,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2024-3333,STU-188,HST-029,Construction noise from next building all day.,Noise/Disturbance,Roommate Noise,High,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2025-3853,STU-172,HST-069,Security guard often missing after 10 PM.,Safety/Security,Security Guard,Low,Investigate immediately; if serious call police.,Submitted
+CMP-2025-2657,STU-189,HST-033,Construction noise from next building all day.,Noise/Disturbance,Roommate Noise,Medium,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2025-4934,STU-192,HST-067,Light bulb fused in corridor near Room 295.,Maintenance,Other Maintenance,Medium,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2024-3142,STU-076,HST-012,My stuff used without asking.,Roommate Issue,Guests,Low,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2024-4098,STU-119,HST-031,TV volume too high in lounge.,Noise/Disturbance,Night Noise,Medium,Warn the noisy party and enforce quiet hours.,Acknowledged
+CMP-2024-9327,STU-191,HST-074,Need permission to keep a bicycle inside.,Other,Room Change,Low,Review student request and respond within 48 hours.,Submitted
+CMP-2026-9342,STU-077,HST-053,Security deposit not refunded after leaving.,Billing/Payment Dispute,Overcharging,High,Review charges with account; provide receipt.,Submitted
+CMP-2025-8762,STU-096,HST-001,Roommate's friends hang out in our room all the time.,Roommate Issue,Personal Space,Medium,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2024-6013,STU-093,HST-059,My laptop was stolen from room.,Safety/Security,Security Guard,High,Investigate immediately; if serious call police.,Submitted
+CMP-2025-8282,STU-193,HST-043,Cleaner shouted at me for no reason.,Staff Behavior,Security,High,Counsel the staff member; involve owner if repeated.,In Progress
+CMP-2025-8660,STU-023,HST-013,Internet quota exhausted too quickly.,Other,Room Change,Low,Review student request and respond within 48 hours.,Submitted
+CMP-2024-5351,STU-187,HST-052,Staff enters room without knocking.,Staff Behavior,Security,Medium,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2025-4731,STU-009,HST-007,Dustbins overflowing near corridor.,Cleanliness,Common Area,Medium,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2025-5096,STU-112,HST-022,Dustbins overflowing near corridor.,Cleanliness,Room Cleaning,Medium,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2025-5617,STU-196,HST-001,Security guard often missing after 10 PM.,Safety/Security,CCTV Issue,Low,Investigate immediately; if serious call police.,Submitted
+CMP-2024-7512,STU-165,HST-055,Roommate uses my phone charger without permission.,Roommate Issue,Personal Space,Medium,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2025-8559,STU-166,HST-005,Talking loudly in corridor after quiet hours.,Noise/Disturbance,Night Noise,Medium,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2026-1493,STU-006,HST-052,Constant arguments with roommate.,Roommate Issue,Cleanliness,Medium,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2025-6567,STU-054,HST-023,My stuff used without asking.,Roommate Issue,Noise,Medium,Mediate between roommates; offer room change if needed.,Acknowledged
+CMP-2026-1527,STU-104,HST-073,TV volume too high in lounge.,Noise/Disturbance,Roommate Noise,Medium,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2025-7247,STU-095,HST-023,"Repeatedly same menu, no variety.",Food Quality,Taste,Low,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2025-5991,STU-130,HST-046,My roommate plays loud music after 11 PM.,Noise/Disturbance,Roommate Noise,Medium,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2024-4058,STU-186,HST-041,Dustbins overflowing near corridor.,Cleanliness,Bathroom,Low,Schedule housekeeping to clean the area immediately.,Acknowledged
+CMP-2025-1941,STU-125,HST-031,TV volume too high in lounge.,Noise/Disturbance,Night Noise,Medium,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2026-7855,STU-080,HST-035,My stuff used without asking.,Roommate Issue,Cleanliness,Medium,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2026-8778,STU-189,HST-028,Security deposit not refunded after leaving.,Billing/Payment Dispute,Unexpected Fee,Low,Review charges with account; provide receipt.,Submitted
+CMP-2024-8302,STU-101,HST-064,Oil used in cooking seems reused.,Food Quality,Hygiene,High,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2025-8580,STU-050,HST-003,Trash piled up near the entrance.,Cleanliness,Pest Control,Low,Schedule housekeeping to clean the area immediately.,In Progress
+CMP-2025-7407,STU-142,HST-023,AC not cooling properly in Room 248.,Maintenance,Other Maintenance,Medium,Assign technician to fix the issue within 24 hours.,In Progress
+CMP-2024-2565,STU-085,HST-016,Very little chicken/vegetables served.,Food Quality,Portion Size,Medium,Inspect kitchen and food storage; check hygiene.,Resolved
+CMP-2026-4559,STU-094,HST-009,Security guard uses offensive language.,Staff Behavior,Warden,Medium,Counsel the staff member; involve owner if repeated.,Resolved
+CMP-2025-8388,STU-145,HST-021,Security deposit not refunded after leaving.,Billing/Payment Dispute,Deposit Refund,Medium,Review charges with account; provide receipt.,In Progress
+CMP-2026-8567,STU-170,HST-034,Very little chicken/vegetables served.,Food Quality,Hygiene,High,Inspect kitchen and food storage; check hygiene.,Acknowledged
+CMP-2024-6359,STU-190,HST-064,Canteen staff not serving on time.,Staff Behavior,Cleaner,High,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2025-3297,STU-101,HST-047,Warden asking for extra money for repairs.,Billing/Payment Dispute,Deposit Refund,Medium,Review charges with account; provide receipt.,In Progress
+CMP-2026-7403,STU-049,HST-057,Unexplained deduction from rent.,Billing/Payment Dispute,Deposit Refund,High,Review charges with account; provide receipt.,Submitted
+CMP-2024-9721,STU-080,HST-027,Lunch rice was spoiled yesterday.,Food Quality,Spoilage/Poisoning,Medium,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2024-1076,STU-036,HST-059,Students shouting late at night in common room.,Noise/Disturbance,Roommate Noise,Medium,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2024-1238,STU-047,HST-013,"Window latch broken, cannot close properly.",Maintenance,Furniture,High,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2026-2764,STU-056,HST-052,Roommate has guests late at night.,Roommate Issue,Noise,Low,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2024-2734,STU-007,HST-061,Roommate smokes in the room.,Roommate Issue,Guests,Low,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2024-2081,STU-106,HST-035,My stuff used without asking.,Roommate Issue,Guests,High,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2024-9784,STU-064,HST-068,My laptop was stolen from room.,Safety/Security,CCTV Issue,High,Investigate immediately; if serious call police.,Submitted
+CMP-2026-3177,STU-027,HST-061,"Dal has a weird smell, looks old.",Food Quality,Hygiene,Low,Inspect kitchen and food storage; check hygiene.,Resolved
+CMP-2025-7264,STU-185,HST-035,Constant arguments with roommate.,Roommate Issue,Noise,High,Mediate between roommates; offer room change if needed.,Resolved
+CMP-2024-8020,STU-093,HST-055,Curfew time is too early for exam preparation.,Other,Suggestion,Low,Review student request and respond within 48 hours.,Submitted
+CMP-2025-4348,STU-112,HST-015,My roommate plays loud music after 11 PM.,Noise/Disturbance,External Noise,Medium,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2024-9533,STU-200,HST-009,Water leakage from ceiling during rain.,Maintenance,Electrical,High,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2024-5068,STU-199,HST-075,Warden is very rude when approached.,Staff Behavior,Cleaner,Medium,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2025-2146,STU-012,HST-010,TV volume too high in lounge.,Noise/Disturbance,External Noise,Medium,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2024-4871,STU-155,HST-035,Construction noise from next building all day.,Noise/Disturbance,Night Noise,Medium,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2024-5079,STU-139,HST-023,No place to dry clothes inside.,Other,General,Low,Review student request and respond within 48 hours.,Submitted
+CMP-2025-7188,STU-016,HST-010,Emergency exit blocked with boxes.,Safety/Security,CCTV Issue,High,Investigate immediately; if serious call police.,Resolved
+CMP-2025-1324,STU-046,HST-042,Canteen staff not wearing gloves.,Food Quality,Portion Size,Low,Inspect kitchen and food storage; check hygiene.,In Progress
+CMP-2025-7233,STU-070,HST-068,Cook refuses to serve extra roti.,Staff Behavior,Security,High,Counsel the staff member; involve owner if repeated.,In Progress
+CMP-2024-8688,STU-025,HST-008,Warden asking for extra money for repairs.,Billing/Payment Dispute,Deposit Refund,Medium,Review charges with account; provide receipt.,Submitted
+CMP-2025-7812,STU-104,HST-048,Talking loudly in corridor after quiet hours.,Noise/Disturbance,Night Noise,Low,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2024-7304,STU-123,HST-049,Canteen staff not serving on time.,Staff Behavior,Cleaner,High,Counsel the staff member; involve owner if repeated.,In Progress
+CMP-2026-7032,STU-194,HST-035,Hair found in food twice this week.,Food Quality,Taste,Medium,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2025-1462,STU-105,HST-056,"Geyser not working, no hot water.",Maintenance,Other Maintenance,High,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2026-3644,STU-100,HST-063,Oil used in cooking seems reused.,Food Quality,Hygiene,High,Inspect kitchen and food storage; check hygiene.,Acknowledged
+CMP-2024-7929,STU-112,HST-005,AC not cooling properly in Room 297.,Maintenance,Plumbing,Low,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2025-7743,STU-057,HST-024,Food is cold when served.,Food Quality,Portion Size,Low,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2025-6047,STU-194,HST-027,Trash piled up near the entrance.,Cleanliness,Room Cleaning,Low,Schedule housekeeping to clean the area immediately.,Resolved
+CMP-2025-5724,STU-102,HST-003,"Fan regulator broken, fan running at full speed.",Maintenance,Electrical,Low,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2024-8383,STU-042,HST-026,Cleaner shouted at me for no reason.,Staff Behavior,Cook,High,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2025-8220,STU-016,HST-008,Talking loudly in corridor after quiet hours.,Noise/Disturbance,Night Noise,Low,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2024-4846,STU-043,HST-072,Dustbins overflowing near corridor.,Cleanliness,Bathroom,Medium,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2026-1685,STU-053,HST-017,Security deposit not refunded after leaving.,Billing/Payment Dispute,Deposit Refund,Low,Review charges with account; provide receipt.,Submitted
+CMP-2025-8961,STU-008,HST-043,Rats in the kitchen area.,Cleanliness,Bathroom,Medium,Schedule housekeeping to clean the area immediately.,Resolved
+CMP-2025-7528,STU-127,HST-049,Amount taken but no receipt provided.,Billing/Payment Dispute,Deposit Refund,Low,Review charges with account; provide receipt.,In Progress
+CMP-2026-3275,STU-080,HST-027,Staff enters room without knocking.,Staff Behavior,Warden,Medium,Counsel the staff member; involve owner if repeated.,Acknowledged
+CMP-2026-8785,STU-088,HST-040,AC not cooling properly in Room 372.,Maintenance,Door/Window,Medium,Assign technician to fix the issue within 24 hours.,Acknowledged
+CMP-2024-6333,STU-120,HST-022,Internet quota exhausted too quickly.,Other,Curfew,High,Review student request and respond within 48 hours.,Submitted
+CMP-2025-2645,STU-181,HST-042,Warden asking for extra money for repairs.,Billing/Payment Dispute,Overcharging,Low,Review charges with account; provide receipt.,Submitted
+CMP-2024-3094,STU-141,HST-039,Security guard uses offensive language.,Staff Behavior,Cleaner,Low,Counsel the staff member; involve owner if repeated.,In Progress
+CMP-2025-9858,STU-072,HST-007,Admin added maintenance fee without notice.,Billing/Payment Dispute,Overcharging,Low,Review charges with account; provide receipt.,Resolved
+CMP-2024-3625,STU-116,HST-041,Talking loudly in corridor after quiet hours.,Noise/Disturbance,Night Noise,Medium,Warn the noisy party and enforce quiet hours.,Resolved
+CMP-2026-3016,STU-130,HST-043,Roommate brings food and leaves plates for days.,Roommate Issue,Personal Space,Low,Mediate between roommates; offer room change if needed.,Resolved
+CMP-2026-6623,STU-043,HST-057,"Dal has a weird smell, looks old.",Food Quality,Portion Size,Low,Inspect kitchen and food storage; check hygiene.,Acknowledged
+CMP-2024-6574,STU-042,HST-028,Canteen staff not serving on time.,Staff Behavior,Security,High,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2026-1027,STU-162,HST-054,My roommate plays loud music after 11 PM.,Noise/Disturbance,External Noise,Low,Warn the noisy party and enforce quiet hours.,Resolved
+CMP-2024-9515,STU-052,HST-075,Security guard often missing after 10 PM.,Safety/Security,Theft,Medium,Investigate immediately; if serious call police.,In Progress
+CMP-2025-4586,STU-200,HST-026,TV volume too high in lounge.,Noise/Disturbance,Night Noise,Medium,Warn the noisy party and enforce quiet hours.,In Progress
+CMP-2026-1562,STU-173,HST-072,Warden asking for extra money for repairs.,Billing/Payment Dispute,Unexpected Fee,High,Review charges with account; provide receipt.,Acknowledged
+CMP-2025-5775,STU-037,HST-043,Roommate has guests late at night.,Roommate Issue,Guests,Medium,Mediate between roommates; offer room change if needed.,In Progress
+CMP-2024-1861,STU-073,HST-043,Staff enters room without knocking.,Staff Behavior,Warden,Low,Counsel the staff member; involve owner if repeated.,Resolved
+CMP-2025-7921,STU-129,HST-055,Hair found in food twice this week.,Food Quality,Portion Size,Low,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2024-9978,STU-166,HST-010,Amount taken but no receipt provided.,Billing/Payment Dispute,Deposit Refund,Low,Review charges with account; provide receipt.,Submitted
+CMP-2025-3681,STU-058,HST-033,Cleaner shouted at me for no reason.,Staff Behavior,Warden,Low,Counsel the staff member; involve owner if repeated.,In Progress
+CMP-2026-1149,STU-106,HST-009,Canteen staff not wearing gloves.,Food Quality,Portion Size,High,Inspect kitchen and food storage; check hygiene.,In Progress
+CMP-2025-3943,STU-054,HST-022,My stuff used without asking.,Roommate Issue,Cleanliness,Low,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2025-5014,STU-027,HST-047,Cupboard door off its hinges.,Maintenance,Plumbing,Low,Assign technician to fix the issue within 24 hours.,Acknowledged
+CMP-2026-7150,STU-151,HST-001,"Window latch broken, cannot close properly.",Maintenance,Plumbing,Medium,Assign technician to fix the issue within 24 hours.,Resolved
+CMP-2024-2999,STU-119,HST-025,"Floor has sticky stains, not mopped properly.",Cleanliness,Pest Control,Medium,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2026-2549,STU-030,HST-001,Food bill is higher than agreed.,Billing/Payment Dispute,Unexpected Fee,Low,Review charges with account; provide receipt.,Submitted
+CMP-2026-9806,STU-190,HST-066,Canteen staff not wearing gloves.,Food Quality,Portion Size,High,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2024-9501,STU-010,HST-027,Lunch rice was spoiled yesterday.,Food Quality,Portion Size,Low,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2025-6149,STU-065,HST-070,Internet quota exhausted too quickly.,Other,General,Low,Review student request and respond within 48 hours.,Submitted
+CMP-2024-2386,STU-101,HST-041,Common washroom is very dirty and smelly.,Cleanliness,Room Cleaning,High,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2024-5925,STU-159,HST-005,Bathroom mirror and sink are never cleaned.,Cleanliness,Common Area,Low,Schedule housekeeping to clean the area immediately.,Acknowledged
+CMP-2026-6769,STU-042,HST-035,"Bed frame creaking loudly, needs oiling.",Maintenance,Door/Window,Medium,Assign technician to fix the issue within 24 hours.,Acknowledged
+CMP-2024-3198,STU-188,HST-016,I want to change my room.,Other,Suggestion,Medium,Review student request and respond within 48 hours.,Submitted
+CMP-2025-7255,STU-198,HST-051,My mattress is too old and uncomfortable.,Other,Suggestion,Medium,Review student request and respond within 48 hours.,Submitted
+CMP-2024-2156,STU-069,HST-059,Canteen staff not wearing gloves.,Food Quality,Portion Size,Low,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2024-6183,STU-021,HST-043,Feeling unsafe due to unverified visitors.,Safety/Security,Unauthorized Entry,Medium,Investigate immediately; if serious call police.,Submitted
+CMP-2026-9984,STU-038,HST-039,Warden is very rude when approached.,Staff Behavior,Security,Medium,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2024-5483,STU-195,HST-070,Staff enters room without knocking.,Staff Behavior,Warden,Low,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2026-6022,STU-116,HST-074,"Geyser not working, no hot water.",Maintenance,Plumbing,Low,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2024-3797,STU-079,HST-002,Double charged for this month's rent.,Billing/Payment Dispute,Overcharging,High,Review charges with account; provide receipt.,Submitted
+CMP-2025-8812,STU-181,HST-075,My stuff used without asking.,Roommate Issue,Personal Space,Medium,Mediate between roommates; offer room change if needed.,In Progress
+CMP-2026-5380,STU-067,HST-020,Lunch rice was spoiled yesterday.,Food Quality,Hygiene,Low,Inspect kitchen and food storage; check hygiene.,Submitted
+CMP-2025-6799,STU-150,HST-038,Tiles cracked in common washroom.,Maintenance,Other Maintenance,Medium,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2024-6000,STU-082,HST-031,Admin added maintenance fee without notice.,Billing/Payment Dispute,Unexpected Fee,Low,Review charges with account; provide receipt.,In Progress
+CMP-2024-3705,STU-058,HST-030,"Floor has sticky stains, not mopped properly.",Cleanliness,Common Area,High,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2026-3235,STU-010,HST-009,"Bed frame creaking loudly, needs oiling.",Maintenance,Plumbing,Low,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2024-7962,STU-161,HST-026,Security deposit not refunded after leaving.,Billing/Payment Dispute,Deposit Refund,High,Review charges with account; provide receipt.,In Progress
+CMP-2024-9577,STU-156,HST-002,Internet quota exhausted too quickly.,Other,Room Change,High,Review student request and respond within 48 hours.,Submitted
+CMP-2025-7211,STU-064,HST-068,My roommate plays loud music after 11 PM.,Noise/Disturbance,Night Noise,Medium,Warn the noisy party and enforce quiet hours.,Submitted
+CMP-2024-5752,STU-184,HST-065,"Dal has a weird smell, looks old.",Food Quality,Hygiene,Low,Inspect kitchen and food storage; check hygiene.,In Progress
+CMP-2024-5994,STU-050,HST-002,Gate left unlocked at night.,Safety/Security,Security Guard,Medium,Investigate immediately; if serious call police.,Submitted
+CMP-2025-6798,STU-141,HST-050,Need a warmer blanket for winter.,Other,General,High,Review student request and respond within 48 hours.,Submitted
+CMP-2024-2388,STU-039,HST-072,Bathroom mirror and sink are never cleaned.,Cleanliness,Room Cleaning,High,Schedule housekeeping to clean the area immediately.,Submitted
+CMP-2024-8711,STU-142,HST-011,No place to dry clothes inside.,Other,Suggestion,Medium,Review student request and respond within 48 hours.,Acknowledged
+CMP-2025-8198,STU-129,HST-047,Warden doesn't listen to complaints.,Staff Behavior,Cleaner,Medium,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2024-4105,STU-092,HST-032,"Repeatedly same menu, no variety.",Food Quality,Taste,Low,Inspect kitchen and food storage; check hygiene.,In Progress
+CMP-2024-8852,STU-036,HST-055,CCTV camera not working near entrance.,Safety/Security,Theft,Low,Investigate immediately; if serious call police.,Submitted
+CMP-2025-7551,STU-159,HST-034,My phone went missing from study room.,Safety/Security,Theft,Medium,Investigate immediately; if serious call police.,In Progress
+CMP-2024-4874,STU-020,HST-031,Need permission to keep a bicycle inside.,Other,Curfew,Medium,Review student request and respond within 48 hours.,Submitted
+CMP-2025-2353,STU-199,HST-050,Tiles cracked in common washroom.,Maintenance,Other Maintenance,Medium,Assign technician to fix the issue within 24 hours.,Submitted
+CMP-2025-5052,STU-025,HST-004,Cleaner shouted at me for no reason.,Staff Behavior,Cook,Medium,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2026-3436,STU-002,HST-070,Warden threatened to fine for a minor rule.,Staff Behavior,Cook,Medium,Counsel the staff member; involve owner if repeated.,Submitted
+CMP-2025-1289,STU-171,HST-040,Construction noise from next building all day.,Noise/Disturbance,Night Noise,Low,Warn the noisy party and enforce quiet hours.,Resolved
+CMP-2024-4633,STU-150,HST-025,Students shouting late at night in common room.,Noise/Disturbance,Night Noise,Medium,Warn the noisy party and enforce quiet hours.,Acknowledged
+CMP-2025-6956,STU-071,HST-034,Roommate's friends hang out in our room all the time.,Roommate Issue,Personal Space,Low,Mediate between roommates; offer room change if needed.,Submitted
+CMP-2026-6269,STU-042,HST-026,My phone went missing from study room.,Safety/Security,CCTV Issue,High,Investigate immediately; if serious call police.,Submitted

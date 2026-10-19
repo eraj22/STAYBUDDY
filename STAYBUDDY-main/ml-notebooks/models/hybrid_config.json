@@ -1,0 +1,75 @@
+{
+  "best_alpha": 0.18,
+  "alpha_results": {
+    "0.0": 0.2834,
+    "0.02": 0.2827,
+    "0.04": 0.2844,
+    "0.06": 0.2868,
+    "0.08": 0.2868,
+    "0.1": 0.2842,
+    "0.12": 0.2853,
+    "0.14": 0.2864,
+    "0.16": 0.2865,
+    "0.18": 0.2852,
+    "0.2": 0.2908,
+    "0.22": 0.288,
+    "0.24": 0.281,
+    "0.26": 0.282,
+    "0.28": 0.2766,
+    "0.3": 0.2755,
+    "0.32": 0.2646,
+    "0.34": 0.2542,
+    "0.36": 0.2452,
+    "0.38": 0.2404,
+    "0.4": 0.2346,
+    "0.42": 0.231,
+    "0.44": 0.218,
+    "0.46": 0.2095,
+    "0.48": 0.2101,
+    "0.5": 0.1999
+  },
+  "type_alphas": {
+    "study_focused": 0.1,
+    "budget_conscious": 0.08,
+    "comfort_seeking": 0.06,
+    "balanced": 0.0
+  },
+  "decay_lambda": 0.01,
+  "cb_feature_cols": [
+    "price_norm",
+    "distance_norm",
+    "rating_norm",
+    "study_norm",
+    "safety_score",
+    "comfort_score",
+    "amenity_richness",
+    "value_score",
+    "internet_norm",
+    "noise_norm",
+    "food_encoded",
+    "curfew_norm",
+    "transport_nearby",
+    "meal_included",
+    "electricity_included"
+  ],
+  "final_metrics": {
+    "Content-Based": {
+      "P@3": 0.0583,
+      "P@5": 0.055,
+      "MAP": 0.0709,
+      "Coverage": 0.68
+    },
+    "Collaborative": {
+      "P@3": 0.1917,
+      "P@5": 0.1825,
+      "MAP": 0.2834,
+      "Coverage": 0.92
+    },
+    "Hybrid": {
+      "P@3": 0.2,
+      "P@5": 0.175,
+      "MAP": 0.2681,
+      "Coverage": 0.96
+    }
+  }
+}

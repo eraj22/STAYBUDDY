@@ -1,0 +1,28 @@
+{
+  "name": "staybuddy-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "node --test",
+    "test:db": "node scripts/run_db_integration_tests.js",
+    "seed:demo": "node scripts/seed_demo_data.js --confirm-demo",
+    "jobs": "node scripts/run_operational_jobs.js",
+    "worker": "node scripts/worker_service.js",
+    "simulate:attendance": "node scripts/simulate_attendance_scanner.js",
+    "ai:complaints": "cd ml-notebooks\\ml_ai_complaint && python app_api.py"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^17.2.4",
+    "express": "^5.2.1",
+    "nodemailer": "^8.0.6",
+    "pg": "^8.18.0",
+    "qrcode": "^1.5.4"
+  }
+}

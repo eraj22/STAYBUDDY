@@ -1,0 +1,17 @@
+[
+  "price_norm",
+  "distance_norm",
+  "rating_norm",
+  "study_norm",
+  "safety_score",
+  "comfort_score",
+  "amenity_richness",
+  "value_score",
+  "internet_norm",
+  "noise_norm",
+  "food_encoded",
+  "curfew_norm",
+  "transport_nearby",
+  "meal_included",
+  "electricity_included"
+]

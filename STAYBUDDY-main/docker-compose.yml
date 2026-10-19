@@ -1,0 +1,163 @@
+services:
+  postgres:
+    build:
+      context: .
+      dockerfile: docker/postgres.Dockerfile
+    environment:
+      POSTGRES_DB: staybuddy
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+    ports:
+      - "5433:5432"
+    volumes:
+      - staybuddy_db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL","pg_isready -U postgres -d staybuddy"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  ollama:
+    image: ollama/ollama:latest
+    volumes:
+      - staybuddy_ollama:/root/.ollama
+    expose: ["11434"]
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 10s
+      timeout: 10s
+      retries: 30
+
+  ollama-model:
+    image: ollama/ollama:latest
+    environment:
+      OLLAMA_HOST: http://ollama:11434
+    command: ["pull", "${OLLAMA_MODEL:-qwen2.5:7b-instruct}"]
+    depends_on:
+      ollama:
+        condition: service_healthy
+    restart: "no"
+
+  recommendation-chat:
+    build:
+      context: .
+      dockerfile: docker/ai.Dockerfile
+    command: ["uvicorn","phase3_service:app","--host","0.0.0.0","--port","8000"]
+    environment:
+      OLLAMA_URL: http://ollama:11434
+      OLLAMA_MODEL: ${OLLAMA_MODEL:-qwen2.5:7b-instruct}
+      OLLAMA_TIMEOUT_SECONDS: ${OLLAMA_TIMEOUT_SECONDS:-180}
+      GROQ_API_KEY: ${GROQ_API_KEY:-}
+      GROQ_MODEL: ${GROQ_MODEL:-openai/gpt-oss-20b}
+      GROQ_TIMEOUT_SECONDS: ${GROQ_TIMEOUT_SECONDS:-45}
+    expose: ["8000"]
+    depends_on:
+      ollama-model:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD","python","-c","import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  complaint-classifier:
+    build:
+      context: .
+      dockerfile: docker/ai.Dockerfile
+    working_dir: /services/ml_ai_complaint
+    command: ["uvicorn","app_api:app","--host","0.0.0.0","--port","8001"]
+    expose: ["8001"]
+    healthcheck:
+      test: ["CMD","python","-c","import urllib.request; urllib.request.urlopen('http://127.0.0.1:8001/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  roommate-matcher:
+    build:
+      context: .
+      dockerfile: docker/ai.Dockerfile
+    working_dir: /services/room_matcher
+    command: ["uvicorn","service_api:app","--host","0.0.0.0","--port","8002"]
+    expose: ["8002"]
+    healthcheck:
+      test: ["CMD","python","-c","import urllib.request; urllib.request.urlopen('http://127.0.0.1:8002/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build: .
+    environment: &node-env
+      NODE_ENV: production
+      PORT: 5000
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: ${DB_PASSWORD:-postgres}
+      DB_NAME: staybuddy
+      AUTH_SECRET: ${AUTH_SECRET:?Set AUTH_SECRET in .env}
+      AUTH_TOKEN_TTL_MINUTES: ${AUTH_TOKEN_TTL_MINUTES:-480}
+      BOOKING_HOLD_HOURS: ${BOOKING_HOLD_HOURS:-24}
+      AI_TIMEOUT_MS: ${AI_TIMEOUT_MS:-120000}
+      AI_CHAT_TIMEOUT_MS: ${AI_CHAT_TIMEOUT_MS:-210000}
+      AI_CHAT_PLAN_TIMEOUT_MS: ${AI_CHAT_PLAN_TIMEOUT_MS:-190000}
+      AI_RECOMMENDER_URL: http://recommendation-chat:8000/recommend
+      AI_CHAT_URL: http://recommendation-chat:8000/chat
+      ATTENDANCE_QR_TTL_SECONDS: ${ATTENDANCE_QR_TTL_SECONDS:-60}
+      ATTENDANCE_GEOFENCE_RADIUS_METERS: ${ATTENDANCE_GEOFENCE_RADIUS_METERS:-5}
+      ATTENDANCE_PUBLIC_BASE_URL: ${ATTENDANCE_PUBLIC_BASE_URL:-}
+      AI_COMPLAINT_URL: http://complaint-classifier:8001/categorize
+      AI_ROOMMATE_URL: http://roommate-matcher:8002/match
+      PRIVATE_DOCUMENTS_DIR: /data/private-documents
+      NOTIFICATION_DELIVERY_MODE: ${NOTIFICATION_DELIVERY_MODE:-fake}
+      NOTIFICATION_PROVIDER_TIMEOUT_MS: ${NOTIFICATION_PROVIDER_TIMEOUT_MS:-15000}
+      EMAIL_SERVICE: ${EMAIL_SERVICE:-}
+      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_SECURE: ${SMTP_SECURE:-false}
+      EMAIL_USER: ${EMAIL_USER:-}
+      EMAIL_PASS: ${EMAIL_PASS:-}
+      EMAIL_FROM: ${EMAIL_FROM:-}
+      TWILIO_ACCOUNT_SID: ${TWILIO_ACCOUNT_SID:-}
+      TWILIO_AUTH_TOKEN: ${TWILIO_AUTH_TOKEN:-}
+      TWILIO_FROM_NUMBER: ${TWILIO_FROM_NUMBER:-}
+      PUSH_WEBHOOK_URL: ${PUSH_WEBHOOK_URL:-}
+      PUSH_WEBHOOK_BEARER_TOKEN: ${PUSH_WEBHOOK_BEARER_TOKEN:-}
+    ports:
+      - "5000:5000"
+    volumes:
+      - staybuddy_documents:/data/private-documents
+    depends_on:
+      postgres: { condition: service_healthy }
+      recommendation-chat: { condition: service_healthy }
+      complaint-classifier: { condition: service_healthy }
+      roommate-matcher: { condition: service_healthy }
+    healthcheck:
+      test: ["CMD","wget","-qO-","http://127.0.0.1:5000/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 15
+
+  worker:
+    build: .
+    command: ["node","scripts/worker_service.js"]
+    environment:
+      <<: *node-env
+      WORKER_HEALTH_PORT: 5001
+      WORKER_INTERVAL_MS: 15000
+    expose: ["5001"]
+    volumes:
+      - staybuddy_documents:/data/private-documents
+    depends_on:
+      postgres: { condition: service_healthy }
+    healthcheck:
+      test: ["CMD","wget","-qO-","http://127.0.0.1:5001/"]
+      interval: 10s
+      timeout: 5s
+      retries: 15
+
+volumes:
+  staybuddy_db:
+  staybuddy_documents:
+  staybuddy_ollama:

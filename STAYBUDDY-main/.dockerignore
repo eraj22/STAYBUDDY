@@ -1,0 +1,7 @@
+node_modules
+.env
+.private-documents
+.private-test-documents
+**/__pycache__
+**/*.pyc
+STAYBUDDY-main

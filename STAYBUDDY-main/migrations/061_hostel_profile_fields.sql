@@ -1,0 +1,13 @@
+BEGIN;
+
+ALTER TABLE hostels
+  ADD COLUMN IF NOT EXISTS floors INTEGER,
+  ADD COLUMN IF NOT EXISTS contact_phone VARCHAR(40),
+  ADD COLUMN IF NOT EXISTS contact_email VARCHAR(254),
+  ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW();
+
+ALTER TABLE hostels DROP CONSTRAINT IF EXISTS hostels_floors_check;
+ALTER TABLE hostels ADD CONSTRAINT hostels_floors_check
+  CHECK (floors IS NULL OR floors > 0);
+
+COMMIT;

@@ -1,0 +1,42 @@
+[
+  {
+    "slug": "booking-process",
+    "source_text": "To book a hostel, search published hostels, review rooms and availability, choose dates and an available room, submit the booking request, upload every document required by that hostel, and wait for authorized hostel staff to confirm it. A pending booking holds inventory for a limited time.",
+    "ur": "ہاسٹل بک کرنے کے لیے شائع شدہ ہاسٹل تلاش کریں، کمروں کی تفصیل اور دستیابی دیکھیں، تاریخیں اور دستیاب کمرہ منتخب کریں، پھر بکنگ کی درخواست جمع کریں۔ ہاسٹل کے لیے درکار تمام دستاویزات اپ لوڈ کریں اور متعلقہ عملے کی تصدیق کا انتظار کریں۔ زیرِ التوا بکنگ کے لیے جگہ صرف محدود وقت تک محفوظ رہتی ہے۔"
+  },
+  {
+    "slug": "booking-documents",
+    "source_text": "Each hostel can define required booking documents. Students upload PDF, JPEG, or PNG files privately against their own booking. Hostel staff review each document as accepted or rejected. A booking cannot be confirmed until every active required document has an accepted submission.",
+    "ur": "ہر ہاسٹل بکنگ کے لیے مطلوبہ دستاویزات خود مقرر کرتا ہے۔ طالب علم اپنی بکنگ کے ساتھ PDF، JPEG یا PNG فائلیں نجی طور پر اپ لوڈ کر سکتا ہے۔ ہاسٹل کا عملہ ہر دستاویز قبول یا مسترد کرتا ہے۔ جب تک تمام لازمی دستاویزات قبول نہ ہو جائیں، بکنگ کی تصدیق نہیں ہو سکتی۔"
+  },
+  {
+    "slug": "fees-and-receipts",
+    "source_text": "StayBuddy records fees in PKR. Payments happen outside StayBuddy using the hostel approved payment destination. A student or linked parent uploads a PDF, JPEG, or PNG receipt. Only an assigned warden can verify the receipt, and only verified allocations reduce the invoice balance. StayBuddy does not charge cards or process online payments.",
+    "ur": "فیس پاکستانی روپے (PKR) میں درج ہوتی ہے۔ ہاسٹل کی منظور شدہ ادائیگی کی تفصیلات استعمال کرتے ہوئے StayBuddy کے باہر فیس ادا کریں۔ پھر طالب علم یا اس سے منسلک والدین PDF، JPEG یا PNG میں رسید اپ لوڈ کریں۔ صرف متعلقہ وارڈن رسید کی تصدیق کر سکتا ہے۔ تصدیق شدہ ادائیگی بل میں درج ہونے کے بعد بقایا رقم کم ہوتی ہے۔ StayBuddy کارڈ سے رقم نہیں کاٹتا اور ایپ کے اندر آن لائن ادائیگی نہیں کرتا۔"
+  },
+  {
+    "slug": "booking-cancellation",
+    "source_text": "A student can cancel an eligible own booking through the booking cancellation endpoint. Capacity is released exactly once and the status history is audited. Refund amounts are not calculated by StayBuddy; consult the hostel terms and staff because this backend uses external payments and receipt verification.",
+    "ur": "طالب علم اپنی ایسی بکنگ منسوخ کر سکتا ہے جس کی منسوخی کی اجازت ہو۔ منسوخی کے بعد جگہ صرف ایک بار دوبارہ دستیاب ہوتی ہے اور حالت کی تبدیلی کا ریکارڈ محفوظ رہتا ہے۔ StayBuddy واپسی کی رقم کا حساب نہیں لگاتا۔ رقم کی واپسی کے لیے ہاسٹل کی شرائط دیکھیں اور عملے سے رابطہ کریں، کیونکہ ادائیگیاں ایپ کے باہر ہوتی ہیں اور ان کی رسیدوں کی تصدیق کی جاتی ہے۔"
+  },
+  {
+    "slug": "complaints",
+    "source_text": "A checked-in student can submit a complaint for the current hostel. The system classifies it, warns about similar active complaints in the same room, tracks status and SLA, accepts private evidence, and supports one reopen after resolution. Students can view only their own complaint details and safe resolution records.",
+    "ur": "ہاسٹل میں قیام شروع کر چکا طالب علم اپنے موجودہ ہاسٹل کے بارے میں شکایت درج کر سکتا ہے۔ نظام شکایت کی قسم مقرر کرتا ہے، اسی کمرے کی ملتی جلتی فعال شکایات کے بارے میں بتاتا ہے اور کارروائی کی حالت اور مقررہ وقت کا ریکارڈ رکھتا ہے۔ نجی ثبوت شامل کیے جا سکتے ہیں اور حل ہونے کے بعد شکایت ایک بار دوبارہ کھولی جا سکتی ہے۔ طالب علم صرف اپنی شکایات اور ان کے حل کی قابلِ اجازت تفصیل دیکھ سکتا ہے۔"
+  },
+  {
+    "slug": "attendance",
+    "source_text": "Hostel attendance records verified IN and OUT events from biometric, RFID, QR, or authorized manual entry. Linked parents can view the timeline and receive enabled alerts. QR codes are short-lived, one-time tokens and must be scanned by an authorized hostel gate integration. Wardens can correct events with a reason; corrections remain audited.",
+    "ur": "ہاسٹل کی حاضری میں بایومیٹرک، RFID، QR یا مجاز عملے کے اندراج سے تصدیق شدہ آمد اور روانگی محفوظ ہوتی ہے۔ منسلک والدین یہ ریکارڈ دیکھ سکتے ہیں اور فعال کیے گئے الرٹس حاصل کر سکتے ہیں۔ QR کوڈ محدود وقت کے لیے اور صرف ایک بار استعمال ہوتا ہے؛ اسے ہاسٹل کے مجاز گیٹ اسکینر سے اسکین کرنا ضروری ہے۔ وارڈن وجہ درج کر کے ریکارڈ درست کر سکتا ہے اور اس تبدیلی کا ریکارڈ محفوظ رہتا ہے۔"
+  },
+  {
+    "slug": "parent-access",
+    "source_text": "A parent can view a child only through an active parent-student link accepted through the invitation flow. Revoking the link immediately removes future access. Exact location requires a separate active student-controlled consent session. Attendance, fee, transport, announcement, and communication access remains relationship scoped.",
+    "ur": "والدین صرف دعوت قبول کیے جانے کے بعد فعال والدین اور طالب علم کے لنک کے ذریعے بچے کی معلومات دیکھ سکتے ہیں۔ لنک ختم ہونے پر آئندہ رسائی فوراً بند ہو جاتی ہے۔ درست مقام دیکھنے کے لیے طالب علم کی الگ اور فعال اجازت ضروری ہے، جس کا اختیار طالب علم کے پاس رہتا ہے۔ حاضری، فیس، ٹرانسپورٹ، اعلانات اور پیغامات تک رسائی بھی اسی تعلق کے مطابق محدود رہتی ہے۔"
+  },
+  {
+    "slug": "human-support",
+    "source_text": "If the assistant cannot answer from current knowledge or authorized account data, it should say so and offer human support. Escalation saves the conversation context for an administrator or support operator. Never invent policy, payment, booking, attendance, or complaint facts.",
+    "ur": "اگر موجودہ معلومات یا مجاز اکاؤنٹ کے ریکارڈ سے جواب نہ مل سکے تو اسسٹنٹ کو یہ بات واضح کرنی چاہیے اور انسانی مدد کی پیشکش کرنی چاہیے۔ انسانی مدد کی درخواست کے ساتھ گفتگو کا پس منظر منتظم یا معاون عملے کے لیے محفوظ ہو جاتا ہے۔ پالیسی، ادائیگی، بکنگ، حاضری یا شکایت کے بارے میں غیر موجود معلومات نہیں بنانی چاہئیں۔"
+  }
+]
